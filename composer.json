@@ -1,0 +1,34 @@
+{
+    "name": "pion/smart-emailing-v3",
+    "description": "Wrapper for SmartEmailing API",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martin Kluska",
+            "email": "martin.kluska@imakers.cz"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SmartEmailing\\v3\\": "src"
+        },
+        "files": [
+            "src/Helpers/global_helpers.php"
+        ]
+    },
+    "autoload-dev": {
+      "psr-4": {
+        "SmartEmailing\\v3\\Tests\\": "tests"
+      }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.5",
+        "guzzlehttp/guzzle": "^6.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "vlucas/phpdotenv": "^2.4"
+    }
+}
