@@ -3,6 +3,9 @@ namespace SmartEmailing\v3\Request\Import;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use function \SmartEmailing\v3\Helpers\convertDate;
+use SmartEmailing\v3\Request\Import\Holder\AbstractHolder;
+use SmartEmailing\v3\Request\Import\Holder\ContactLists;
+use SmartEmailing\v3\Request\Import\Holder\CustomFields;
 
 /**
  * Contact wrapper with public properties (allows force set and easy getter). The fluent setter will help
@@ -103,14 +106,14 @@ class Contact implements \JsonSerializable
     /**
      * Contactlists presence of imported contacts. Any contactlist presence unlisted in imported data will be
      * untouched. Unsubscribed contacts will stay unsubscribed if settings.preserve_unsubscribed=1
-     * @var array
+     * @var ContactLists
      */
-    public $contactLists = [];
+    protected $contactLists;
     /**
      * Customfields belonging to contact Customfields unlisted in imported data will be untouched.
-     * @var array
+     * @var CustomFields
      */
-    public $customFields = [];
+    protected $customFields;
 
     //endregion
 
@@ -122,6 +125,8 @@ class Contact implements \JsonSerializable
     public function __construct($emailAddress)
     {
         $this->emailAddress = $emailAddress;
+        $this->customFields = new CustomFields();
+        $this->contactLists = new ContactLists();
     }
 
     //region Setters
@@ -352,14 +357,48 @@ class Contact implements \JsonSerializable
     }
 
     /**
-     * @param array $contactLists
-     *
-     * @return Contact
+     * @return ContactLists
      */
-    public function setContactLists(array $contactLists)
+    public function contactList()
     {
-        $this->contactLists = $contactLists;
+        return $this->contactLists;
+    }
+
+    /**
+     * @return CustomFields
+     */
+    public function customFields()
+    {
+        return $this->customFields;
+    }
+
+    /**
+     * Adds an contact list
+     *
+     * @param ContactList $list
+     *
+     * @return $this
+     */
+    public function addContactList(ContactList $list)
+    {
+        $this->contactLists[] = $list;
         return $this;
+    }
+
+    /**
+     * Creates a new custom list and stores it to the list
+     *
+     * @param $id
+     *
+     * @return ContactList
+     *
+     * @uses Contact::addContactList()
+     */
+    public function newContactList($id)
+    {
+        $list = new ContactList($id);
+        $this->addContactList($list);
+        return $list;
     }
 
     /**
@@ -374,16 +413,32 @@ class Contact implements \JsonSerializable
     }
 
     /**
-     * Adds an contact list
+     * Adds an custom filed into the source
      *
-     * @param ContactList $list
+     * @param CustomField $field
      *
      * @return $this
      */
-    public function addContactList(ContactList $list)
+    public function addCustomField(CustomField $field)
     {
-        $this->contactLists[] = $list;
+        $this->customFields[] = $field;
         return $this;
+    }
+
+    /**
+     * Creates a new custom field and stores it to the list
+     *
+     * @param $id
+     *
+     * @return CustomField
+     *
+     * @uses Contact::addCustomField()
+     */
+    public function newCustomField($id)
+    {
+        $field = new CustomField($id);
+        $this->addCustomField($field);
+        return $field;
     }
 
     //endregion
@@ -419,8 +474,8 @@ class Contact implements \JsonSerializable
             'customfields' => $this->customFields
         ], function ($var) {
             // Don`t show empty array
-            if (is_array($var)) {
-                return !empty($var);
+            if ($var instanceof AbstractHolder) {
+                return !$var->isEmpty();
             }
 
             // Show non-null values

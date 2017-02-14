@@ -29,11 +29,16 @@ class CustomField implements \JsonSerializable
     /**
      * CustomField constructor.
      *
-     * @param int|null $id
+     * @param int|null    $id
+     * @param string|null $value
      */
-    public function __construct($id)
+    public function __construct($id, $value = null)
     {
         $this->setId($id);
+
+        if (!is_null($value)) {
+            $this->setValue($value);
+        }
     }
 
 
@@ -63,6 +68,7 @@ class CustomField implements \JsonSerializable
 
     /**
      * Adds a CustomField id for composite customfields
+     *
      * @param int $customFiledId
      *
      * @return $this

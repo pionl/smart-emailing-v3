@@ -3,6 +3,8 @@ namespace SmartEmailing\v3\Tests\Request\Import;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use SmartEmailing\v3\Request\Import\Contact;
+use SmartEmailing\v3\Request\Import\ContactList;
+use SmartEmailing\v3\Request\Import\CustomField;
 use SmartEmailing\v3\Tests\BaseTestCase;
 
 class ContactTest extends BaseTestCase
@@ -89,5 +91,56 @@ class ContactTest extends BaseTestCase
     public function testJsonSerialize()
     {
         $this->assertCount(1, $this->contact->jsonSerialize(), 'There should be 2 values - email and date');
+    }
+
+    public function testAddField()
+    {
+        $this->contact->customFields()->add(new CustomField(1));
+        $this->assertCount(1, $this->contact->customFields()->toArray(), 'There should be 1 field');
+        $this->assertEquals(1, $this->contact->customFields()->get(0)->id);
+    }
+
+    public function testCreateField()
+    {
+        $this->contact->customFields()->create(1, 'test2', [1]);
+        $this->assertCount(1, $this->contact->customFields()->toArray(), 'There should be 1 field');
+
+        /** @var CustomField $field */
+        $field = $this->contact->customFields()->get(0);
+        $this->assertEquals(1, $field->id);
+        $this->assertEquals('test2', $field->value);
+        $this->assertEquals([1], $field->options);
+    }
+
+    public function testAddList()
+    {
+        $this->contact->contactList()->add(new ContactList(1));
+        $this->assertCount(1, $this->contact->contactList()->toArray(), 'There should be 1 field');
+        $this->assertEquals(1, $this->contact->contactList()->get(0)->id);
+    }
+
+    public function testCreateList()
+    {
+        $this->contact->contactList()->create(1, ContactList::REMOVED);
+        $this->assertCount(1, $this->contact->contactList()->toArray(), 'There should be 1 field');
+
+        /** @var ContactList $list */
+        $list = $this->contact->contactList()->get(0);
+        $this->assertEquals(1, $list->id);
+        $this->assertEquals(ContactList::REMOVED, $list->status);
+    }
+
+    public function testJson()
+    {
+        $this->contact->customFields()->create(1, 'test2', [1]);
+        $this->contact->contactList()->create(1, ContactList::REMOVED);
+        $this->contact->setGender('M');
+
+        $json = json_encode($this->contact->jsonSerialize());
+
+        $this->assertEquals(
+            '{"emailaddress":"email@gmail.com","gender":"M","contactlists":[{"id":1,"status":"removed"}],"customfields":[{"id":1,"options":[1],"value":"test2"}]}',
+            $json
+        );
     }
 }
