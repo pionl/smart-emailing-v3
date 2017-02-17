@@ -64,7 +64,8 @@ $import->send();
 * [x] [Ping](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Aliveness_test) `$api->ping()` or `new Ping($api)`
 * [x] [Credentials](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Login_test_with_GET) `$api->credentials()` or `new Credentials($api)`
 * [ ] [Contactlist](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contactlists-Get_Contactlists) Retrieve list `$api->contactlist()->lists()` or detail `$api->contactlist()->get($id)` - wrapper for 2 Request objects
-* [ ] [Customfields](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) Similar concept as contact-list
+* [x] [Customfields - create](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) Similar concept as contact-list
+* [ ] [Customfields - rest](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) Similar concept as contact-list - already started
 * [ ] [Customfiels options](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfield_Options)
 * [ ] [Contacts](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts) Similar concept as contact-list
 * [ ] [Contacts in list](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts_in_lists) Similar concept as contact-list
@@ -75,7 +76,9 @@ $import->send();
 
 ## Changelog
 
-none
+### 0.1
+
+* Added Custom-fields create request
 
 ## Contribution or overriding
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute changes. All contributions are welcome.

@@ -3,6 +3,7 @@ namespace SmartEmailing\v3;
 
 use GuzzleHttp\Client;
 use SmartEmailing\v3\Request\Credentials\Credentials;
+use SmartEmailing\v3\Request\CustomFields\CustomFields;
 use SmartEmailing\v3\Request\Import\Import;
 use SmartEmailing\v3\Request\Ping\Ping;
 
@@ -67,6 +68,11 @@ class Api
     public function credentials()
     {
         return new Credentials($this);
+    }
+
+    public function customFields()
+    {
+        return new CustomFields($this);
     }
 
 }

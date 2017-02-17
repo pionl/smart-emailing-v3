@@ -28,6 +28,7 @@ upload and progress.
 * For running live test, just create `.env` with your credentials set
 * To test your credentials run `PingLiveTest`
 * To test import, comment `return` statement in `ImportLiveTest` 
+* To test custom field create-request, comment `return` statement in `CreateRequestLiveTest` 
 
 ## Quick guide
 
