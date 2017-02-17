@@ -1,13 +1,15 @@
 <?php
 namespace SmartEmailing\v3\Request\Import;
+
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
+use SmartEmailing\v3\Models\Model;
 
 /**
  * Contact list wrapper with public properties (allows force set and easy getter). The fluent setter will help
  * to set values in correct format.
  * @package SmartEmailing\v3\Request\Import
  */
-class ContactList implements \JsonSerializable
+class ContactList extends Model
 {
     const CONFIRMED = 'confirmed';
     const REMOVED = 'removed';
@@ -26,8 +28,8 @@ class ContactList implements \JsonSerializable
     /**
      * ContactList constructor.
      *
-     * @param int $id
-     * @param string   $status Default value: confirmed
+     * @param int    $id
+     * @param string $status Default value: confirmed
      */
     public function __construct($id, $status = null)
     {
@@ -37,7 +39,6 @@ class ContactList implements \JsonSerializable
             $this->setStatus($status);
         }
     }
-
 
     /**
      * @param int $id
@@ -51,7 +52,7 @@ class ContactList implements \JsonSerializable
     }
 
     /**
-     * Contact's status in Contactlist. Allowed values: "confirmed", "unsubscribed", "removed"
+     * Contact's status in Contact-list. Allowed values: "confirmed", "unsubscribed", "removed"
      *
      * @param string $status
      *
@@ -82,6 +83,7 @@ class ContactList implements \JsonSerializable
      */
     public function jsonSerialize()
     {
+        // Don't remove null/empty values - not needed
         return $this->toArray();
     }
 }

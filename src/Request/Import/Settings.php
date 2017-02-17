@@ -1,6 +1,8 @@
 <?php
 namespace SmartEmailing\v3\Request\Import;
 
+use SmartEmailing\v3\Models\Model;
+
 /**
  * Class Settings
  *
@@ -8,7 +10,7 @@ namespace SmartEmailing\v3\Request\Import;
  *
  * @package SmartEmailing\v3\Request\Import
  */
-class Settings implements \JsonSerializable
+class Settings extends Model
 {
     //region Properties
     /**
@@ -170,6 +172,7 @@ class Settings implements \JsonSerializable
      */
     public function jsonSerialize()
     {
+        // Don't remove any null/empty array - not needed
         return $this->toArray();
     }
 

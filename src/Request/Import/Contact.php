@@ -3,7 +3,8 @@ namespace SmartEmailing\v3\Request\Import;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use function \SmartEmailing\v3\Helpers\convertDate;
-use SmartEmailing\v3\Request\Import\Holder\AbstractHolder;
+use SmartEmailing\v3\Models\Model;
+use SmartEmailing\v3\Models\AbstractHolder;
 use SmartEmailing\v3\Request\Import\Holder\ContactLists;
 use SmartEmailing\v3\Request\Import\Holder\CustomFields;
 
@@ -13,7 +14,7 @@ use SmartEmailing\v3\Request\Import\Holder\CustomFields;
  *
  * @package SmartEmailing\v3\Request\Import
  */
-class Contact implements \JsonSerializable
+class Contact extends Model
 {
     //region Properties
     /**
@@ -315,9 +316,9 @@ class Contact implements \JsonSerializable
     }
 
     /**
-     * 0 (false) if Contact is OK, 1 (true) if Contact does not want to recieve any of your e-mails anymore. This flag will stop
-     * further campaigns. Be careful, setting this value to 1 will also unsubscribe contact from all lists. It is
-     * recommended not to send this parameter at all if you do not know what you are doing.
+     * 0 (false) if Contact is OK, 1 (true) if Contact does not want to recieve any of your e-mails anymore. This flag
+     * will stop further campaigns. Be careful, setting this value to 1 will also unsubscribe contact from all lists.
+     * It is recommended not to send this parameter at all if you do not know what you are doing.
      *
      * @param boolean $blacklisted
      *
@@ -345,6 +346,7 @@ class Contact implements \JsonSerializable
 
     /**
      * Date of Contact's birthday in YYYY-MM-DD 00:00:00 format  or different format
+     *
      * @param null|string $birthday
      * @param bool        $convertToValidFormat converts the value to valid format
      *
@@ -449,8 +451,7 @@ class Contact implements \JsonSerializable
      */
     public function toArray()
     {
-        // Build the full array of values and remove the null values
-        return array_filter([
+        return [
             'emailaddress' => $this->emailAddress,
             'name' => $this->name,
             'surname' => $this->surname,
@@ -472,22 +473,6 @@ class Contact implements \JsonSerializable
             'birthday' => $this->birthday,
             'contactlists' => $this->contactLists,
             'customfields' => $this->customFields
-        ], function ($var) {
-            // Don`t show empty array
-            if ($var instanceof AbstractHolder) {
-                return !$var->isEmpty();
-            }
-
-            // Show non-null values
-            return !is_null($var);
-        });
-    }
-
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
-    {
-        return $this->toArray();
+        ];
     }
 }

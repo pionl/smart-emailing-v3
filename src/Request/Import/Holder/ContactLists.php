@@ -1,6 +1,7 @@
 <?php
 namespace SmartEmailing\v3\Request\Import\Holder;
 
+use SmartEmailing\v3\Models\AbstractHolder;
 use SmartEmailing\v3\Request\Import\ContactList;
 
 class ContactLists extends AbstractHolder

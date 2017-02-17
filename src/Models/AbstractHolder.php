@@ -1,5 +1,5 @@
 <?php
-namespace SmartEmailing\v3\Request\Import\Holder;
+namespace SmartEmailing\v3\Models;
 
 abstract class AbstractHolder implements \JsonSerializable
 {
@@ -36,6 +36,4 @@ abstract class AbstractHolder implements \JsonSerializable
     {
         return $this->toArray();
     }
-
-
 }

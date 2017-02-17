@@ -1,12 +1,14 @@
 <?php
 namespace SmartEmailing\v3\Request\Import;
 
+use SmartEmailing\v3\Models\Model;
+
 /**
  * Contact field wrapper with public properties (allows force set and easy getter). The fluent setter will help
  * to set values in correct format.
  * @package SmartEmailing\v3\Request\Import
  */
-class CustomField implements \JsonSerializable
+class CustomField extends Model
 {
     /**
      * @var int|null
@@ -14,14 +16,14 @@ class CustomField implements \JsonSerializable
     public $id = null;
 
     /**
-     * Array of Customfields options IDs matching with selected Customfield. Required for composite customfields
+     * Array of Customfields options IDs matching with selected Custom-field. Required for composite custom-fields
      * @var array
      */
     public $options = [];
 
     /**
-     * String value for simple customfields, and YYYY-MM-DD HH:MM:SS for date customfields. Value size is limited to
-     * 64KB. Required for simple customfields
+     * String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields. Value size is limited to
+     * 64KB. Required for simple custom-fields
      * @var string|null
      */
     public $value = null;
@@ -67,7 +69,7 @@ class CustomField implements \JsonSerializable
     }
 
     /**
-     * Adds a CustomField id for composite customfields
+     * Adds a CustomField id for composite custom-fields
      *
      * @param int $customFiledId
      *
@@ -80,8 +82,8 @@ class CustomField implements \JsonSerializable
     }
 
     /**
-     * String value for simple customfields, and YYYY-MM-DD HH:MM:SS for date customfields. Value size is limited to
-     * 64KB. Required for simple customfields
+     * String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields. Value size is limited to
+     * 64KB. Required for simple custom-fields
      *
      * @param null|string $value
      *
@@ -100,24 +102,10 @@ class CustomField implements \JsonSerializable
      */
     public function toArray()
     {
-        $array = [
-            'id' => $this->id
+        return [
+            'id' => $this->id,
+            'options' => $this->options,
+            'value' => $this->value
         ];
-
-        if (!empty($this->options)) {
-            $array['options'] = $this->options;
-        }
-        if (!is_null($this->value)) {
-            $array['value'] = $this->value;
-        }
-        return $array;
-    }
-
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
-    {
-        return $this->toArray();
     }
 }
