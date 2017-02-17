@@ -10,7 +10,8 @@ API wrapper for [Smart emailing](http://smartemailing.cz) API. Currenlty in deve
 * [Supports](#supports)
 * [Changelog](#changelog)
 * [Contribution or overriding](#contribution-or-overriding)
-* [Suggested frontend libs](#suggested-frontend-libs)
+* [Copyright and License](#copyright-and-license)
+* [Smart emailing API](https://app.smartemailing.cz/docs/api/v3/index.html)
 
 ## Installation
 
