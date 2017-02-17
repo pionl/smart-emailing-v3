@@ -2,6 +2,7 @@
 namespace SmartEmailing\v3\Tests;
 
 use GuzzleHttp\Psr7\Uri;
+use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class ApiClientTest extends BaseTestCase
 {

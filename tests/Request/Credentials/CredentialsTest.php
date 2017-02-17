@@ -1,12 +1,11 @@
 <?php
 namespace SmartEmailing\v3\Tests\Request\Credentials;
 
-use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Request\Credentials\Credentials;
 use SmartEmailing\v3\Request\Credentials\Response;
-use SmartEmailing\v3\Tests\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
-class CredentialsTest extends BaseTestCase
+class CredentialsTestCase extends ApiStubTestCase
 {
     /**
      * @var Credentials
@@ -14,17 +13,11 @@ class CredentialsTest extends BaseTestCase
     protected $credentials;
 
     /**
-     * @var Api|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $apiStub;
-
-    /**
      * Builds the ping instance on every test
      */
     public function setUp()
     {
-        /** @var  $apiStub */
-        $this->apiStub = $this->createMock(Api::class);
+        parent::setUp();
         $this->credentials = new Credentials($this->apiStub);
     }
 
@@ -33,10 +26,8 @@ class CredentialsTest extends BaseTestCase
      */
     public function testEndpointAndOptions()
     {
-        $this->createEndpointTest($this->apiStub, $this->credentials, 'check-credentials');
+        $this->createEndpointTest($this->credentials, 'check-credentials');
     }
-
-
 
     /**
      * Mocks the request and checks if request is returned via send method
@@ -44,7 +35,7 @@ class CredentialsTest extends BaseTestCase
     public function testSend()
     {
         /** @var Response $response */
-        $response = $this->createSendResponse($this->apiStub, $this->credentials, '{
+        $response = $this->createSendResponse($this->credentials, '{
             "status": "ok",
             "meta": [
             ],

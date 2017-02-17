@@ -5,7 +5,7 @@ use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Exceptions\RequestException;
 use SmartEmailing\v3\Request\Credentials\Credentials;
 use SmartEmailing\v3\Request\Credentials\Response;
-use SmartEmailing\v3\Tests\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class CredentialsLiveTest extends BaseTestCase
 {

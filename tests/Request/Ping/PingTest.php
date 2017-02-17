@@ -1,16 +1,10 @@
 <?php
 namespace SmartEmailing\v3\Tests\Request\Ping;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\Psr7\Response;
-use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Request\Ping\Ping;
-use SmartEmailing\v3\Api;
-use SmartEmailing\v3\Request\Response as InternalResponse;
-use SmartEmailing\v3\Tests\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
-class PingTest extends BaseTestCase
+class PingTestCase extends ApiStubTestCase
 {
     /**
      * @var Ping
@@ -18,17 +12,11 @@ class PingTest extends BaseTestCase
     protected $ping;
 
     /**
-     * @var Api|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $apiStub;
-
-    /**
      * Builds the ping instance on every test
      */
     public function setUp()
     {
-        /** @var  $apiStub */
-        $this->apiStub = $this->createMock(Api::class);
+        parent::setUp();
         $this->ping = new Ping($this->apiStub);
     }
 
@@ -36,7 +24,7 @@ class PingTest extends BaseTestCase
      * Tests if the endpoint/options is passed to request
      */
     public function testEndpointAndOptions() {
-        $this->createEndpointTest($this->apiStub, $this->ping, 'ping');
+        $this->createEndpointTest($this->ping, 'ping');
     }
 
     /**
@@ -44,7 +32,7 @@ class PingTest extends BaseTestCase
      */
     public function testSend()
     {
-        $this->createSendResponse($this->apiStub, $this->ping, '{
+        $this->createSendResponse($this->ping, '{
                "status": "ok",
                "meta": [
                ],

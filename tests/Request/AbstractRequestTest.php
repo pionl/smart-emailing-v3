@@ -4,10 +4,10 @@ namespace SmartEmailing\v3\Tests\Request;
 use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Request\AbstractRequest;
 use SmartEmailing\v3\Request\Response;
-use SmartEmailing\v3\Tests\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 use SmartEmailing\v3\Tests\Mock\RequestMock;
 
-class AbstractRequestTest extends BaseTestCase
+class AbstractRequestTestCase extends ApiStubTestCase
 {
     /**
      * @var AbstractRequest|\PHPUnit_Framework_MockObject_MockObject
@@ -15,17 +15,11 @@ class AbstractRequestTest extends BaseTestCase
     protected $request;
 
     /**
-     * @var Api|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $apiStub;
-
-    /**
      * Builds the ping instance on every test
      */
     public function setUp()
     {
-        /** @var  $apiStub */
-        $this->apiStub = $this->createMock(Api::class);
+        parent::setUp();
         $this->request = new RequestMock($this->apiStub);
     }
 
@@ -34,12 +28,12 @@ class AbstractRequestTest extends BaseTestCase
      */
     public function testEndpointAndOptions()
     {
-        $this->createEndpointTest($this->apiStub, $this->request, 'endpoint', 'GET', ['test']);
+        $this->createEndpointTest($this->request, 'endpoint', 'GET', ['test']);
     }
 
     public function testResponse()
     {
-        $this->createSendResponse($this->apiStub, $this->request, '{
+        $this->createSendResponse($this->request, '{
                "status": "ok",
                "meta": [
                ],
@@ -52,7 +46,7 @@ class AbstractRequestTest extends BaseTestCase
      */
     public function testResponseStatusCodeWithResponseError()
     {
-        $exception = $this->createSendErrorResponse($this->apiStub, $this->request, '{
+        $exception = $this->createSendErrorResponse($this->request, '{
                "status": "error",
                "meta": [
                ],
@@ -72,7 +66,7 @@ class AbstractRequestTest extends BaseTestCase
      */
     public function testResponse200StatusCodeWithResponseError()
     {
-        $exception = $this->createSendErrorResponse($this->apiStub, $this->request, '{
+        $exception = $this->createSendErrorResponse($this->request, '{
                "status": "error",
                "meta": [
                ],
@@ -91,7 +85,7 @@ class AbstractRequestTest extends BaseTestCase
     public function testResponseStatusCode()
     {
         $exception = $this->createSendErrorResponse(
-            $this->apiStub, $this->request, null, null, Response::ERROR, [], Response::class, 500
+            $this->request, null, null, Response::ERROR, [], Response::class, 500
         );
 
         $this->assertEquals('Client error', $exception->getMessage(), 'The exception should use the Guzzles message');
@@ -107,7 +101,7 @@ class AbstractRequestTest extends BaseTestCase
     public function testResponseStatusCodeWithJson()
     {
         $exception = $this->createSendErrorResponse(
-            $this->apiStub, $this->request, '{
+            $this->request, '{
                "status": "error",
                "meta": [
                ],

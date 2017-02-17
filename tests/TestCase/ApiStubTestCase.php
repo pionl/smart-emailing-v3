@@ -1,54 +1,46 @@
 <?php
-namespace SmartEmailing\v3\Tests;
+namespace SmartEmailing\v3\Tests\TestCase;
 
-use Dotenv\Dotenv;
+use SmartEmailing\v3\Api;
+use SmartEmailing\v3\Request\AbstractRequest;
+use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
-use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Exceptions\RequestException;
-use SmartEmailing\v3\Request\AbstractRequest;
 use SmartEmailing\v3\Request\Response as InternalResponse;
+use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
-class BaseTestCase extends TestCase
+abstract class ApiStubTestCase extends BaseTestCase
 {
-    protected $username;
-    protected $apiKey;
 
     /**
-     * Constructs a test case with the given name. Setups default api-key/username
-     *
-     * @param string $name
-     * @param array  $data
-     * @param string $dataName
+     * @var Api|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    protected $apiStub;
+
+    protected function setUp()
     {
-        parent::__construct($name, $data, $dataName);
+        parent::setUp();
 
-        // Load the Env variables
-        $dotEnv = new Dotenv(__DIR__.'/../');
-        $dotEnv->load();
-
-        // Setup the username/api-key
-        $this->username = $this->env('USERNAME', 'username');
-        $this->apiKey = $this->env('API_KEY', 'password');
+        /** @var  $apiStub */
+        $this->apiStub = $this->createMock(Api::class);
     }
+
 
     /**
      * Creates a tests for send request that will check if correct parameters are send to clients request method
      *
-     * @param Api|\PHPUnit_Framework_MockObject_MockObject $apiStub
-     * @param AbstractRequest                              $request
-     * @param string                                       $endpointName
-     * @param string                                       $httpMethod
-     * @param array|null|object                                   $options
+     * @param AbstractRequest   $request
+     * @param string            $endpointName
+     * @param string            $httpMethod
+     * @param array|null|object $options
+     *
+     * @return \SmartEmailing\v3\Request\Response
      */
-    protected function createEndpointTest($apiStub, $request, $endpointName, $httpMethod = 'GET',
+    protected function createEndpointTest($request, $endpointName, $httpMethod = 'GET',
                                           $options = [])
     {
         // Build the client that will mock the client->request method
@@ -80,14 +72,14 @@ class BaseTestCase extends TestCase
 
         )->willReturn($response);
 
-        $apiStub->method('client')->willReturn($client);
-        $request->send();
+        $this->apiStub->method('client')->willReturn($client);
+        return $request->send();
     }
+
 
     /**
      * Creates a response mock and runs the send method. Then checks for the response result.
      *
-     * @param Api|\PHPUnit_Framework_MockObject_MockObject $apiStub
      * @param AbstractRequest                              $request
      * @param string                                       $responseText
      * @param string                                       $responseMessage
@@ -98,12 +90,12 @@ class BaseTestCase extends TestCase
      *
      * @return InternalResponse
      */
-    public function createSendResponse($apiStub, $request, $responseText, $responseMessage,
+    public function createSendResponse($request, $responseText, $responseMessage,
                                        $responseStatus = InternalResponse::SUCCESS, array $meta = [],
                                        $responseClass = InternalResponse::class, $responseCode = 200)
     {
 
-        $this->createMockHandlerToApi($apiStub, $responseText, $responseCode);
+        $this->createMockHandlerToApi($responseText, $responseCode);
 
         // Run the request
         $response = $request->send();
@@ -115,7 +107,6 @@ class BaseTestCase extends TestCase
     /**
      * Creates a response mock and runs the send method. Then checks for the response result.
      *
-     * @param Api|\PHPUnit_Framework_MockObject_MockObject $apiStub
      * @param AbstractRequest                              $request
      * @param string                                       $responseText
      * @param string                                       $responseMessage
@@ -126,12 +117,12 @@ class BaseTestCase extends TestCase
      *
      * @return RequestException
      */
-    public function createSendErrorResponse($apiStub, $request, $responseText, $responseMessage,
+    public function createSendErrorResponse($request, $responseText, $responseMessage,
                                             $responseStatus = InternalResponse::SUCCESS, array $meta = [],
                                             $responseClass = InternalResponse::class, $responseCode = 200)
     {
 
-        $this->createMockHandlerToApi($apiStub, $responseText, $responseCode);
+        $this->createMockHandlerToApi($responseText, $responseCode);
 
         try {
             // Run the request
@@ -148,11 +139,10 @@ class BaseTestCase extends TestCase
     /**
      * Creates a MockHandler with a response and mocks the client in mocked api
      *
-     * @param Api|\PHPUnit_Framework_MockObject_MockObject $apiStub
      * @param string                                       $responseText
      * @param int                                          $responseCode
      */
-    protected function createMockHandlerToApi($apiStub, $responseText, $responseCode)
+    protected function createMockHandlerToApi($responseText, $responseCode)
     {
         $responseQueue = [];
         if ($responseCode > 300) {
@@ -170,7 +160,7 @@ class BaseTestCase extends TestCase
         $client = new Client(['handler' => $handler]);
 
         // Replace the client
-        $apiStub->method('client')->willReturn($client);
+        $this->apiStub->method('client')->willReturn($client);
     }
 
     /**
@@ -189,48 +179,4 @@ class BaseTestCase extends TestCase
         $this->assertEquals($meta, $response->meta());
     }
 
-    /**
-     * Creates new API
-     *
-     * @param string|null $apiUrl
-     *
-     * @return Api
-     */
-    protected function createApi($apiUrl = null)
-    {
-        return new Api($this->username, $this->apiKey, $apiUrl);
-    }
-
-    /**
-     * Gets the value of an environment variable.
-     *
-     * @param  string $key
-     * @param  mixed  $default
-     *
-     * @return mixed
-     */
-    function env($key, $default = null)
-    {
-        $value = getenv($key);
-
-        if ($value === false) {
-            return $default;
-        }
-
-        switch (strtolower($value)) {
-            case 'true':
-            case '(true)':
-                return true;
-            case 'false':
-            case '(false)':
-                return false;
-            case 'empty':
-            case '(empty)':
-                return '';
-            case 'null':
-            case '(null)':
-                return null;
-        }
-        return $value;
-    }
 }

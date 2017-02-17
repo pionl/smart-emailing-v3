@@ -5,7 +5,7 @@ use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use SmartEmailing\v3\Request\Import\Contact;
 use SmartEmailing\v3\Request\Import\ContactList;
 use SmartEmailing\v3\Request\Import\CustomField;
-use SmartEmailing\v3\Tests\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class ContactTest extends BaseTestCase
 {

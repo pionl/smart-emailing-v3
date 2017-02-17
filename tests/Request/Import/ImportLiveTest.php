@@ -6,7 +6,7 @@ use SmartEmailing\v3\Request\Import\Contact;
 use SmartEmailing\v3\Request\Import\Import;
 use SmartEmailing\v3\Request\Import\Settings;
 use SmartEmailing\v3\Request\Response;
-use SmartEmailing\v3\Tests\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class ImportLiveTest extends BaseTestCase
 {

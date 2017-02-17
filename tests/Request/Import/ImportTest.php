@@ -1,29 +1,22 @@
 <?php
 namespace SmartEmailing\v3\Tests\Request\Import;
 
-use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Request\Import\Contact;
 use SmartEmailing\v3\Request\Import\Import;
 use SmartEmailing\v3\Request\Import\Settings;
-use SmartEmailing\v3\Tests\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
-class ImportTest extends BaseTestCase
+class ImportTestCase extends ApiStubTestCase
 {
     /**
      * @var Import
      */
     protected $import;
 
-    /**
-     * @var Api|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $apiStub;
-
     protected function setUp()
     {
         parent::setUp();
-        /** @var  $apiStub */
-        $this->apiStub = $this->createMock(Api::class);
+
         $this->import = new Import($this->apiStub);
     }
 
@@ -31,7 +24,7 @@ class ImportTest extends BaseTestCase
      * Tests if the endpoint/options is passed to request
      */
     public function testEndpoint() {
-        $this->createEndpointTest($this->apiStub, $this->import, 'import', 'POST', $this->arrayHasKey('json'));
+        $this->createEndpointTest($this->import, 'import', 'POST', $this->arrayHasKey('json'));
     }
 
     public function testConstruct()
