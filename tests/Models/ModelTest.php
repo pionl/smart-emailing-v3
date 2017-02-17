@@ -48,4 +48,16 @@ class ModelTest extends BaseTestCase
         $this->assertNull($model->null);
         $this->assertEquals([], $model->array);
     }
+
+    /**
+     * Test that event null values are parsed
+     */
+    public function testFromJSONParseNull()
+    {
+        /** @var ModelMock $model */
+        $model = ModelMock::fromJSON([
+            'array' => null
+        ]);
+        $this->assertNull($model->array);
+    }
 }

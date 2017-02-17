@@ -16,7 +16,7 @@ abstract class Model implements \JsonSerializable
         // Get all the data that is supported and try to
         // get it from the json with same key
         foreach ($item->toArray() as $key => $value) {
-            if (isset($json[$key])) {
+            if (array_key_exists($key, $json)) {
                 $item->{$key} = $json[$key];
             }
         }
