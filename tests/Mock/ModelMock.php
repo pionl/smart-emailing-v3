@@ -5,13 +5,17 @@ use SmartEmailing\v3\Models\Model;
 
 class ModelMock extends Model
 {
+    public $boolean = true;
+    public $null = null;
+    public $array = [];
+
     public function toArray()
     {
         return [
-            'null' => null,
-            'boolean' => true,
+            'null' => $this->null,
+            'boolean' => $this->boolean,
             'string' => 'hello',
-            'empty' => [],
+            'empty' => $this->array,
             'array' => ['hello'],
             'holder' => (new HolderMock())->add('hello'),
             'holder_empty' => new HolderMock()

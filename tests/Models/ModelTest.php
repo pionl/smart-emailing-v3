@@ -31,4 +31,21 @@ class ModelTest extends BaseTestCase
         $this->assertArrayHasKey('array', $array);
         $this->assertArrayHasKey('holder', $array);
     }
+
+    public function testFromJSON()
+    {
+        /** @var ModelMock $model */
+        $model = ModelMock::fromJSON([
+            'unsupported' => 'test',
+            'boolean' => true,
+            'null' => null,
+            'array' => []
+        ]);
+
+        $this->assertObjectNotHasAttribute('unsupported', $model, 'A key should not be imported if not found in default 
+        toArray data');
+        $this->assertTrue($model->boolean);
+        $this->assertNull($model->null);
+        $this->assertEquals([], $model->array);
+    }
 }
