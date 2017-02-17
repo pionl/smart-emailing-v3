@@ -15,6 +15,11 @@ use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 abstract class ApiStubTestCase extends BaseTestCase
 {
+    /**
+     * Default response that will be rewritten on every setUp
+     * @var string
+     */
+    protected $defaultReturnResponse;
 
     /**
      * @var Api|\PHPUnit_Framework_MockObject_MockObject
@@ -27,66 +32,90 @@ abstract class ApiStubTestCase extends BaseTestCase
 
         /** @var  $apiStub */
         $this->apiStub = $this->createMock(Api::class);
+
+        $this->defaultReturnResponse = '{
+               "status": "ok",
+               "meta": [
+               ],
+               "message": "Hi there! API version 3 here!"
+           }';
     }
 
 
     /**
      * Creates a tests for send request that will check if correct parameters are send to clients request method
      *
-     * @param AbstractRequest   $request
-     * @param string            $endpointName
-     * @param string            $httpMethod
-     * @param array|null|object $options
+     * @param AbstractRequest                                 $request
+     * @param string|null|\PHPUnit_Framework_Constraint|mixed $endpointName
+     * @param string|null|\PHPUnit_Framework_Constraint|mixed $httpMethod
+     * @param string|null|\PHPUnit_Framework_Constraint|mixed $options
      *
      * @return \SmartEmailing\v3\Request\Response
      */
     protected function createEndpointTest($request, $endpointName, $httpMethod = 'GET',
                                           $options = [])
     {
+        $this->stubClientResponse($endpointName, $httpMethod, $options);
+        return $request->send();
+    }
+
+    /**
+     * Builds the response/client mocks and setups for a clients request call
+     *
+     * @param string|null|\PHPUnit_Framework_Constraint|mixed $endpointName
+     * @param string|null|\PHPUnit_Framework_Constraint|mixed $httpMethod
+     * @param array                                           $options
+     */
+    protected function stubClientResponse($endpointName, $httpMethod = 'GET', $options = [])
+    {
         // Build the client that will mock the client->request method
         $client = $this->createMock(Client::class);
         $response = $this->createMock(ResponseInterface::class);
 
         // Make a response that is valid and ok - prevent exception
-        $response->expects($this->once())->method('getBody')->willReturn('{
-               "status": "ok",
-               "meta": [
-               ],
-               "message": "Hi there! API version 3 here!"
-           }');
+        $response->expects($this->once())->method('getBody')->willReturn($this->defaultReturnResponse);
 
-        // Build customizable options to check
-        $optionsCheck = null;
-
-        if (is_null($options)) {
-            $optionsCheck = $this->anything();
-        } else if (is_object($options)) {
-            $optionsCheck = $options;
-        } else {
-            $optionsCheck = $this->equalTo($options);
-        }
 
         // The send method will trigger the request once with given properties (request methods)
         $client->expects($this->once())->method('request')->with(
-            $this->equalTo($httpMethod), $this->equalTo($endpointName), $optionsCheck
+            $this->valueConstraint($httpMethod),
+            $this->valueConstraint($endpointName),
+            $this->valueConstraint($options)
 
         )->willReturn($response);
 
         $this->apiStub->method('client')->willReturn($client);
-        return $request->send();
+    }
+
+    /**
+     * Builds the correct constraint value based on input value
+     *
+     * @param string|null|\PHPUnit_Framework_Constraint|mixed $desiredValue
+     *
+     * @return \PHPUnit_Framework_Constraint_IsAnything|\PHPUnit_Framework_Constraint_IsEqual
+     */
+    protected function valueConstraint($desiredValue)
+    {
+        if (is_null($desiredValue)) {
+            return $this->anything();
+        } else if (is_object($desiredValue)) {
+            return $desiredValue;
+        } else {
+            return $this->equalTo($desiredValue);
+        }
     }
 
 
     /**
      * Creates a response mock and runs the send method. Then checks for the response result.
      *
-     * @param AbstractRequest                              $request
-     * @param string                                       $responseText
-     * @param string                                       $responseMessage
-     * @param string                                       $responseStatus
-     * @param array                                        $meta
-     * @param string                                       $responseClass
-     * @param int                                          $responseCode
+     * @param AbstractRequest $request
+     * @param string          $responseText
+     * @param string          $responseMessage
+     * @param string          $responseStatus
+     * @param array           $meta
+     * @param string          $responseClass
+     * @param int             $responseCode
      *
      * @return InternalResponse
      */
@@ -107,13 +136,13 @@ abstract class ApiStubTestCase extends BaseTestCase
     /**
      * Creates a response mock and runs the send method. Then checks for the response result.
      *
-     * @param AbstractRequest                              $request
-     * @param string                                       $responseText
-     * @param string                                       $responseMessage
-     * @param string                                       $responseStatus
-     * @param array                                        $meta
-     * @param string                                       $responseClass
-     * @param int                                          $responseCode
+     * @param AbstractRequest $request
+     * @param string          $responseText
+     * @param string          $responseMessage
+     * @param string          $responseStatus
+     * @param array           $meta
+     * @param string          $responseClass
+     * @param int             $responseCode
      *
      * @return RequestException
      */
@@ -139,8 +168,8 @@ abstract class ApiStubTestCase extends BaseTestCase
     /**
      * Creates a MockHandler with a response and mocks the client in mocked api
      *
-     * @param string                                       $responseText
-     * @param int                                          $responseCode
+     * @param string $responseText
+     * @param int    $responseCode
      */
     protected function createMockHandlerToApi($responseText, $responseCode)
     {
