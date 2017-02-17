@@ -4,7 +4,6 @@ namespace SmartEmailing\v3\Request\Import;
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use function \SmartEmailing\v3\Helpers\convertDate;
 use SmartEmailing\v3\Models\Model;
-use SmartEmailing\v3\Models\AbstractHolder;
 use SmartEmailing\v3\Request\Import\Holder\ContactLists;
 use SmartEmailing\v3\Request\Import\Holder\CustomFields;
 
@@ -88,8 +87,8 @@ class Contact extends Model
      */
     public $gender = null;
     /**
-     * 0 if Contact is OK, 1 if Contact does not want to recieve any of your e-mails anymore. This flag will stop
-     * further campaigns. Be careful, setting this value to 1 will also unsubscribe contact from all lists. It is
+     * 0 if Contact is OK, 1 if Contact does not want to receive any of your e-mails anymore. This flag will stop
+     * further campaigns. Be careful, setting this value to 1 will also un-subscribe contact from all lists. It is
      * recommended not to send this parameter at all if you do not know what you are doing.
      * @var int
      */
@@ -105,13 +104,13 @@ class Contact extends Model
      */
     public $birthday = null;
     /**
-     * Contactlists presence of imported contacts. Any contactlist presence unlisted in imported data will be
+     * Contact lists presence of imported contacts. Any contact list presence unlisted in imported data will be
      * untouched. Unsubscribed contacts will stay unsubscribed if settings.preserve_unsubscribed=1
      * @var ContactLists
      */
     protected $contactLists;
     /**
-     * Customfields belonging to contact Customfields unlisted in imported data will be untouched.
+     * Custom fields belonging to contact Custom fields unlisted in imported data will be untouched.
      * @var CustomFields
      */
     protected $customFields;
@@ -316,8 +315,8 @@ class Contact extends Model
     }
 
     /**
-     * 0 (false) if Contact is OK, 1 (true) if Contact does not want to recieve any of your e-mails anymore. This flag
-     * will stop further campaigns. Be careful, setting this value to 1 will also unsubscribe contact from all lists.
+     * 0 (false) if Contact is OK, 1 (true) if Contact does not want to receive any of your e-mails anymore. This flag
+     * will stop further campaigns. Be careful, setting this value to 1 will also un-subscribe contact from all lists.
      * It is recommended not to send this parameter at all if you do not know what you are doing.
      *
      * @param boolean $blacklisted

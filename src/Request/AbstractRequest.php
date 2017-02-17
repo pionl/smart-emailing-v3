@@ -75,7 +75,7 @@ abstract class AbstractRequest
             // Pass the response
             return $internalResponse;
         } catch (GuzzleRequestException $exception) {
-            throw $this->convertGuzzleException($exception, false);
+            throw $this->convertGuzzleException($exception);
         }
     }
 

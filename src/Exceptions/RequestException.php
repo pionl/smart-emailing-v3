@@ -1,7 +1,6 @@
 <?php
 namespace SmartEmailing\v3\Exceptions;
 
-use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
 use Psr\Http\Message\RequestInterface;
 use SmartEmailing\v3\Request\Response;
 

@@ -1,7 +1,6 @@
 <?php
 namespace SmartEmailing\v3\Request\Credentials;
 
-use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Request\Response as BaseRequest;
 
 class Response extends BaseRequest

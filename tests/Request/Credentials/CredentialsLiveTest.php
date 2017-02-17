@@ -3,7 +3,6 @@ namespace SmartEmailing\v3\Tests\Request\Credentials;
 
 use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Exceptions\RequestException;
-use SmartEmailing\v3\Request\Credentials\Credentials;
 use SmartEmailing\v3\Request\Credentials\Response;
 use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
@@ -28,7 +27,7 @@ class CredentialsLiveTest extends BaseTestCase
     public function testSend401()
     {
         try {
-            $response = (new Api('test', 'password'))->credentials()->send();
+            (new Api('test', 'password'))->credentials()->send();
             $this->fail('The response should raise an RequestException due incorrect credentials - Guzzle raises an exception');
         } catch (RequestException $exception) {
             /** @var Response $response */

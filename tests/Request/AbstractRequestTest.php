@@ -1,7 +1,6 @@
 <?php
 namespace SmartEmailing\v3\Tests\Request;
 
-use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Request\AbstractRequest;
 use SmartEmailing\v3\Request\Response;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;

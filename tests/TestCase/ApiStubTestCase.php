@@ -11,7 +11,6 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use SmartEmailing\v3\Exceptions\RequestException;
 use SmartEmailing\v3\Request\Response as InternalResponse;
-use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 abstract class ApiStubTestCase extends BaseTestCase
 {
@@ -155,10 +154,11 @@ abstract class ApiStubTestCase extends BaseTestCase
 
         try {
             // Run the request
-            $response = $request->send();
+            $request->send();
 
             $this->fail('The send request should raise an exception when Guzzle raises RequestException 
             (non 200 status code) or API returns 200 status code with error status in json');
+            return null;
         } catch (RequestException $exception) {
             $this->assertResponse($exception->response(), $responseClass, $responseStatus, $responseMessage, $meta);
             return $exception;

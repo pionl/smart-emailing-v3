@@ -19,7 +19,7 @@ class PropertyRequiredException extends \LogicException
         }
     }
 
-    public function __construct($propertyName, $code = 500, \Exception $previous = null)
+    public function __construct($propertyName, $code = 500, Exception $previous = null)
     {
         parent::__construct("Property {$propertyName} is required to be set", $code, $previous);
     }

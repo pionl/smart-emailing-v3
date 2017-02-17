@@ -1,10 +1,8 @@
 <?php
 namespace SmartEmailing\v3\Tests\Request\Import;
 
-use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Request\Import\Contact;
 use SmartEmailing\v3\Request\Import\Import;
-use SmartEmailing\v3\Request\Import\Settings;
 use SmartEmailing\v3\Request\Response;
 use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
