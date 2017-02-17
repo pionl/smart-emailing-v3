@@ -9,7 +9,7 @@ abstract class Model implements \JsonSerializable
      *
      * @return static
      */
-    public function fromJSON($json)
+    public static function fromJSON(array $json)
     {
         $item = new static();
 
