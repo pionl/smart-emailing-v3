@@ -19,22 +19,27 @@ class ContactTest extends BaseTestCase
         $this->contact = new Contact('email@gmail.com');
     }
 
+    public function testToArray()
+    {
+        $this->assertNotCount(1, $this->contact->toArray(), "toArray shouldn't have filtered values");
+    }
+
     /**
      * Test that only email will be returned - array filter works
      */
-    public function testToArraySingleItem()
+    public function testToJSONSingleItem()
     {
-        $haystack = $this->contact->toArray();
+        $haystack = $this->contact->jsonSerialize();
         $this->assertCount(1, $haystack, 'The array should be filtered from null or empty array values');
     }
 
     /**
      * Tests if the notes are set and toArray returns 2 items
      */
-    public function testToArrayMultiple()
+    public function testToJSONMultiple()
     {
         $this->contact->setNotes('test');
-        $haystack = $this->contact->toArray();
+        $haystack = $this->contact->jsonSerialize();
         $this->assertCount(2, $haystack, 'There should be 2 values - email and note');
     }
 
@@ -85,12 +90,12 @@ class ContactTest extends BaseTestCase
         $this->assertEquals(
             date('Y-m-d H:i:s', strtotime('+1 month')), $this->contact->setNameDay('+1 month')->nameDay
         );
-        $this->assertCount(2, $this->contact->toArray(), 'There should be 2 values - email and date');
+        $this->assertCount(2, $this->contact->jsonSerialize(), 'There should be 2 values - email and date');
     }
 
     public function testJsonSerialize()
     {
-        $this->assertCount(1, $this->contact->jsonSerialize(), 'There should be 2 values - email and date');
+        $this->assertCount(1, $this->contact->jsonSerialize(), 'There should be 1 value - email');
     }
 
     public function testAddField()
