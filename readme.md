@@ -108,7 +108,7 @@ The import holds 3 main data points:
 
 See source code for all methods/properties that you can use
 
-#### CustomFields](./src/Request/Import/Holder/CustomFields.php)/[ContactLists]((./src/Request/Import/Holder/ContactLists.php)
+#### [CustomFields](./src/Request/Import/Holder/CustomFields.php)/[ContactLists]((./src/Request/Import/Holder/ContactLists.php)
 
 Uses a data holder with `create`/`add`/`get`/`isEmpty`/`toArray`/`jsonSerialize` methods.
 
