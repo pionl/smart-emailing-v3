@@ -2,6 +2,7 @@
 namespace SmartEmailing\v3\Tests\Request\CustomFields;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
+use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
@@ -82,5 +83,33 @@ class CustomFieldTest extends BaseTestCase
         $this->assertArrayHasKey('name', $array);
         $this->assertArrayHasKey('options', $array);
         $this->assertCount(2, $array);
+    }
+
+    public function testCreateValueFail()
+    {
+        // Test non saved custom field - without id
+        try {
+            $this->field->createValue();
+        } catch (PropertyRequiredException $exception) {
+            $this->assertEquals('You must register the custom field - missing id', $exception->getMessage());
+        }
+    }
+
+    public function testCreateValue()
+    {
+        $importField = $this->field->setId(10)->createValue('Test');
+
+        $this->assertInstanceOf(\SmartEmailing\v3\Request\Import\CustomField::class, $importField);
+        $this->assertEquals(10, $importField->id);
+        $this->assertEquals('Test', $importField->value);
+    }
+
+    public function testCreateValueEmpty()
+    {
+        $importField = $this->field->setId(11)->createValue();
+
+        $this->assertInstanceOf(\SmartEmailing\v3\Request\Import\CustomField::class, $importField);
+        $this->assertEquals(11, $importField->id);
+        $this->assertNull($importField->value);
     }
 }

@@ -402,46 +402,6 @@ class Contact extends Model
         return $list;
     }
 
-    /**
-     * @param array $customFields
-     *
-     * @return Contact
-     */
-    public function setCustomFields(array $customFields)
-    {
-        $this->customFields = $customFields;
-        return $this;
-    }
-
-    /**
-     * Adds an custom filed into the source
-     *
-     * @param CustomField $field
-     *
-     * @return $this
-     */
-    public function addCustomField(CustomField $field)
-    {
-        $this->customFields[] = $field;
-        return $this;
-    }
-
-    /**
-     * Creates a new custom field and stores it to the list
-     *
-     * @param $id
-     *
-     * @return CustomField
-     *
-     * @uses Contact::addCustomField()
-     */
-    public function newCustomField($id)
-    {
-        $field = new CustomField($id);
-        $this->addCustomField($field);
-        return $field;
-    }
-
     //endregion
 
     /**

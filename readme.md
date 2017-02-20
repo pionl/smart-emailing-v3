@@ -150,6 +150,11 @@ $response = $request->send();
 
 ## Changelog
 
+### 0.1.1
+
+* Removed deprecated methods for Import\Contact\CustomField (newCustomField, setCustomFields, addCustomField)
+* Added `createValue` to `CustomFields\CustomField` to enable quick creating of CustomField for import.
+
 ### 0.1
 
 * Added Custom-fields create request

@@ -32,7 +32,9 @@ class CustomField extends Model
      * CustomField constructor.
      *
      * @param int|null    $id
-     * @param string|null $value
+     * @param string|null $value String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields.
+     *                           Value size is limited to
+     *                           64KB. Required for simple custom-fields
      */
     public function __construct($id, $value = null)
     {
