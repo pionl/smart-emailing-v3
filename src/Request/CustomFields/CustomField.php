@@ -2,7 +2,9 @@
 namespace SmartEmailing\v3\Request\CustomFields;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
+use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Models\Model;
+use SmartEmailing\v3\Request\Import\CustomField as ImportCustomField;
 
 class CustomField extends Model
 {
@@ -64,6 +66,7 @@ class CustomField extends Model
 
     /**
      * Adds an option id
+     *
      * @param int $id
      *
      * @return $this
@@ -97,6 +100,21 @@ class CustomField extends Model
         InvalidFormatException::checkInArray($type, static::types());
         $this->type = $type;
         return $this;
+    }
+
+    /**
+     * Creates import custom field object from the CustomField
+     *
+     * @param string|null $value String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields.
+     *                           Value size is limited to
+     *                           64KB. Required for simple custom-fields
+     *
+     * @return ImportCustomField
+     */
+    public function createValue($value = null)
+    {
+        PropertyRequiredException::throwIf('id', is_numeric($this->id), 'You must register the custom field - missing id');
+        return new ImportCustomField($this->id, $value);
     }
 
     /**
