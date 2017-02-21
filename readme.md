@@ -80,6 +80,7 @@ try {
 * [x] [Ping](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Aliveness_test) `$api->ping()` or `new Ping($api)`
 * [x] [Credentials](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Login_test_with_GET) `$api->credentials()` or `new Credentials($api)`
 * [ ] [Contactlist](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contactlists-Get_Contactlists) Retrieve list `$api->contactlist()->lists()` or detail `$api->contactlist()->get($id)` - wrapper for 2 Request objects
+* [x] CustomFields - exists: A quick way how to get custom field by it's name. `$api->customFields()->exists('name') : CustomField|bool`
 * [x] [Customfields - create](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) create request `$api->customFields()->createRequest()` or send create request `$api->customFields()->create(new CustomField('test', CustomField::TEXT))`
 * [x] [Customfields - search / list](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) search request `$api->customFields()->searchRequest($page = 1, $limit = 100)` or send search request `$api->customFields()->search($page = 1, $limit = 100)`
 * [ ] [Customfields - rest](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) Similar concept as contact-list - already started
@@ -232,8 +233,24 @@ Allows filtering custom fields with multiple filter conditions.
     * byType($value)
     * byId($value)
     
+### Exists
+Runs a search query with name filter and checks if the given name is found in customFields. Returns `false` or the `CustomFields\CustomField`.
+Uses send logic (throws RequestException).
+
+```php
+// Can throw RequestException - uses send.
+if ($customField = $api->customFields()->exists('name')) {
+    return $customField->id;
+} else {
+    throw new Exception('Not found!', 404);
+}
+```
 
 ## Changelog
+
+### 0.1.2
+
+* Added exists custom field request. A quick way how to get custom field by it's name. `$api->customFields()->exists('name') : CustomField|bool`
 
 ### 0.1.1
 

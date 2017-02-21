@@ -70,4 +70,35 @@ class CustomFieldsTest extends ApiStubTestCase
             $this->assertEquals("The JSON response is missing 'data' value", $exception->getMessage());
         }
     }
+
+    public function testExists()
+    {
+        // The exact endpoint test are in specific tests for the request
+        // Checks if request is called in the send method
+
+        $this->defaultReturnResponse = '{
+            "status": "ok",
+            "meta": {
+                "total_count": 8,
+                "displayed_count": 2,
+                "offset": 0,
+                "limit": 2
+            },
+            "data": [
+                {
+                    "id": 1,
+                    "customfield_options_url": "http://app.stormspire.loc/api/v3/customfield-options?customfield_id=1",
+                    "name": "test",
+                    "type": "checkbox"
+                }
+            ]
+        }';
+        $this->stubClientResponse(null, null, null);
+
+        $customField = $this->fields->exists('test');
+
+        $this->assertTrue(is_object($customField), 'The item is in the source');
+        $this->assertInstanceOf(CustomField::class, $customField);
+        $this->assertEquals(1, $customField->id);
+    }
 }

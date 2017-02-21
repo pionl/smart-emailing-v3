@@ -4,9 +4,9 @@ namespace SmartEmailing\v3\Tests\Request\CustomFields\Create;
 use SmartEmailing\v3\Request\CustomFields\Create\Request;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Request\CustomFields\Create\Response;
-use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
+use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
-class RequestLiveTestCase extends ApiStubTestCase
+class RequestLiveTestCase extends BaseTestCase
 {
     /**
      * @var Request

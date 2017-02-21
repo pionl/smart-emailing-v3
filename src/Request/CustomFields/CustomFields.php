@@ -2,10 +2,6 @@
 namespace SmartEmailing\v3\Request\CustomFields;
 
 use SmartEmailing\v3\Api;
-use SmartEmailing\v3\Request\CustomFields\Create\Request as CreateRequest;
-use SmartEmailing\v3\Request\CustomFields\Create\Response as CreateResponse;
-use SmartEmailing\v3\Request\CustomFields\Search\Request as SearchRequest;
-use SmartEmailing\v3\Request\CustomFields\Search\Response as SearchResponse;
 
 class CustomFields
 {
@@ -30,7 +26,7 @@ class CustomFields
      *
      * @param CustomField $customField
      *
-     * @return CreateResponse
+     * @return Create\Response
      */
     public function create(CustomField $customField)
     {
@@ -42,11 +38,11 @@ class CustomFields
      *
      * @param CustomField|null $customField
      *
-     * @return CreateRequest
+     * @return Create\Request
      */
     public function createRequest(CustomField $customField = null)
     {
-        return new CreateRequest($this->api, $customField);
+        return new Create\Request($this->api, $customField);
     }
     //endregion
 
@@ -57,7 +53,7 @@ class CustomFields
      * @param int|null $page
      * @param int|null $limit Number of records on page. Maximum (default) allowed value is 500
      *
-     * @return SearchResponse
+     * @return Search\Response
      */
     public function search($page = null, $limit = null)
     {
@@ -70,12 +66,24 @@ class CustomFields
      * @param int|null $page
      * @param int|null $limit Number of records on page. Maximum (default) allowed value is 500
      *
-     * @return SearchRequest
+     * @return Search\Request
      */
     public function searchRequest($page = null, $limit = null)
     {
-        return new SearchRequest($this->api, $page, $limit);
+        return new Search\Request($this->api, $page, $limit);
     }
     //endregion
+
+    /**
+     * Runs a search query for given name and checks if it exists.
+     *
+     * @param string $name
+     *
+     * @return bool|CustomField
+     */
+    public function exists($name)
+    {
+        return (new Exists\Request($this->api, $name))->exists();
+    }
 
 }
