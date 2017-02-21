@@ -181,7 +181,10 @@ $request = $api->customFields()->searchRequest(1);
 
 // Search by name
 $request->filter()->byName('test');
-$request->sortBy('name')
+$request->sortBy('name');
+
+// Send the request
+$response = $request->send();
 ```
 ##### Request methods
 
