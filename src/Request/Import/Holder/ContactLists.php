@@ -6,6 +6,7 @@ use SmartEmailing\v3\Request\Import\ContactList;
 
 class ContactLists extends AbstractHolder
 {
+    protected $idMap = [];
     /**
      * @param ContactList $list
      *
@@ -13,7 +14,13 @@ class ContactLists extends AbstractHolder
      */
     public function add(ContactList $list)
     {
+        // Allow only unique values
+        if (isset($this->idMap[$list->id])) {
+            return $this;
+        }
+
         $this->items[] = $list;
+        $this->idMap[$list->id] = $list;
         return $this;
     }
 

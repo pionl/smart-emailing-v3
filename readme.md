@@ -251,6 +251,7 @@ if ($customField = $api->customFields()->exists('name')) {
 ### 0.1.2
 
 * Added exists custom field request. A quick way how to get custom field by it's name. `$api->customFields()->exists('name') : CustomField|bool`
+* Contacts list allows only unique id's (when already added ignores the value) 
 
 ### 0.1.1
 

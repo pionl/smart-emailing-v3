@@ -135,6 +135,21 @@ class ContactTest extends BaseTestCase
         $this->assertEquals(ContactList::REMOVED, $list->status);
     }
 
+    public function testCreateListUnique()
+    {
+        // This will be stored first
+        $this->contact->contactList()->create(1, ContactList::REMOVED);
+        // This value will be ignores
+        $this->contact->contactList()->create(1, ContactList::UNSUBSCRIBED);
+        $this->contact->contactList()->create(2, ContactList::REMOVED);
+        $this->assertCount(2, $this->contact->contactList()->toArray(), 'There should be 2 unique fields');
+
+        /** @var ContactList $list */
+        $list = $this->contact->contactList()->get(0);
+        $this->assertEquals(1, $list->id);
+        $this->assertEquals(ContactList::REMOVED, $list->status);
+    }
+
     public function testJson()
     {
         $this->contact->customFields()->create(1, 'test2', [1]);
