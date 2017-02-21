@@ -48,6 +48,8 @@ class CustomFieldTest extends BaseTestCase
             $this->fail('The options should require an array and raise warning');
         } catch (\Exception $exception) {
             $this->assertContains('the type array', $exception->getMessage());
+        } catch (\TypeError $exception) {
+            $this->assertContains('the type array', $exception->getMessage());
         }
     }
 
