@@ -27,6 +27,11 @@ class PingLiveTest extends BaseTestCase
      */
     public function testSend()
     {
+        if (!$this->canDoLiveTest) {
+            // Always proof test - ignores the no test phpunit warning
+            $this->assertInstanceOf(Ping::class, $this->ping);
+            return;
+        }
         $response = $this->ping->send();
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::SUCCESS, $response->status());

@@ -14,6 +14,12 @@ class CredentialsLiveTest extends BaseTestCase
      */
     public function testSend()
     {
+        if (!$this->canDoLiveTest) {
+            // Always proof test - ignores the no test phpunit warning
+            $this->assertTrue(true);
+            return;
+        }
+
         $response = $this->createApi()->credentials()->send();
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::SUCCESS, $response->status());

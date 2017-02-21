@@ -11,6 +11,8 @@ abstract class BaseTestCase extends TestCase
     protected $username;
     protected $apiKey;
 
+    protected $canDoLiveTest = false;
+
     /**
      * Constructs a test case with the given name. Setups default api-key/username
      *
@@ -27,6 +29,7 @@ abstract class BaseTestCase extends TestCase
             // Load the Env variables
             $dotEnv = new Dotenv(__DIR__.'/../../');
             $dotEnv->load();
+            $this->canDoLiveTest = true;
         } catch (\Exception $exception) {
         }
 
