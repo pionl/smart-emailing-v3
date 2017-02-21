@@ -1,5 +1,5 @@
 <?php
-namespace SmartEmailing\v3\Request\CustomFields\Responses;
+namespace SmartEmailing\v3\Request\CustomFields\Create;
 
 use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Request\Response as BaseResponse;

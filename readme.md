@@ -79,7 +79,8 @@ try {
 * [x] [Ping](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Aliveness_test) `$api->ping()` or `new Ping($api)`
 * [x] [Credentials](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Login_test_with_GET) `$api->credentials()` or `new Credentials($api)`
 * [ ] [Contactlist](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contactlists-Get_Contactlists) Retrieve list `$api->contactlist()->lists()` or detail `$api->contactlist()->get($id)` - wrapper for 2 Request objects
-* [x] [Customfields - create](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) create request `$api->customFields()->createRequest()` or send request `$api->customFields()->create(new CustomField('test', CustomField::TEXT))`
+* [x] [Customfields - create](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) create request `$api->customFields()->createRequest()` or send create request `$api->customFields()->create(new CustomField('test', CustomField::TEXT))`
+* [x] [Customfields - search / list](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) search request `$api->customFields()->searchRequest($page = 1, $limit = 100)` or send search request `$api->customFields()->search($page = 1, $limit = 100)`
 * [ ] [Customfields - rest](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) Similar concept as contact-list - already started
 * [ ] [Customfiels options](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfield_Options)
 * [ ] [Contacts](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts) Similar concept as contact-list
@@ -122,7 +123,7 @@ On this object you can create any request that is currently implemented. See bel
 Quick way that will create request with required customField
 ```php
 use SmartEmailing\v3\Request\CustomFields\CustomField;
-use SmartEmailing\v3\Request\CustomFields\Responses\Response;
+use SmartEmailing\v3\Request\CustomFields\Create\Response;
 
 ...
 // Create the new customField and send the request now.
@@ -148,12 +149,95 @@ $customField->setType(CustomField::RADIO)->setName('test');
 $response = $request->send();
 ```
 
+### Search / List
+[API DOCS](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields-Get_Customfields)
+
+Enables searching threw the custom fields with a filter/sort support. Results are limited by 100 per page. The response
+returns meta data (MetaDataInterface) and an array of `CustomField\CustomField` by calling `$response->data()`.
+
+#### Response
+
+* data() returns an array `CustomField\CustomField`
+* meta() returns a `stdClass` with properties (defined in `MetaDataInterface`)
+
+#### Get a list without advanced setup
+Creates a search request and setups only `$page` or `$limit`. The full response from api with `customfield_options_url` or
+```php
+$response = $api->customFields()->search($page = 1);
+
+/** @var \SmartEmailing\v3\Request\CustomFields\CustomField $customField */
+foreach ($response->data() as $customField) {
+    echo $customField->id;
+    echo $customField->name;
+    echo $customField->type;
+}
+```
+
+#### Advanced setup - filter/sort/etc
+
+```php
+$request = $api->customFields()->searchRequest(1);
+
+// Search by name
+$request->filter()->byName('test');
+$request->sortBy('name')
+```
+##### Request methods
+
+* Getters are via public property
+    * page
+    * limit
+    * select
+    * expand
+    * sort
+* Fluent Setters (with a validation) - more below.
+* `filter()` returns a Filters setup - more below
+
+###### expandBy(string : $expand)
+Using this parameter, "customfield_options_url" property will be replaced by "customfield_options" contianing
+expanded data. See examples below For more information see "/customfield-options" endpoint.
+
+Allowed values: "customfield_options"
+
+###### select(string : $select)
+Comma separated list of properties to select. eg. "?select=id,name" If not provided, all fields are selected.
+
+Allowed values: "id", "name", "type"
+
+###### sortBy(string : $sort)
+Comma separated list of sorting keys from left side. Prepend "-" to any key for desc direction, eg.
+"?sort=type,-name"
+
+Allowed values: "id", "name", "type"
+
+###### setPage(int : $page)
+Sets the current page
+
+###### limit(int : $limit)
+Sets the limit of result in single query
+
+###### filter()
+Allows filtering custom fields with multiple filter conditions.
+
+* Getters are via public property
+    * name
+    * type
+    * id
+* Fluent Setters (with a validation)
+    * byName($value)
+    * byType($value)
+    * byId($value)
+    
+
 ## Changelog
 
 ### 0.1.1
 
 * Removed deprecated methods for Import\Contact\CustomField (newCustomField, setCustomFields, addCustomField)
 * Added `createValue` to `CustomFields\CustomField` to enable quick creating of CustomField for import.
+* **Moved the CustomField `Create`**  request and response to its own namespace `SmartEmailing\v3\Request\CustomFields\Create` and renamed to only `Request` class
+* **Changed the JSON structure** from `array` to `stdClass`. Update all the `json()` usage
+* Added search request for custom fields
 
 ### 0.1
 

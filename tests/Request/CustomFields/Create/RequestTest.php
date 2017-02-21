@@ -1,22 +1,22 @@
 <?php
-namespace SmartEmailing\v3\Tests\Request\CustomFields\Requests;
+namespace SmartEmailing\v3\Tests\Request\CustomFields\Create;
 
-use SmartEmailing\v3\Request\CustomFields\Requests\CreateRequest;
+use SmartEmailing\v3\Request\CustomFields\Create\Request;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
-use SmartEmailing\v3\Request\CustomFields\Responses\Response;
+use SmartEmailing\v3\Request\CustomFields\Create\Response;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
-class CreateRequestTestCase extends ApiStubTestCase
+class RequestTestCase extends ApiStubTestCase
 {
     /**
-     * @var CreateRequest
+     * @var Request
      */
     protected $request;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->request = new CreateRequest($this->apiStub);
+        $this->request = new Request($this->apiStub);
         $this->defaultReturnResponse = '{
             "status": "created",
             "meta": [],
@@ -57,7 +57,7 @@ class CreateRequestTestCase extends ApiStubTestCase
 
     public function testConstructCustomField()
     {
-        $request = new CreateRequest($this->apiStub, new CustomField('test'));
+        $request = new Request($this->apiStub, new CustomField('test'));
         $this->assertNotNull($request->customField());
         $this->assertEquals('test', $request->customField()->name, 'Custom field is not same as passed');
     }

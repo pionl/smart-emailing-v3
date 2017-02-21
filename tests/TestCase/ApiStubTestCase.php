@@ -99,9 +99,9 @@ abstract class ApiStubTestCase extends BaseTestCase
             return $this->anything();
         } else if (is_object($desiredValue)) {
             return $desiredValue;
-        } else {
-            return $this->equalTo($desiredValue);
         }
+
+        return $this->equalTo($desiredValue);
     }
 
 

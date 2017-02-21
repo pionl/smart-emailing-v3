@@ -1,15 +1,15 @@
 <?php
-namespace SmartEmailing\v3\Tests\Request\CustomFields\Requests;
+namespace SmartEmailing\v3\Tests\Request\CustomFields\Create;
 
-use SmartEmailing\v3\Request\CustomFields\Requests\CreateRequest;
+use SmartEmailing\v3\Request\CustomFields\Create\Request;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
-use SmartEmailing\v3\Request\CustomFields\Responses\Response;
+use SmartEmailing\v3\Request\CustomFields\Create\Response;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
-class CreateRequestLiveTestCase extends ApiStubTestCase
+class RequestLiveTestCase extends ApiStubTestCase
 {
     /**
-     * @var CreateRequest
+     * @var Request
      */
     protected $request;
 
@@ -21,7 +21,7 @@ class CreateRequestLiveTestCase extends ApiStubTestCase
 
     public function testInstance()
     {
-        $this->assertInstanceOf(CreateRequest::class, $this->request);
+        $this->assertInstanceOf(Request::class, $this->request);
     }
 
     public function testSend()

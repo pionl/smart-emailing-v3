@@ -1,17 +1,16 @@
 <?php
-namespace SmartEmailing\v3\Request\CustomFields\Requests;
+namespace SmartEmailing\v3\Request\CustomFields\Create;
 
 use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Request\AbstractRequest;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
-use SmartEmailing\v3\Request\CustomFields\Responses\Response;
 
 /**
  * Class CreateRequest
  * @package SmartEmailing\v3\Request\CustomFields\Requests
  */
-class CreateRequest extends AbstractRequest
+class Request extends AbstractRequest
 {
     /**
      * @var CustomField
