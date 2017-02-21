@@ -17,3 +17,19 @@ function convertDate($date, $convert = true)
 
     return date('Y-m-d H:i:s', strtotime($date));
 }
+
+/**
+ * If given value is null, the $onNullValue is returned
+ *
+ * @param mixed $value
+ * @param mixed $onNullValue
+ *
+ * @return mixed
+ */
+function value($value, $onNullValue) {
+    if (is_null($value)) {
+        return $onNullValue;
+    }
+
+    return $value;
+}

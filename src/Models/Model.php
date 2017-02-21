@@ -1,23 +1,25 @@
 <?php
 namespace SmartEmailing\v3\Models;
 
+use stdClass;
+
 abstract class Model implements \JsonSerializable
 {
     /**
      * Copies the data from the JSON
-     * @param $json
+     * @param stdClass $json
      *
      * @return static
      */
-    public static function fromJSON(array $json)
+    public static function fromJSON($json)
     {
         $item = new static();
 
         // Get all the data that is supported and try to
         // get it from the json with same key
         foreach ($item->toArray() as $key => $value) {
-            if (array_key_exists($key, $json)) {
-                $item->{$key} = $json[$key];
+            if (property_exists($json, $key)) {
+                $item->{$key} = $json->{$key};
             }
         }
 

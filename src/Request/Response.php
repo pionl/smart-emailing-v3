@@ -3,6 +3,7 @@ namespace SmartEmailing\v3\Request;
 
 
 use Psr\Http\Message\ResponseInterface;
+use stdClass;
 
 class Response
 {
@@ -21,7 +22,7 @@ class Response
     protected $data = null;
 
     /**
-     * @var array
+     * @var stdClass|null
      */
     protected $meta = [];
 
@@ -36,7 +37,7 @@ class Response
     protected $status = self::ERROR;
 
     /**
-     * @var array|null
+     * @var stdClass|null
      */
     protected $json = null;
 
@@ -51,10 +52,10 @@ class Response
             return;
         }
 
-        $json = json_decode($response->getBody(), true);
+        $json = json_decode($response->getBody());
 
         // If we have valid json, lets get the data
-        if (is_array($json) && isset($json['status'])) {
+        if (is_object($json) && property_exists($json, 'status')) {
             $this->json = $json;
 
             // Fill the data
@@ -88,7 +89,7 @@ class Response
     /**
      * Response meta list
      *
-     * @return array
+     * @return stdClass|null
      */
     public function meta()
     {
@@ -178,16 +179,16 @@ class Response
     /**
      * Tries to get data from given array
      *
-     * @param array      $array
+     * @param stdClass   $object
      * @param string     $key
      * @param mixed|null $default
      *
      * @return mixed|null
      */
-    protected function value(array $array, $key, $default = null)
+    protected function value($object, $key, $default = null)
     {
-        if (isset($array[$key])) {
-            return $array[$key];
+        if (property_exists($object, $key)) {
+            return $object->{$key};
         }
 
         return $default;

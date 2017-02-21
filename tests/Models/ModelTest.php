@@ -35,7 +35,7 @@ class ModelTest extends BaseTestCase
     public function testFromJSON()
     {
         /** @var ModelMock $model */
-        $model = ModelMock::fromJSON([
+        $model = ModelMock::fromJSON((object)[
             'unsupported' => 'test',
             'boolean' => true,
             'null' => null,
@@ -55,7 +55,7 @@ class ModelTest extends BaseTestCase
     public function testFromJSONParseNull()
     {
         /** @var ModelMock $model */
-        $model = ModelMock::fromJSON([
+        $model = ModelMock::fromJSON((object)[
             'array' => null
         ]);
         $this->assertNull($model->array);
