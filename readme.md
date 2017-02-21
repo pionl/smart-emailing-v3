@@ -4,6 +4,7 @@ API wrapper for [Smart emailing](http://smartemailing.cz) API. Currenlty in deve
 [![Total Downloads](https://poser.pugx.org/pion/smart-emailing-v3/downloads?format=flat)](https://packagist.org/packages/pion/smart-emailing-v3)
 [![Latest Stable Version](https://poser.pugx.org/pion/smart-emailing-v3/v/stable?format=flat)](https://packagist.org/packages/pion/smart-emailing-v3)
 [![Latest Unstable Version](https://poser.pugx.org/pion/smart-emailing-v3/v/unstable?format=flat)](https://packagist.org/packages/pion/smart-emailing-v3)
+[![Build Status](https://travis-ci.org/pionl/smart-emailing-v3.svg?branch=master)](https://travis-ci.org/pionl/smart-emailing-v3)
 
 * [Installation](#installation)
 * [Usage](#usage)
