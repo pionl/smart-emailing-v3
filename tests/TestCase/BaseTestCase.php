@@ -22,9 +22,13 @@ abstract class BaseTestCase extends TestCase
     {
         parent::__construct($name, $data, $dataName);
 
-        // Load the Env variables
-        $dotEnv = new Dotenv(__DIR__.'/../../');
-        $dotEnv->load();
+        // Ignore the non-existing env file
+        try {
+            // Load the Env variables
+            $dotEnv = new Dotenv(__DIR__.'/../../');
+            $dotEnv->load();
+        } catch (\Exception $exception) {
+        }
 
         // Setup the username/api-key
         $this->username = $this->env('USERNAME', 'username');
