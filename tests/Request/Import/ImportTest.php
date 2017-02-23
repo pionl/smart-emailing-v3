@@ -1,6 +1,9 @@
 <?php
 namespace SmartEmailing\v3\Tests\Request\Import;
 
+use GuzzleHttp\Client;
+use Psr\Http\Message\ResponseInterface;
+use SmartEmailing\v3\Exceptions\RequestException;
 use SmartEmailing\v3\Request\Import\Contact;
 use SmartEmailing\v3\Request\Import\Import;
 use SmartEmailing\v3\Request\Import\Settings;
@@ -23,7 +26,8 @@ class ImportTestCase extends ApiStubTestCase
     /**
      * Tests if the endpoint/options is passed to request
      */
-    public function testEndpoint() {
+    public function testEndpoint()
+    {
         $this->createEndpointTest($this->import, 'import', 'POST', $this->arrayHasKey('json'));
     }
 
@@ -44,6 +48,97 @@ class ImportTestCase extends ApiStubTestCase
     {
         $this->import->newContact('test@test.cz');
         $this->assertCount(1, $this->import->contacts());
+    }
+
+    public function testChunkMode()
+    {
+        // Build a contact list 2,5 larger then chunk limit
+        for ($i = 1; $i <= 1250; $i++) {
+            $this->import->addContact(new Contact("test+{$i}@test.cz"));
+        }
+
+        // Build the client that will mock the client->request method
+        $client = $this->createMock(Client::class);
+        $response = $this->createMock(ResponseInterface::class);
+
+        // The array will be chunked in 3 groups
+        $willBeCalled = $this->exactly(3);
+
+        // Make a response that is valid and ok - prevent exception
+        $response->expects($this->atLeastOnce())->method('getBody')->willReturn($this->defaultReturnResponse);
+        $called = 0;
+        $client->expects($willBeCalled)->method('request')->with(
+            $this->valueConstraint('POST'),
+            $this->valueConstraint('import'),
+            $this->callback(function ($value) use (&$called) {
+                $this->assertTrue(is_array($value), 'Options should be array');
+                $this->assertArrayHasKey('json', $value, 'Options should contain json');
+                $this->assertArrayHasKey('data', $value['json'], 'JSON must have data array');
+                $this->assertArrayHasKey('settings', $value['json'], 'JSON must have settings');
+                $called++;
+
+                switch ($called) {
+                    case 1:
+                        $this->assertCount(500, $value['json']['data']);
+                        $this->assertEquals('test+1@test.cz', $value['json']['data'][0]->emailAddress);
+                        break;
+                    case 2:
+                        $this->assertCount(500, $value['json']['data']);
+                        $this->assertEquals('test+501@test.cz', $value['json']['data'][0]->emailAddress);
+                        break;
+                    case 3: // Last pack of contacts is smaller
+                        $this->assertCount(250, $value['json']['data']);
+                        $this->assertEquals('test+1001@test.cz', $value['json']['data'][0]->emailAddress);
+                        break;
+                }
+
+                return true;
+            })
+        )->willReturn($response);
+
+        $this->apiStub->method('client')->willReturn($client);
+        $this->import->send();
+    }
+
+    public function testChunkModeError()
+    {
+        // Build a contact list 2,5 larger then chunk limit
+        for ($i = 1; $i <= 1250; $i++) {
+            $this->import->addContact(new Contact("test+{$i}@test.cz"));
+        }
+
+        // Build the client that will mock the client->request method
+        $client = $this->createMock(Client::class);
+        $response = $this->createMock(ResponseInterface::class);
+
+        // Make a response that is valid and ok - prevent exception
+        $response->expects($this->atLeastOnce())
+            ->method('getBody')
+            ->willReturn('{
+            "status": "error",
+            "meta": [],
+            "message": "Emailaddress invalid@email@gmail.com is not valid email address."
+        }');
+        $response->expects($this->once())->method('getStatusCode')->willReturn(422);
+
+        $client->expects($this->once())->method('request')->with(
+            $this->valueConstraint('POST'),
+            $this->valueConstraint('import'),
+            $this->callback(function ($value) {
+                $this->assertTrue(is_array($value), 'Options should be array');
+                $this->assertArrayHasKey('json', $value, 'Options should contain json');
+                $this->assertArrayHasKey('data', $value['json'], 'JSON must have data array');
+                $this->assertArrayHasKey('settings', $value['json'], 'JSON must have settings');
+                $this->assertCount(500, $value['json']['data']);
+                $this->assertEquals('test+1@test.cz', $value['json']['data'][0]->emailAddress);
+
+                return true;
+            })
+        )->willReturn($response);
+
+        $this->apiStub->method('client')->willReturn($client);
+        $this->expectException(RequestException::class);
+        $this->import->send();
     }
 
 }

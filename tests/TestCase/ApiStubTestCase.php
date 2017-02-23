@@ -170,6 +170,8 @@ abstract class ApiStubTestCase extends BaseTestCase
      *
      * @param string $responseText
      * @param int    $responseCode
+     *
+     * @return Client
      */
     protected function createMockHandlerToApi($responseText, $responseCode)
     {
@@ -190,6 +192,7 @@ abstract class ApiStubTestCase extends BaseTestCase
 
         // Replace the client
         $this->apiStub->method('client')->willReturn($client);
+        return $client;
     }
 
     /**

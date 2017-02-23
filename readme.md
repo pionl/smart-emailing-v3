@@ -248,6 +248,10 @@ if ($customField = $api->customFields()->exists('name')) {
 
 ## Changelog
 
+### 0.1.3
+
+* Added automatic chunk send for contact import - when number of contacts exceeds 500, the `send()` method will send multiple request (chunk's the contact array)
+
 ### 0.1.2
 
 * Added exists custom field request. A quick way how to get custom field by it's name. `$api->customFields()->exists('name') : CustomField|bool`
