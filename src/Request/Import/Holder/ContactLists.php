@@ -1,26 +1,26 @@
 <?php
 namespace SmartEmailing\v3\Request\Import\Holder;
 
-use SmartEmailing\v3\Models\AbstractHolder;
+use SmartEmailing\v3\Models\AbstractMapHolder;
 use SmartEmailing\v3\Request\Import\ContactList;
 
-class ContactLists extends AbstractHolder
+/**
+ * Class ContactLists
+ *
+ * @package SmartEmailing\v3\Request\Import\Holder
+ */
+class ContactLists extends AbstractMapHolder
 {
-    protected $idMap = [];
     /**
+     * Inserts contact list into the items. Unique items only.
+     *
      * @param ContactList $list
      *
      * @return $this
      */
     public function add(ContactList $list)
     {
-        // Allow only unique values
-        if (isset($this->idMap[$list->id])) {
-            return $this;
-        }
-
-        $this->items[] = $list;
-        $this->idMap[$list->id] = $list;
+        $this->insertEntry($list);
         return $this;
     }
 

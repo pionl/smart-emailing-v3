@@ -1,19 +1,21 @@
 <?php
 namespace SmartEmailing\v3\Request\Import\Holder;
 
-use SmartEmailing\v3\Models\AbstractHolder;
+use SmartEmailing\v3\Models\AbstractMapHolder;
 use SmartEmailing\v3\Request\Import\CustomField;
 
-class CustomFields extends AbstractHolder
+class CustomFields extends AbstractMapHolder
 {
     /**
-     * @param CustomField $field
+     * Inserts custom filed into the items. Unique items only.
+     *
+     * @param CustomField $list
      *
      * @return $this
      */
-    public function add(CustomField $field)
+    public function add(CustomField $list)
     {
-        $this->items[] = $field;
+        $this->insertEntry($list);
         return $this;
     }
 

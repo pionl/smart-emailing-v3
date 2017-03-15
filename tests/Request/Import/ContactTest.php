@@ -105,6 +105,16 @@ class ContactTest extends BaseTestCase
         $this->assertEquals(1, $this->contact->customFields()->get(0)->id);
     }
 
+
+    public function testAddFieldUnique()
+    {
+        $this->contact->customFields()->add(new CustomField(1));
+        $this->contact->customFields()->add(new CustomField(1));
+        $this->contact->customFields()->add(new CustomField(2));
+        $this->assertCount(2, $this->contact->customFields()->toArray(), 'There should be 2 fields - unique only');
+        $this->assertEquals(1, $this->contact->customFields()->get(0)->id);
+    }
+
     public function testCreateField()
     {
         $this->contact->customFields()->create(1, 'test2', [1]);
