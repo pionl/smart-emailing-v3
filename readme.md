@@ -115,6 +115,11 @@ See source code for all methods/properties that you can use
 
 Uses a data holder with `create`/`add`/`get`/`isEmpty`/`toArray`/`jsonSerialize` methods.
 
+```php
+$field = $contact->customFields()->create(12, 'test')
+$list = $contact->contactLists()->create(12, 'confirmed')
+```
+
 ## CustomFields
 
 The customFields uses a wrapper for each request related to custom-fields. To create a new instance call `$api->customFields()`.
@@ -247,6 +252,14 @@ if ($customField = $api->customFields()->exists('name')) {
 ```
 
 ## Changelog
+
+### 0.1.5
+
+* Removed deprecated API usage in Contact.php: `addContactList` and `newContactList`
+
+### 0.1.4
+
+* CustomFields can be imported only once (unique by id)
 
 ### 0.1.3
 

@@ -2,7 +2,6 @@
 namespace SmartEmailing\v3\Tests\TestCase;
 
 use Dotenv\Dotenv;
-
 use PHPUnit\Framework\TestCase;
 use SmartEmailing\v3\Api;
 

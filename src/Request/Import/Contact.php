@@ -373,35 +373,6 @@ class Contact extends Model
         return $this->customFields;
     }
 
-    /**
-     * Adds an contact list
-     *
-     * @param ContactList $list
-     *
-     * @return $this
-     */
-    public function addContactList(ContactList $list)
-    {
-        $this->contactLists[] = $list;
-        return $this;
-    }
-
-    /**
-     * Creates a new custom list and stores it to the list
-     *
-     * @param $id
-     *
-     * @return ContactList
-     *
-     * @uses Contact::addContactList()
-     */
-    public function newContactList($id)
-    {
-        $list = new ContactList($id);
-        $this->addContactList($list);
-        return $list;
-    }
-
     //endregion
 
     /**
