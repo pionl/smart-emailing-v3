@@ -62,6 +62,15 @@ class Settings extends Model
      * @var bool
      */
     public $skipInvalidEmails = false;
+    /**
+     * If this section is present, opt-in e-mail will be sent to all contacts in request, excluding blacklisted (sending
+     * opt-in e-amil to blacklisted contacts can be forced by setting preserve_unsubscribed=false). Imported data will
+     * be written when they click through confirmation link.
+     *
+     * Default value: null
+     * @var Settings\ConfirmationRequest|null
+     */
+    public $confirmationRequest = null;
     //endregion
 
     //region Setters
@@ -149,6 +158,21 @@ class Settings extends Model
         $this->skipInvalidEmails = $skipInvalidEmails;
         return $this;
     }
+
+    /**
+     * If this section is present, opt-in e-mail will be sent to all contacts in request, excluding blacklisted (sending
+     * opt-in e-amil to blacklisted contacts can be forced by setting preserve_unsubscribed=false). Imported data will
+     * be written when they click through confirmation link.
+     *
+     * @param Settings\ConfirmationRequest $confirmationRequest Default value: null
+     *
+     * @return Settings
+     */
+    public function setConfirmationRequest($confirmationRequest)
+    {
+        $this->confirmationRequest = $confirmationRequest;
+        return $this;
+    }
     //endregion
 
     /**
@@ -163,7 +187,8 @@ class Settings extends Model
             'add_genders' => $this->addGenders,
             'add_salutions' => $this->addSalutations,
             'preserve_unsubscribed' => $this->preserveUnSubscribed,
-            'skip_invalid_emails' => $this->skipInvalidEmails
+            'skip_invalid_emails' => $this->skipInvalidEmails,
+            'confirmation_request' => $this->confirmationRequest ? $this->confirmationRequest->toArray() :  null
         ];
     }
 
