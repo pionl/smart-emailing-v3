@@ -1,5 +1,5 @@
 <?php
-namespace SmartEmailing\v3\Request\Import\Settings;
+namespace SmartEmailing\v3\Request\Import;
 
 use SmartEmailing\v3\Models\Model;
 
