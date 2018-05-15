@@ -1,5 +1,5 @@
 <?php
-namespace SmartEmailing\v3\Request\Import\Settings;
+namespace SmartEmailing\v3\Request\Import;
 
 use SmartEmailing\v3\Models\Model;
 
@@ -9,7 +9,7 @@ use SmartEmailing\v3\Models\Model;
  * ConfirmationRequest for Settings.
  *
  * @author Stanislav Janů info@lweb.cz
- * @package SmartEmailing\v3\Request\Import\Settings
+ * @package SmartEmailing\v3\Request\Import
  */
 class ConfirmationRequest extends Model
 {
