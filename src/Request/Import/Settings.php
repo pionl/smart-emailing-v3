@@ -68,7 +68,7 @@ class Settings extends Model
      * be written when they click through confirmation link.
      *
      * Default value: null
-     * @var Settings\ConfirmationRequest|null
+     * @var ConfirmationRequest|null
      */
     public $confirmationRequest = null;
     //endregion
