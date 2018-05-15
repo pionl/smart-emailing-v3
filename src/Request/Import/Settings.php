@@ -188,7 +188,7 @@ class Settings extends Model
             'add_salutions' => $this->addSalutations,
             'preserve_unsubscribed' => $this->preserveUnSubscribed,
             'skip_invalid_emails' => $this->skipInvalidEmails,
-            'confirmation_request' => $this->confirmationRequest ? $this->confirmationRequest->toArray() :  null
+            'confirmation_request' => $this->confirmationRequest
         ];
     }
 
