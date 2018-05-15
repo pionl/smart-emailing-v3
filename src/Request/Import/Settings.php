@@ -164,7 +164,7 @@ class Settings extends Model
      * opt-in e-amil to blacklisted contacts can be forced by setting preserve_unsubscribed=false). Imported data will
      * be written when they click through confirmation link.
      *
-     * @param Settings\ConfirmationRequest $confirmationRequest Default value: null
+     * @param ConfirmationRequest $confirmationRequest Default value: null
      *
      * @return Settings
      */
