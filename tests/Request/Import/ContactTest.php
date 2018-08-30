@@ -4,6 +4,7 @@ namespace SmartEmailing\v3\Tests\Request\Import;
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use SmartEmailing\v3\Request\Import\Contact;
 use SmartEmailing\v3\Request\Import\ContactList;
+use SmartEmailing\v3\Request\Import\Purpose;
 use SmartEmailing\v3\Request\Import\CustomField;
 use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
@@ -158,6 +159,25 @@ class ContactTest extends BaseTestCase
         $list = $this->contact->contactList()->get(0);
         $this->assertEquals(1, $list->id);
         $this->assertEquals(ContactList::REMOVED, $list->status);
+    }
+
+    public function testAddPurpose()
+    {
+        // This will be stored first
+        $this->contact->purposes()->create(1);
+        // This value will be ignores
+        $this->contact->purposes()->create(1, '1991-06-17 00:00:00', '1998-02-22 05:45:00');
+        $this->contact->purposes()->create(2, '1991-06-17 00:00:00', '1998-02-22 05:45:00');
+        $this->assertCount(2, $this->contact->purposes()->toArray(), 'There should be 2 unique fields');
+
+        /** @var Purpose $list */
+        $list = $this->contact->purposes()->get(0);
+        $this->assertEquals(1, $list->id);
+        $this->assertEquals(null, $list->valid_to);
+
+        $list = $this->contact->purposes()->get(1);
+        $this->assertEquals(2, $list->id);
+        $this->assertEquals('1998-02-22 05:45:00', $list->valid_to);
     }
 
     public function testJson()
