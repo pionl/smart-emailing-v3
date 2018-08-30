@@ -7,7 +7,7 @@ use SmartEmailing\v3\Request\Import\Purpose;
 class Purposes extends AbstractMapHolder
 {
     /**
-     * Inserts custom filed into the items. Unique items only.
+     * Inserts purposes into the items. Unique items only.
      *
      * @param Purpose $list
      *
@@ -20,7 +20,7 @@ class Purposes extends AbstractMapHolder
     }
 
     /**
-     * Creates ContactList entry and inserts it to the array
+     * Creates Purpose entry and inserts it to the array
      *
      * @param int         $id
      * @param string|null $valid_from   Date and time since processing purpose is valid in YYYY-MM-DD HH:MM:SS format.
