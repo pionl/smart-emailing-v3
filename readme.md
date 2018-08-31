@@ -253,6 +253,18 @@ if ($customField = $api->customFields()->exists('name')) {
 
 ## Changelog
 
+### 0.1.8
+
+* Added purposes for contacts.
+
+### 0.1.7
+
+* Fix incorrect namespace for confirmation request.
+
+### 0.1.6
+
+* Added confirmation request to import settings.
+
 ### 0.1.5
 
 * Removed deprecated API usage in Contact.php: `addContactList` and `newContactList`

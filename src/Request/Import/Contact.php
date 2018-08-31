@@ -6,6 +6,7 @@ use function \SmartEmailing\v3\Helpers\convertDate;
 use SmartEmailing\v3\Models\Model;
 use SmartEmailing\v3\Request\Import\Holder\ContactLists;
 use SmartEmailing\v3\Request\Import\Holder\CustomFields;
+use SmartEmailing\v3\Request\Import\Holder\Purposes;
 
 /**
  * Contact wrapper with public properties (allows force set and easy getter). The fluent setter will help
@@ -114,6 +115,12 @@ class Contact extends Model
      * @var CustomFields
      */
     protected $customFields;
+    /**
+     * Processing purposes assigned to contact. Every purpose may be assigned multiple times for different time intervals.
+     * Exact duplicities will be silently skipped.
+     * @var Purposes
+     */
+    protected $purposes;
 
     //endregion
 
@@ -127,6 +134,7 @@ class Contact extends Model
         $this->emailAddress = $emailAddress;
         $this->customFields = new CustomFields();
         $this->contactLists = new ContactLists();
+        $this->purposes = new Purposes();
     }
 
     //region Setters
@@ -373,6 +381,14 @@ class Contact extends Model
         return $this->customFields;
     }
 
+    /**
+     * @return Purposes
+     */
+    public function purposes()
+    {
+        return $this->purposes;
+    }
+
     //endregion
 
     /**
@@ -402,7 +418,8 @@ class Contact extends Model
             'nameday' => $this->nameDay,
             'birthday' => $this->birthday,
             'contactlists' => $this->contactLists,
-            'customfields' => $this->customFields
+            'customfields' => $this->customFields,
+            'purposes' => $this->purposes
         ];
     }
 }
