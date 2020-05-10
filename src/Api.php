@@ -2,6 +2,8 @@
 namespace SmartEmailing\v3;
 
 use GuzzleHttp\Client;
+use SmartEmailing\v3\Request\Contactlists\ContactlistEndpoint;
+use SmartEmailing\v3\Request\Contactlists\Contactlists;
 use SmartEmailing\v3\Request\Credentials\Credentials;
 use SmartEmailing\v3\Request\CustomFields\CustomFields;
 use SmartEmailing\v3\Request\Import\Import;
@@ -52,6 +54,14 @@ class Api
     public function import()
     {
         return new Import($this);
+    }
+
+    /**
+     * Creates new contactlists proxy
+     */
+    public function contactlist(): ContactlistEndpoint
+    {
+        return new ContactlistEndpoint($this);
     }
 
     /**
