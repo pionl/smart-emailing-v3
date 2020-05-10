@@ -27,6 +27,11 @@ class Newsletter extends AbstractRequest implements \JsonSerializable
         return 'newsletter';
     }
 
+    protected function method()
+    {
+        return 'POST';
+    }
+
     protected function options(): array
     {
         return [

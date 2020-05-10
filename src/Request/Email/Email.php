@@ -50,6 +50,11 @@ class Email extends AbstractRequest implements \JsonSerializable
         return 'emails';
     }
 
+    protected function method()
+    {
+        return 'POST';
+    }
+
     protected function options(): array
     {
         if ($this->htmlBody === null && $this->textBody === null) {
