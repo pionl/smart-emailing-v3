@@ -70,11 +70,8 @@ class Email extends AbstractRequest implements \JsonSerializable
     {
         $data = [
             'title' => $this->title,
+            'name' => $this->name ?: $this->title,
         ];
-
-        if ($this->name) {
-            $data['name'] = $this->name;
-        }
 
         if ($this->htmlBody) {
             $data['htmlbody'] = $this->htmlBody;
