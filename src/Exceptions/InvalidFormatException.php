@@ -14,4 +14,13 @@ class InvalidFormatException extends \LogicException
             throw new InvalidFormatException("Value '{$value}' not allowed: ".implode(', ', $allowed));
         }
     }
+
+    public static function checkAllowedValues(array $values, array $allowed)
+    {
+        $invalidFields = array_diff($values, $allowed);
+
+        if (count($invalidFields) > 0) {
+            throw new InvalidFormatException('These values are not allowed: '. implode(', ', $invalidFields));
+        }
+    }
 }
