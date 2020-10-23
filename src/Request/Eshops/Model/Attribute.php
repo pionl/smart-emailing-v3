@@ -35,6 +35,26 @@ class Attribute extends Model
 	}
 
 	/**
+	 * @param string|null $name
+	 * @return Attribute
+	 */
+	public function setName(string $name): Attribute
+	{
+		$this->name = $name;
+		return $this;
+	}
+
+	/**
+	 * @param string|null $value
+	 * @return Attribute
+	 */
+	public function setValue(string $value): Attribute
+	{
+		$this->value = $value;
+		return $this;
+	}
+
+	/**
 	 * Converts data to array
 	 * @return array
 	 */

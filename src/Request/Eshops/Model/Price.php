@@ -35,6 +35,28 @@ class Price extends Model
 	}
 
 	/**
+	 * @param number $withoutVat
+	 * @return Price
+	 */
+	public function setWithoutVat($withoutVat): Price
+	{
+		$this->withoutVat = $withoutVat;
+		return $this;
+	}
+
+	/**
+	 * @param number $withVat
+	 * @return Price
+	 */
+	public function setWithVat($withVat): Price
+	{
+		$this->withVat = $withVat;
+		return $this;
+	}
+
+
+
+	/**
 	 * item price currency code (ISO-4217 three-letter ("Alpha-3")) i.e.: CZK, EUR
 	 *
 	 * @param string $currency
