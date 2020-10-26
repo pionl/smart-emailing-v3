@@ -12,7 +12,7 @@ use SmartEmailing\v3\Request\Eshops\Model\Holder\Attributes;
  */
 class OrderItem extends Model
 {
-	/** @var int|null required */
+	/** @var string|null required */
 	public $id;
 	/** @var string|null required */
 	public $name;
@@ -31,7 +31,7 @@ class OrderItem extends Model
 
 	/**
 	 * OrderItem constructor.
-	 * @param int $id
+	 * @param string $id
 	 * @param string $name
 	 * @param int $quantity
 	 * @param Price $price
@@ -51,7 +51,7 @@ class OrderItem extends Model
 	 * @param $id
 	 * @return OrderItem
 	 */
-	public function setId(int $id): OrderItem
+	public function setId(string $id): OrderItem
 	{
 		$this->id = $id;
 		return $this;
