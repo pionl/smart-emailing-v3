@@ -120,7 +120,7 @@ class OrderItem extends Model
 	/**
 	 * @return Attributes
 	 */
-	public function getAttributes(): Attributes
+	public function attributes(): Attributes
 	{
 		return $this->attributes;
 	}

@@ -4,10 +4,17 @@ namespace SmartEmailing\v3\Request\Eshops;
 
 use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Request\AbstractRequest;
-use SmartEmailing\v3\Request\Eshops\Model\Order as OrderModel;
+use SmartEmailing\v3\Request\Eshops\Model\Order;
 use SmartEmailing\v3\Request\Response;
 
-class OrdersBulk extends AbstractRequest implements \JsonSerializable
+/**
+ * Class OrdersBulk
+ * Method is used to import orders in bulk. Up to 500 orders per request is allowed.
+ * This creates new activities which can be used for scoring, segmentation and automation.
+ *
+ * @package SmartEmailing\v3\Request\Eshops
+ */
+class EshopOrdersBulk extends AbstractRequest implements \JsonSerializable
 {
 	/**
 	 * The maximum orders per single request
@@ -15,7 +22,7 @@ class OrdersBulk extends AbstractRequest implements \JsonSerializable
 	 */
 	public $chunkLimit = 500;
 	/**
-	 * @var OrderModel[]
+	 * @var Order[]
 	 */
 	protected $orders = [];
 
@@ -25,36 +32,37 @@ class OrdersBulk extends AbstractRequest implements \JsonSerializable
 	}
 
 	/**
-	 * @param OrderModel $order
+	 * Creates Returns the newly created order
 	 *
-	 * @return OrdersBulk
+	 * @param $eshopName
+	 * @param $eshopCode
+	 * @param $emailAddress
+	 *
+	 * @return Order
 	 */
-	public function addOrder(OrderModel $order): self
+	public function newOrder($eshopName, $eshopCode, $emailAddress): Order
+	{
+		$order = new Order($eshopName, $eshopCode, $emailAddress);
+		$this->addOrder($order);
+		return $order;
+	}
+
+
+	/**
+	 * @param Order $order
+	 *
+	 * @return EshopOrdersBulk
+	 */
+	public function addOrder(Order $order): EshopOrdersBulk
 	{
 		$this->orders[] = $order;
 		return $this;
 	}
 
 	/**
-	 * Creates Returns the newly created contact
-	 *
-	 * @param $eshopName
-	 * @param $eshopCode
-	 * @param $emailAddress
-	 *
-	 * @return OrderModel
+	 * @return Order[]
 	 */
-	public function newOrder($eshopName, $eshopCode, $emailAddress): OrderModel
-	{
-		$order = new OrderModel($eshopName, $eshopCode, $emailAddress);
-		$this->addOrder($order);
-		return $order;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function order(): array
+	public function orders(): array
 	{
 		return $this->orders;
 	}
@@ -80,7 +88,7 @@ class OrdersBulk extends AbstractRequest implements \JsonSerializable
 	protected function sendInChunkMode(): Response
 	{
 		// Store the original contact list
-		$originalFullContactList = $this->orders;
+		$originalFullOrdersList = $this->orders;
 		$lastResponse = null;
 
 		// Chunk the array of contacts send it in multiple requests
@@ -92,7 +100,7 @@ class OrdersBulk extends AbstractRequest implements \JsonSerializable
 		}
 
 		// Restore to original array
-		$this->orders = $originalFullContactList;
+		$this->orders = $originalFullOrdersList;
 
 		return $lastResponse;
 	}

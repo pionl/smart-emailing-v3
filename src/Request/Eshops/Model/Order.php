@@ -86,6 +86,7 @@ class Order extends Model
 
 	//region Setters
 
+
 	/**
 	 * @param null|string $emailAddress
 	 *
@@ -159,7 +160,7 @@ class Order extends Model
 	/**
 	 * @return OrderItems
 	 */
-	public function getOrderItems(): OrderItems
+	public function orderItems(): OrderItems
 	{
 		return $this->orderItems;
 	}
@@ -167,7 +168,7 @@ class Order extends Model
 	/**
 	 * @return Attributes
 	 */
-	public function getAttributes(): Attributes
+	public function attributes(): Attributes
 	{
 		return $this->attributes;
 	}
@@ -175,7 +176,7 @@ class Order extends Model
 	/**
 	 * @return FeedItems
 	 */
-	public function getFeedItems(): FeedItems
+	public function feedItems(): FeedItems
 	{
 		return $this->feedItems;
 	}

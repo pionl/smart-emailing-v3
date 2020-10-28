@@ -95,6 +95,7 @@ try {
 * [x] [Emails](https://app.smartemailing.cz/docs/api/v3/index.html#api-Emails)
 * [x] [Newsletter](https://app.smartemailing.cz/docs/api/v3/index.html#api-Newsletter)
 * [ ] [Webhooks](https://app.smartemailing.cz/docs/api/v3/index.html#api-Webhooks)
+* [x] [E shops](https://app.smartemailing.cz/docs/api/v3/index.html#api-E_shops) Notifies SmartEmailing about new order in e-shop.
 
 ## Advanced docs
 
@@ -253,6 +254,30 @@ if ($customField = $api->customFields()->exists('name')) {
 } else {
     throw new Exception('Not found!', 404);
 }
+```
+
+## E_shops - Add Placed order
+
+The E_shops section have two endpoints to set single Order or import orders in bulk.
+
+Example add single order
+```php
+$order = new \SmartEmailing\v3\Request\Eshops\Model\Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
+$order->orderItems()->add(
+    new \SmartEmailing\v3\Request\Eshops\Model\OrderItem(
+        'ABC123',   // item Id
+        'My Product', // item name
+        10,          // quantity
+        new \SmartEmailing\v3\Request\Eshops\Model\Price(
+            100, // without vat
+            121, // with vat
+            'CZK' // currency code
+        ),
+        'https://myeshop.cz/product/ABC123'  // product url
+    )   
+);
+$api->eshopOrders()->addOrder($order);
+$api->send();
 ```
 
 ## Changelog
