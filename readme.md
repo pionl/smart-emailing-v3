@@ -17,6 +17,10 @@ API wrapper for [Smart emailing](http://smartemailing.cz) API. Currenlty in deve
 
 ## Installation
 
+**Requirements**
+
+This package requires PHP 7.3 and higher.
+
 **Install via composer**
 
 ```
@@ -79,7 +83,7 @@ try {
 * [x] [Import](https://app.smartemailing.cz/docs/api/v3/index.html#api-Import-Import_contacts)`$api->import()` or `new Import($api)`
 * [x] [Ping](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Aliveness_test) `$api->ping()` or `new Ping($api)`
 * [x] [Credentials](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Login_test_with_GET) `$api->credentials()` or `new Credentials($api)`
-* [ ] [Contactlist](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contactlists-Get_Contactlists) Retrieve list `$api->contactlist()->lists()` or detail `$api->contactlist()->get($id)` - wrapper for 2 Request objects
+* [x] [Contactlist](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contactlists-Get_Contactlists) Retrieve list `$api->contactlist()->lists()` or detail `$api->contactlist()->get($id)` - wrapper for 2 Request objects
 * [x] CustomFields - exists: A quick way how to get custom field by it's name. `$api->customFields()->exists('name') : CustomField|bool`
 * [x] [Customfields - create](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) create request `$api->customFields()->createRequest()` or send create request `$api->customFields()->create(new CustomField('test', CustomField::TEXT))`
 * [x] [Customfields - search / list](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) search request `$api->customFields()->searchRequest($page = 1, $limit = 100)` or send search request `$api->customFields()->search($page = 1, $limit = 100)`
@@ -88,8 +92,8 @@ try {
 * [ ] [Contacts](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts) Similar concept as contact-list
 * [ ] [Contacts in list](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts_in_lists) Similar concept as contact-list
 * [ ] [Custom emails](https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_emails)
-* [ ] [Emails](https://app.smartemailing.cz/docs/api/v3/index.html#api-Emails)
-* [ ] [Newsletter](https://app.smartemailing.cz/docs/api/v3/index.html#api-Newsletter)
+* [x] [Emails](https://app.smartemailing.cz/docs/api/v3/index.html#api-Emails)
+* [x] [Newsletter](https://app.smartemailing.cz/docs/api/v3/index.html#api-Newsletter)
 * [ ] [Webhooks](https://app.smartemailing.cz/docs/api/v3/index.html#api-Webhooks)
 
 ## Advanced docs
