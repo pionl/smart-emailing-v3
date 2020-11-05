@@ -318,6 +318,51 @@ $transactionEmail->setMessageContents($messageContents);
 $transactionEmail->send();
 ```
 
+### Send / Bulk custom emails
+The implementation of API call ``send/custom-emails-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_emails
+## Full transactional email example
+```php
+$transactionEmail = new BulkCustomEmails($api);
+
+$credentials = new SenderCredentials();
+$credentials->setFrom('from@example.com');
+$credentials->setReplyTo('to@example.com');
+$credentials->setSenderName('Jean-Luc Picard');
+
+$recipient = new Recipient();
+$recipient->setEmailAddress('kirk@example.com');
+
+$replace1 = new Replace();
+$replace1->setKey('key1');
+$replace1->setContent('content1');
+
+$replace2 = new Replace();
+$replace2->setKey('key2');
+$replace2->setContent('content2');
+
+$templateVariable = new TemplateVariable();
+$templateVariable->setCustomData([
+    'foo' => 'bar',
+    'products' => [
+        ['name' => 'prod1', 'desc' => 'desc1'],
+        ['name' => 'prod1', 'desc' => 'desc2']
+    ]
+]);
+
+$task = new Task();
+$task->setRecipient($recipient);
+$task->addReplace($replace1);
+$task->addReplace($replace2);
+$task->setTemplateVariables($templateVariable);
+
+$transactionEmail->setTag('tag_tag');
+$transactionEmail->setEmailId(5);
+$transactionEmail->setSenderCredentials($credentials);
+$transactionEmail->addTask($task);
+
+$transactionEmail->send();
+```
+
 ## Changelog
 
 ### 0.1.8
