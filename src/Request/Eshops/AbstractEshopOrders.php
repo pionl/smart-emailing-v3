@@ -4,7 +4,6 @@
 namespace SmartEmailing\v3\Request\Eshops;
 
 use JsonSerializable;
-use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Request\AbstractRequest;
 use SmartEmailing\v3\Request\Eshops\Model\Order;
 
