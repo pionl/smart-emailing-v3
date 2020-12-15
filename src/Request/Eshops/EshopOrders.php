@@ -2,25 +2,23 @@
 
 namespace SmartEmailing\v3\Request\Eshops;
 
-use SmartEmailing\v3\Api;
-use SmartEmailing\v3\Request\AbstractRequest;
 use SmartEmailing\v3\Request\Eshops\Model\Order;
 
 /**
  * Class Orders
  * @package SmartEmailing\v3\Request\Eshops
  */
-class EshopOrders extends EshopOrdersBulk implements \JsonSerializable
+class EshopOrders extends AbstractEshopOrders implements \JsonSerializable
 {
 	/**
 	 * @param  $order
 	 *
 	 * @return EshopOrders
 	 */
-	public function addOrder(Order $order): EshopOrdersBulk
+	public function addOrder(Order $order): EshopOrders
 	{
 		$this->orders = [];
-		$this->orders[] = $order;
+		parent::addOrder($order);
 		return $this;
 	}
 
@@ -35,27 +33,14 @@ class EshopOrders extends EshopOrdersBulk implements \JsonSerializable
 		return null;
 	}
 
-	//region AbstractRequest implementation
+	/**
+	 * @return string
+	 */
 	protected function endpoint(): string
 	{
 		return 'orders';
 	}
 
-	protected function options(): array
-	{
-		return [
-			'json' => $this->jsonSerialize()
-		];
-	}
-
-	protected function method(): string
-	{
-		return 'POST';
-	}
-
-	//endregion
-
-	//region Data convert
 	/**
 	 * Converts data to array
 	 * @return array
@@ -67,5 +52,4 @@ class EshopOrders extends EshopOrdersBulk implements \JsonSerializable
 		}
 		return $this->order()->toArray();
 	}
-
 }

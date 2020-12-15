@@ -2,6 +2,7 @@
 namespace SmartEmailing\v3\Tests\Request\Eshops;
 
 use SmartEmailing\v3\Request\Eshops\EshopOrders;
+use SmartEmailing\v3\Request\Eshops\Model\Order;
 use SmartEmailing\v3\Request\Response;
 use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
@@ -35,7 +36,7 @@ class EshopOrdersLiveTest extends BaseTestCase
         // Uncomment if you want to try
         return;
 
-        $order = new \SmartEmailing\v3\Request\Eshops\Model\Order(
+        $order = new Order(
 	        'my-eshop',
 	        'ORDER0001',
 	        'jan.novak@smartemailing.cz'

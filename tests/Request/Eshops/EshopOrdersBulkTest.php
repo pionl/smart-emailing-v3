@@ -4,8 +4,8 @@ namespace SmartEmailing\v3\Tests\Request\Eshops;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Exceptions\RequestException;
-use SmartEmailing\v3\Request\Eshops\EshopOrders;
 use SmartEmailing\v3\Request\Eshops\EshopOrdersBulk;
+use SmartEmailing\v3\Request\Eshops\Model\Order;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class EshopOrdersBulkTest extends ApiStubTestCase
@@ -13,7 +13,7 @@ class EshopOrdersBulkTest extends ApiStubTestCase
     /**
      * @var EshopOrdersBulk
      */
-    protected $orders;
+    protected EshopOrdersBulk $orders;
 
     protected function setUp()
     {
@@ -33,19 +33,19 @@ class EshopOrdersBulkTest extends ApiStubTestCase
     public function testAddOrder()
     {
         $this->assertCount(1, $this->orders->addOrder(
-        	new \SmartEmailing\v3\Request\Eshops\Model\Order(
+        	new Order(
         		'my-eshop',
 		        'ORDER0001',
 		        'jan.novak@smartemailing.cz'
 	        ))->orders());
         $this->assertCount(2, $this->orders->addOrder(
-        	new \SmartEmailing\v3\Request\Eshops\Model\Order(
+        	new Order(
         		'my-eshop2',
 		        'ORDER00012',
 		        'jan.novak2@smartemailing.cz'
 	        ))->orders());
         $this->assertCount(3, $this->orders->addOrder(
-        	new \SmartEmailing\v3\Request\Eshops\Model\Order(
+        	new Order(
         		'my-eshop2',
 		        'ORDER00013',
 		        'jan.novak3@smartemailing.cz'
@@ -67,7 +67,7 @@ class EshopOrdersBulkTest extends ApiStubTestCase
 		// Build a contact list 2,5 larger then chunk limit
 		for ($i = 1; $i <= 1250; $i++) {
 			$this->orders->addOrder(
-				new \SmartEmailing\v3\Request\Eshops\Model\Order(
+				new Order(
 					'my-eshop',
 					"ORDER000{$i}",
 					"jan.novak+{$i}@test.cz"
@@ -121,7 +121,7 @@ class EshopOrdersBulkTest extends ApiStubTestCase
 		// Build a contact list 2,5 larger then chunk limit
 		for ($i = 1; $i <= 1250; $i++) {
 			$this->orders->addOrder(
-				new \SmartEmailing\v3\Request\Eshops\Model\Order(
+				new Order(
 					'my-eshop',
 					"ORDER000{$i}",
 					"jan.novak+{$i}@test.cz"

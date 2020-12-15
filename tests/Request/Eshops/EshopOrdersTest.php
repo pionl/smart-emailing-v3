@@ -1,10 +1,8 @@
 <?php
 namespace SmartEmailing\v3\Tests\Request\Eshops;
 
-use GuzzleHttp\Client;
-use Psr\Http\Message\ResponseInterface;
-use SmartEmailing\v3\Exceptions\RequestException;
 use SmartEmailing\v3\Request\Eshops\EshopOrders;
+use SmartEmailing\v3\Request\Eshops\Model\Order;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class EshopOrdersTest extends ApiStubTestCase
@@ -12,7 +10,7 @@ class EshopOrdersTest extends ApiStubTestCase
     /**
      * @var EshopOrders
      */
-    protected $orders;
+    protected EshopOrders $orders;
 
     protected function setUp()
     {
@@ -32,13 +30,13 @@ class EshopOrdersTest extends ApiStubTestCase
     public function testAddOrder()
     {
         $this->assertCount(1, $this->orders->addOrder(
-        	new \SmartEmailing\v3\Request\Eshops\Model\Order(
+        	new Order(
         		'my-eshop',
 		        'ORDER0001',
 		        'jan.novak@smartemailing.cz'
 	        ))->orders());
 	    $orders = $this->orders->addOrder(
-		    new \SmartEmailing\v3\Request\Eshops\Model\Order(
+		    new Order(
 			    'eshop_name2',
 			    'eshop_code2',
 			    'jan.novak2@smartemailing.cz'

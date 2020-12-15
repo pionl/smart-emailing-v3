@@ -2,9 +2,6 @@
 
 namespace SmartEmailing\v3\Request\Eshops;
 
-use SmartEmailing\v3\Api;
-use SmartEmailing\v3\Request\AbstractRequest;
-use SmartEmailing\v3\Request\Eshops\Model\Order;
 use SmartEmailing\v3\Request\Response;
 
 /**
@@ -14,58 +11,13 @@ use SmartEmailing\v3\Request\Response;
  *
  * @package SmartEmailing\v3\Request\Eshops
  */
-class EshopOrdersBulk extends AbstractRequest implements \JsonSerializable
+class EshopOrdersBulk extends AbstractEshopOrders implements \JsonSerializable
 {
 	/**
 	 * The maximum orders per single request
 	 * @var int
 	 */
-	public $chunkLimit = 500;
-	/**
-	 * @var Order[]
-	 */
-	protected $orders = [];
-
-	public function __construct(Api $api)
-	{
-		parent::__construct($api);
-	}
-
-	/**
-	 * Creates Returns the newly created order
-	 *
-	 * @param $eshopName
-	 * @param $eshopCode
-	 * @param $emailAddress
-	 *
-	 * @return Order
-	 */
-	public function newOrder($eshopName, $eshopCode, $emailAddress): Order
-	{
-		$order = new Order($eshopName, $eshopCode, $emailAddress);
-		$this->addOrder($order);
-		return $order;
-	}
-
-
-	/**
-	 * @param Order $order
-	 *
-	 * @return EshopOrdersBulk
-	 */
-	public function addOrder(Order $order): EshopOrdersBulk
-	{
-		$this->orders[] = $order;
-		return $this;
-	}
-
-	/**
-	 * @return Order[]
-	 */
-	public function orders(): array
-	{
-		return $this->orders;
-	}
+	public int $chunkLimit = 500;
 
 	/**
 	 * Will send multiple requests because of the 500 count limit
@@ -105,43 +57,12 @@ class EshopOrdersBulk extends AbstractRequest implements \JsonSerializable
 		return $lastResponse;
 	}
 
-	//region AbstractRequest implementation
+	/**
+	 * @return string
+	 */
 	protected function endpoint(): string
 	{
 		return 'orders-bulk';
 	}
-
-	protected function options(): array
-	{
-		return [
-			'json' => $this->jsonSerialize()
-		];
-	}
-
-	protected function method(): string
-	{
-		return 'POST';
-	}
-
-	//endregion
-
-	//region Data convert
-	/**
-	 * Converts data to array
-	 * @return array
-	 */
-	public function toArray(): array
-	{
-		return $this->orders;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function jsonSerialize(): array
-	{
-		return $this->toArray();
-	}
-	//endregion
 
 }
