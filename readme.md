@@ -46,7 +46,7 @@ then use the `$api` with desired method/component.
 $api->import()->addContact(new Contact('test@test.cz'))->send();
 ```
 
-or 
+or
 
 ```php
 // Creates a new instance
@@ -139,12 +139,12 @@ use SmartEmailing\v3\Request\CustomFields\Create\Response;
 ...
 // Create the new customField and send the request now.
 $response = $api->customFields()->create(new CustomField('test', CustomField::TEXT));
-    
+
  // Get the customField in data
 $customFieldId = $response->data()->id;
 ```
 
-or 
+or
 
 ```php
 $request = $api->customFields()->createRequest(); // You can pass the customField object
@@ -241,7 +241,7 @@ Allows filtering custom fields with multiple filter conditions.
     * byName($value)
     * byType($value)
     * byId($value)
-    
+
 ### Exists
 Runs a search query with name filter and checks if the given name is found in customFields. Returns `false` or the `CustomFields\CustomField`.
 Uses send logic (throws RequestException).
@@ -363,47 +363,6 @@ $transactionEmail->addTask($task);
 $transactionEmail->send();
 ```
 
-## Changelog
-
-### 0.1.8
-
-* Added purposes for contacts.
-
-### 0.1.7
-
-* Fix incorrect namespace for confirmation request.
-
-### 0.1.6
-
-* Added confirmation request to import settings.
-
-### 0.1.5
-
-* Removed deprecated API usage in Contact.php: `addContactList` and `newContactList`
-
-### 0.1.4
-
-* CustomFields can be imported only once (unique by id)
-
-### 0.1.3
-
-* Added automatic chunk send for contact import - when number of contacts exceeds 500, the `send()` method will send multiple request (chunk's the contact array)
-
-### 0.1.2
-
-* Added exists custom field request. A quick way how to get custom field by it's name. `$api->customFields()->exists('name') : CustomField|bool`
-* Contacts list allows only unique id's (when already added ignores the value) 
-
-### 0.1.1
-
-* Removed deprecated methods for Import\Contact\CustomField (newCustomField, setCustomFields, addCustomField)
-* Added `createValue` to `CustomFields\CustomField` to enable quick creating of CustomField for import.
-* **Moved the CustomField `Create`**  request and response to its own namespace `SmartEmailing\v3\Request\CustomFields\Create` and renamed to only `Request` class
-* **Changed the JSON structure** from `array` to `stdClass`. Update all the `json()` usage
-* Added search request for custom fields
-
-### 0.1
-
 * Added Custom-fields create request
 
 ## Contribution or overriding
@@ -412,7 +371,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute changes. All contri
 ## Copyright and License
 
 [smart-emailing-v3](https://github.com/pionl/smart-emailing-v3)
-was written by [Martin Kluska](http://kluska.cz) and is released under the 
+was written by [Martin Kluska](http://kluska.cz) and is released under the
 [MIT License](LICENSE.md).
 
 Copyright (c) 2016 Martin Kluska

@@ -2,14 +2,14 @@
 
 namespace SmartEmailing\v3\Tests\Request\Send;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use SmartEmailing\v3\Request\Send\Attachment;
 use SmartEmailing\v3\Request\Send\Recipient;
 use SmartEmailing\v3\Request\Send\Replace;
 use SmartEmailing\v3\Request\Send\Task;
 use SmartEmailing\v3\Request\Send\TemplateVariable;
 
-class TaskTest extends PHPUnit_Framework_TestCase
+class TaskTest extends TestCase
 {
 	/** @var Task  */
 	private $model;

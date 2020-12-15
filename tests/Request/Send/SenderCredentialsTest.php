@@ -2,11 +2,11 @@
 
 namespace SmartEmailing\v3\Tests\Request\Send;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Request\Send\SenderCredentials;
 
-class SenderCredentialsTest extends PHPUnit_Framework_TestCase
+class SenderCredentialsTest extends TestCase
 {
 	/** @var SenderCredentials  */
 	private $model;
