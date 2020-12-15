@@ -56,8 +56,7 @@ class AbstractRequestTestCase extends ApiStubTestCase
             'The exception should use json message if Guzzle returns simple error');
         $this->assertEquals(500, $exception->getCode(), 'Exception must have same code as status code');
         $this->assertEquals(500, $exception->response()->statusCode());
-        $this->assertNotNull($exception->request(), 'Non 200 status code should have request - 
-        passed from guzzle exception');
+        $this->assertNotNull($exception->request(), 'Non 200 status code should have request - passed from guzzle exception');
     }
 
     /**
@@ -90,8 +89,7 @@ class AbstractRequestTestCase extends ApiStubTestCase
         $this->assertEquals('Client error', $exception->getMessage(), 'The exception should use the Guzzles message');
         $this->assertEquals(500, $exception->getCode(), 'Exception must have same code as status code');
         $this->assertEquals(500, $exception->response()->statusCode());
-        $this->assertNotNull($exception->request(), 'Non 200 status code should have request - 
-        passed from guzzle exception');
+        $this->assertNotNull($exception->request(), 'Non 200 status code should have request - passed from guzzle exception');
     }
 
     /**
@@ -111,8 +109,7 @@ class AbstractRequestTestCase extends ApiStubTestCase
         $this->assertEquals('Client error: An error', $exception->getMessage(), 'The guzzle message is simple, append message');
         $this->assertEquals(500, $exception->getCode(), 'Exception must have same code as status code');
         $this->assertEquals(500, $exception->response()->statusCode());
-        $this->assertNotNull($exception->request(), 'Non 200 status code should have request - 
-        passed from guzzle exception');
+        $this->assertNotNull($exception->request(), 'Non 200 status code should have request - passed from guzzle exception');
     }
 
 }
