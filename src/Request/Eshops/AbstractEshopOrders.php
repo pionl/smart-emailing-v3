@@ -20,15 +20,6 @@ abstract class AbstractEshopOrders extends AbstractRequest implements JsonSerial
 	protected array $orders = [];
 
 	/**
-	 * AbstractEshopOrders constructor.
-	 * @param Api $api
-	 */
-	public function __construct(Api $api)
-	{
-		parent::__construct($api);
-	}
-
-	/**
 	 * Creates Returns the newly created order
 	 *
 	 * @param $eshopName

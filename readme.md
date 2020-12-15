@@ -369,13 +369,17 @@ The E_shops section have two endpoints to set single Order or import orders in b
 
 Example add single order
 ```php
-$order = new \SmartEmailing\v3\Request\Eshops\Model\Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
+use \SmartEmailing\v3\Request\Eshops\Model\Order;
+use  \SmartEmailing\v3\Request\Eshops\Model\OrderItem;
+use \SmartEmailing\v3\Request\Eshops\Model\Price;
+
+$order = new Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
 $order->orderItems()->add(
-    new \SmartEmailing\v3\Request\Eshops\Model\OrderItem(
+    new OrderItem(
         'ABC123',   // item Id
         'My Product', // item name
         10,          // quantity
-        new \SmartEmailing\v3\Request\Eshops\Model\Price(
+        new Price(
             100, // without vat
             121, // with vat
             'CZK' // currency code
@@ -383,8 +387,7 @@ $order->orderItems()->add(
         'https://myeshop.cz/product/ABC123'  // product url
     )
 );
-$api->eshopOrders()->addOrder($order);
-$api->send();
+$api->eshopOrders()->addOrder($order)->send();
 ```
 
 ## Changelog
