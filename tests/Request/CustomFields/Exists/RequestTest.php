@@ -101,7 +101,6 @@ class RequestTest extends ApiStubTestCase
                 "limit": 2
             },
             "data": [
-                
             ]
         }';
 

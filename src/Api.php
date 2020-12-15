@@ -26,6 +26,9 @@ class Api
      */
     private $apiUrl;
 
+    /** @var \GuzzleHttp\Client */
+    private $client;
+
     /**
      * Api constructor.
      *

@@ -46,7 +46,7 @@ then use the `$api` with desired method/component.
 $api->import()->addContact(new Contact('test@test.cz'))->send();
 ```
 
-or 
+or
 
 ```php
 // Creates a new instance
@@ -140,12 +140,12 @@ use SmartEmailing\v3\Request\CustomFields\Create\Response;
 ...
 // Create the new customField and send the request now.
 $response = $api->customFields()->create(new CustomField('test', CustomField::TEXT));
-    
+
  // Get the customField in data
 $customFieldId = $response->data()->id;
 ```
 
-or 
+or
 
 ```php
 $request = $api->customFields()->createRequest(); // You can pass the customField object
@@ -242,7 +242,7 @@ Allows filtering custom fields with multiple filter conditions.
     * byName($value)
     * byType($value)
     * byId($value)
-    
+
 ### Exists
 Runs a search query with name filter and checks if the given name is found in customFields. Returns `false` or the `CustomFields\CustomField`.
 Uses send logic (throws RequestException).
@@ -254,6 +254,113 @@ if ($customField = $api->customFields()->exists('name')) {
 } else {
     throw new Exception('Not found!', 404);
 }
+```
+### Send / Transactional emails
+The implementation of API call ``send/transactional-emails-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_transactional_emails
+## Full transactional email example
+```php
+$transactionEmail = new TransactionalEmails($api);
+
+$credentials = new SenderCredentials();
+$credentials->setFrom('from@example.com');
+$credentials->setReplyTo('to@example.com');
+$credentials->setSenderName('Jean-Luc Picard');
+
+$recipient = new Recipient();
+$recipient->setEmailAddress('kirk@example.com');
+
+$replace1 = new Replace();
+$replace1->setKey('key1');
+$replace1->setContent('content1');
+
+$replace2 = new Replace();
+$replace2->setKey('key2');
+$replace2->setContent('content2');
+
+$templateVariable = new TemplateVariable();
+$templateVariable->setCustomData([
+    'foo' => 'bar',
+    'products' => [
+        ['name' => 'prod1', 'desc' => 'desc1'],
+        ['name' => 'prod1', 'desc' => 'desc2']
+    ]
+]);
+
+$attachment1 = new Attachment();
+$attachment1->setContentType('image/png');
+$attachment1->setFileName('picture.png');
+$attachment1->setDataBase64('data1');
+
+$attachment2 = new Attachment();
+$attachment2->setContentType('image/gif');
+$attachment2->setFileName('sun.gif');
+$attachment2->setDataBase64('data2');
+
+$task = new Task();
+$task->setRecipient($recipient);
+$task->addReplace($replace1);
+$task->addReplace($replace2);
+$task->setTemplateVariables($templateVariable);
+$task->addAttachment($attachment1);
+$task->addAttachment($attachment2);
+
+$messageContents = new MessageContents();
+$messageContents->setTextBody('text_body');
+$messageContents->setHtmlBody('html_body');
+$messageContents->setSubject('subject');
+
+$transactionEmail->setTag('tag_tag');
+$transactionEmail->setEmailId(5);
+$transactionEmail->setSenderCredentials($credentials);
+$transactionEmail->addTask($task);
+$transactionEmail->setMessageContents($messageContents);
+
+$transactionEmail->send();
+```
+
+### Send / Bulk custom emails
+The implementation of API call ``send/custom-emails-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_emails
+## Full transactional email example
+```php
+$transactionEmail = new BulkCustomEmails($api);
+
+$credentials = new SenderCredentials();
+$credentials->setFrom('from@example.com');
+$credentials->setReplyTo('to@example.com');
+$credentials->setSenderName('Jean-Luc Picard');
+
+$recipient = new Recipient();
+$recipient->setEmailAddress('kirk@example.com');
+
+$replace1 = new Replace();
+$replace1->setKey('key1');
+$replace1->setContent('content1');
+
+$replace2 = new Replace();
+$replace2->setKey('key2');
+$replace2->setContent('content2');
+
+$templateVariable = new TemplateVariable();
+$templateVariable->setCustomData([
+    'foo' => 'bar',
+    'products' => [
+        ['name' => 'prod1', 'desc' => 'desc1'],
+        ['name' => 'prod1', 'desc' => 'desc2']
+    ]
+]);
+
+$task = new Task();
+$task->setRecipient($recipient);
+$task->addReplace($replace1);
+$task->addReplace($replace2);
+$task->setTemplateVariables($templateVariable);
+
+$transactionEmail->setTag('tag_tag');
+$transactionEmail->setEmailId(5);
+$transactionEmail->setSenderCredentials($credentials);
+$transactionEmail->addTask($task);
+
+$transactionEmail->send();
 ```
 
 ## E_shops - Add Placed order
@@ -274,7 +381,7 @@ $order->orderItems()->add(
             'CZK' // currency code
         ),
         'https://myeshop.cz/product/ABC123'  // product url
-    )   
+    )
 );
 $api->eshopOrders()->addOrder($order);
 $api->send();
@@ -309,7 +416,7 @@ $api->send();
 ### 0.1.2
 
 * Added exists custom field request. A quick way how to get custom field by it's name. `$api->customFields()->exists('name') : CustomField|bool`
-* Contacts list allows only unique id's (when already added ignores the value) 
+* Contacts list allows only unique id's (when already added ignores the value)
 
 ### 0.1.1
 
@@ -329,7 +436,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute changes. All contri
 ## Copyright and License
 
 [smart-emailing-v3](https://github.com/pionl/smart-emailing-v3)
-was written by [Martin Kluska](http://kluska.cz) and is released under the 
+was written by [Martin Kluska](http://kluska.cz) and is released under the
 [MIT License](LICENSE.md).
 
 Copyright (c) 2016 Martin Kluska

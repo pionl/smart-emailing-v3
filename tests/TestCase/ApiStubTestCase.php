@@ -45,9 +45,9 @@ abstract class ApiStubTestCase extends BaseTestCase
      * Creates a tests for send request that will check if correct parameters are send to clients request method
      *
      * @param AbstractRequest                                 $request
-     * @param string|null|\PHPUnit_Framework_Constraint|mixed $endpointName
-     * @param string|null|\PHPUnit_Framework_Constraint|mixed $httpMethod
-     * @param string|null|\PHPUnit_Framework_Constraint|mixed $options
+     * @param string|null|mixed $endpointName
+     * @param string|null|mixed $httpMethod
+     * @param string|null|mixed $options
      *
      * @return \SmartEmailing\v3\Request\Response
      */
@@ -61,8 +61,8 @@ abstract class ApiStubTestCase extends BaseTestCase
     /**
      * Builds the response/client mocks and setups for a clients request call
      *
-     * @param string|null|\PHPUnit_Framework_Constraint|mixed $endpointName
-     * @param string|null|\PHPUnit_Framework_Constraint|mixed $httpMethod
+     * @param string|null|mixed $endpointName
+     * @param string|null|mixed $httpMethod
      * @param array                                           $options
      */
     protected function stubClientResponse($endpointName, $httpMethod = 'GET', $options = [])
@@ -89,9 +89,7 @@ abstract class ApiStubTestCase extends BaseTestCase
     /**
      * Builds the correct constraint value based on input value
      *
-     * @param string|null|\PHPUnit_Framework_Constraint|mixed $desiredValue
-     *
-     * @return \PHPUnit_Framework_Constraint_IsAnything|\PHPUnit_Framework_Constraint_IsEqual
+     * @param string|null|mixed $desiredValue
      */
     protected function valueConstraint($desiredValue)
     {
@@ -156,7 +154,7 @@ abstract class ApiStubTestCase extends BaseTestCase
             // Run the request
             $request->send();
 
-            $this->fail('The send request should raise an exception when Guzzle raises RequestException 
+            $this->fail('The send request should raise an exception when Guzzle raises RequestException
             (non 200 status code) or API returns 200 status code with error status in json');
             return null;
         } catch (RequestException $exception) {
