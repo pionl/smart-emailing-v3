@@ -2,11 +2,11 @@
 
 namespace SmartEmailing\v3\Tests\Request\Send;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Request\Send\MessageContents;
 
-class MessageContentsTest extends PHPUnit_Framework_TestCase
+class MessageContentsTest extends TestCase
 {
 	/** @var MessageContents  */
 	private $model;

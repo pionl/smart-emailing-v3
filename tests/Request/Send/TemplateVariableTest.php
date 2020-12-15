@@ -2,10 +2,10 @@
 
 namespace SmartEmailing\v3\Tests\Request\Send;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use SmartEmailing\v3\Request\Send\TemplateVariable;
 
-class TemplateVariableTest extends PHPUnit_Framework_TestCase
+class TemplateVariableTest extends TestCase
 {
 	/** @var TemplateVariable  */
 	private $model;
