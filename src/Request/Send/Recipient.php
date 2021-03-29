@@ -10,24 +10,52 @@ class Recipient extends Model
 {
 	/** @var string */
 	private $emailAddress;
+	/** @var string */
+	private $cellphone = '';
 
-	public function getEmailAddress(): ?String
+	public function getEmailAddress(): ?string
 	{
 		return $this->emailAddress;
 	}
 
-	public function setEmailAddress(String $emailAddress): void
+	public function setEmailAddress(string $emailAddress): void
 	{
 		$this->emailAddress = $emailAddress;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getCellphone(): string
+	{
+		return $this->cellphone;
+	}
+
+	/**
+	 * @param string $cellphone
+	 */
+	public function setCellphone(string $cellphone): void
+	{
+		$this->cellphone = $cellphone;
+	}
+
 	public function toArray(): array
 	{
-		PropertyRequiredException::throwIf('emailaddress', !empty($this->getEmailAddress()), 'You must set emailaddress - missing emailaddress');
+		PropertyRequiredException::throwIf(
+			'emailaddress',
+			!empty($this->getEmailAddress()),
+			'You must set emailaddress - missing emailaddress'
+		);
 
-		return [
-			'emailaddress' => $this->getEmailAddress(),
+		$data = [
+			'emailaddress' => $this->getEmailAddress()
 		];
+
+		if (!empty($this->getCellphone())) {
+			$data['cellphone'] = $this->getCellphone();
+		}
+
+		return $data;
 	}
 
 	public function jsonSerialize(): array

@@ -10,6 +10,9 @@ use SmartEmailing\v3\Request\Email\EmailsEndpoint;
 use SmartEmailing\v3\Request\Import\Import;
 use SmartEmailing\v3\Request\Newsletter\Newsletter;
 use SmartEmailing\v3\Request\Ping\Ping;
+use SmartEmailing\v3\Request\Send\BulkCustomEmails;
+use SmartEmailing\v3\Request\Send\BulkCustomSms;
+use SmartEmailing\v3\Request\Send\TransactionalEmails;
 
 /**
  * Class Api
@@ -104,6 +107,21 @@ class Api
     public function customFields()
     {
         return new CustomFields($this);
+    }
+
+    public function customEmailsBulk(): BulkCustomEmails
+    {
+        return new BulkCustomEmails($this);
+    }
+
+    public function customSmsBulk(): BulkCustomSms
+    {
+        return new BulkCustomSms($this);
+    }
+
+    public function transactionalEmails(): TransactionalEmails
+    {
+        return new TransactionalEmails($this);
     }
 
 }

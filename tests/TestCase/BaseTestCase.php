@@ -31,7 +31,7 @@ abstract class BaseTestCase extends TestCase
             $this->canDoLiveTest = true;
         } catch (\Exception $exception) {
         }
-
+        
         // Setup the username/api-key
         $this->username = $this->env('USERNAME', 'username');
         $this->apiKey = $this->env('API_KEY', 'password');
