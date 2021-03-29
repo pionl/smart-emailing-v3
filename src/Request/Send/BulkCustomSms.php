@@ -3,6 +3,7 @@
 namespace SmartEmailing\v3\Request\Send;
 
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
+use SmartEmailing\v3\Request\Response;
 
 /**
  * Class BulkCustomSms
@@ -11,8 +12,49 @@ use SmartEmailing\v3\Exceptions\PropertyRequiredException;
  */
 class BulkCustomSms extends AbstractSend
 {
+	/**
+	 * The maximum tasks per single request
+	 * Single request is restricted to contain 500 SMS at most. Multiple simultaneous calls is allowed.
+	 * @var int
+	 */
+	protected $chunkLimit = 500;
+
 	/** @var int|null */
 	protected $smsId;
+
+	/**
+	 * Will send multiple requests because of the 500 count limit
+	 * @inheritDoc
+	 */
+	public function send(): ?Response
+	{
+		// There is not enough contacts to enable chunk mode
+		if ($this->chunkLimit >= count($this->getTasks())) {
+			return parent::send();
+		}
+
+		return $this->sendInChunkMode();
+	}
+
+	/**
+	 * Sends tasks in chunk mode
+	 * @return Response
+	 */
+	protected function sendInChunkMode(): ?Response
+	{
+		$originalFullTaskList = $this->getTasks();
+		$lastResponse = null;
+
+		foreach (array_chunk($this->getTasks(), $this->chunkLimit) as $tasks) {
+			$this->tasks = $tasks;
+
+			$lastResponse = parent::send();
+		}
+
+		$this->tasks = $originalFullTaskList;
+
+		return $lastResponse;
+	}
 
 	/**
 	 * @return int|null
