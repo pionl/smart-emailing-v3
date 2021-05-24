@@ -46,7 +46,7 @@ then use the `$api` with desired method/component.
 $api->import()->addContact(new Contact('test@test.cz'))->send();
 ```
 
-or 
+or
 
 ```php
 // Creates a new instance
@@ -95,6 +95,7 @@ try {
 * [x] [Emails](https://app.smartemailing.cz/docs/api/v3/index.html#api-Emails)
 * [x] [Newsletter](https://app.smartemailing.cz/docs/api/v3/index.html#api-Newsletter)
 * [ ] [Webhooks](https://app.smartemailing.cz/docs/api/v3/index.html#api-Webhooks)
+* [x] [E shops](https://app.smartemailing.cz/docs/api/v3/index.html#api-E_shops) Notifies SmartEmailing about new order in e-shop.
 
 ## Advanced docs
 
@@ -139,12 +140,12 @@ use SmartEmailing\v3\Request\CustomFields\Create\Response;
 ...
 // Create the new customField and send the request now.
 $response = $api->customFields()->create(new CustomField('test', CustomField::TEXT));
-    
+
  // Get the customField in data
 $customFieldId = $response->data()->id;
 ```
 
-or 
+or
 
 ```php
 $request = $api->customFields()->createRequest(); // You can pass the customField object
@@ -241,7 +242,7 @@ Allows filtering custom fields with multiple filter conditions.
     * byName($value)
     * byType($value)
     * byId($value)
-    
+
 ### Exists
 Runs a search query with name filter and checks if the given name is found in customFields. Returns `false` or the `CustomFields\CustomField`.
 Uses send logic (throws RequestException).
@@ -254,7 +255,6 @@ if ($customField = $api->customFields()->exists('name')) {
     throw new Exception('Not found!', 404);
 }
 ```
-
 ### Send / Transactional emails
 The implementation of API call ``send/transactional-emails-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_transactional_emails
 ## Full transactional email example
@@ -363,6 +363,33 @@ $transactionEmail->addTask($task);
 $transactionEmail->send();
 ```
 
+## E_shops - Add Placed order
+
+The E_shops section have two endpoints to set single Order or import orders in bulk.
+
+Example add single order
+```php
+use \SmartEmailing\v3\Request\Eshops\Model\Order;
+use  \SmartEmailing\v3\Request\Eshops\Model\OrderItem;
+use \SmartEmailing\v3\Request\Eshops\Model\Price;
+
+$order = new Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
+$order->orderItems()->add(
+    new OrderItem(
+        'ABC123',   // item Id
+        'My Product', // item name
+        10,          // quantity
+        new Price(
+            100, // without vat
+            121, // with vat
+            'CZK' // currency code
+        ),
+        'https://myeshop.cz/product/ABC123'  // product url
+    )
+);
+$api->eshopOrders()->addOrder($order)->send();
+```
+
 ## Changelog
 
 ### 0.1.8
@@ -392,7 +419,7 @@ $transactionEmail->send();
 ### 0.1.2
 
 * Added exists custom field request. A quick way how to get custom field by it's name. `$api->customFields()->exists('name') : CustomField|bool`
-* Contacts list allows only unique id's (when already added ignores the value) 
+* Contacts list allows only unique id's (when already added ignores the value)
 
 ### 0.1.1
 
@@ -412,7 +439,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute changes. All contri
 ## Copyright and License
 
 [smart-emailing-v3](https://github.com/pionl/smart-emailing-v3)
-was written by [Martin Kluska](http://kluska.cz) and is released under the 
+was written by [Martin Kluska](http://kluska.cz) and is released under the
 [MIT License](LICENSE.md).
 
 Copyright (c) 2016 Martin Kluska
