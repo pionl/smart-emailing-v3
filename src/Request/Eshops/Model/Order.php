@@ -20,7 +20,7 @@ class Order extends Model
 	const STATUS_PLACED = 'placed';
 	const STATUS_PROCESSING = 'processing';
 	const STATUS_SHIPPED = 'shipped';
-	const STATUS_CANCELLED = 'cancelled';
+	const STATUS_CANCELED = 'canceled';
 	const STATUS_UNKNOWN = 'unknown';
 	//region Properties
 	/**
@@ -148,7 +148,7 @@ class Order extends Model
 	{
 		InvalidFormatException::checkInArray($status, [
 			self::STATUS_PLACED,
-			self::STATUS_CANCELLED,
+			self::STATUS_CANCELED,
 			self::STATUS_PROCESSING,
 			self::STATUS_SHIPPED,
 			self::STATUS_UNKNOWN
