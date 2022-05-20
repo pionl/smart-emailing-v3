@@ -320,7 +320,7 @@ $transactionEmail->send();
 
 ### Send / Bulk custom emails
 The implementation of API call ``send/custom-emails-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_emails
-## Full transactional email example
+## Full custom email example
 ```php
 $transactionEmail = new BulkCustomEmails($api);
 
@@ -362,6 +362,77 @@ $transactionEmail->addTask($task);
 
 $transactionEmail->send();
 ```
+
+### Send / Bulk custom sms
+The implementation of API call ``send/custom-sms-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_SMS
+## Full send sms example
+```php
+$bulkCustomSms = new BulkCustomSms($api);
+
+$recipient = new Recipient();
+$recipient->setEmailAddress('kirk@example.com');
+$recipient->setCellphone('+420777888777');
+
+$replace1 = new Replace();
+$replace1->setKey('key1');
+$replace1->setContent('content1');
+
+$replace2 = new Replace();
+$replace2->setKey('key2');
+$replace2->setContent('content2');
+
+$task = new Task();
+$task->setRecipient($recipient);
+$task->addReplace($replace1);
+$task->addReplace($replace2);
+
+$bulkCustomSms->setTag('tag_tag');
+$bulkCustomSms->setSmsId(5);
+$bulkCustomSms->addTask($task);
+
+$bulkCustomSms->send();
+```
+
+## Changelog
+
+### 0.1.8
+
+* Added purposes for contacts.
+
+### 0.1.7
+
+* Fix incorrect namespace for confirmation request.
+
+### 0.1.6
+
+* Added confirmation request to import settings.
+
+### 0.1.5
+
+* Removed deprecated API usage in Contact.php: `addContactList` and `newContactList`
+
+### 0.1.4
+
+* CustomFields can be imported only once (unique by id)
+
+### 0.1.3
+
+* Added automatic chunk send for contact import - when number of contacts exceeds 500, the `send()` method will send multiple request (chunk's the contact array)
+
+### 0.1.2
+
+* Added exists custom field request. A quick way how to get custom field by it's name. `$api->customFields()->exists('name') : CustomField|bool`
+* Contacts list allows only unique id's (when already added ignores the value) 
+
+### 0.1.1
+
+* Removed deprecated methods for Import\Contact\CustomField (newCustomField, setCustomFields, addCustomField)
+* Added `createValue` to `CustomFields\CustomField` to enable quick creating of CustomField for import.
+* **Moved the CustomField `Create`**  request and response to its own namespace `SmartEmailing\v3\Request\CustomFields\Create` and renamed to only `Request` class
+* **Changed the JSON structure** from `array` to `stdClass`. Update all the `json()` usage
+* Added search request for custom fields
+
+### 0.1
 
 * Added Custom-fields create request
 
