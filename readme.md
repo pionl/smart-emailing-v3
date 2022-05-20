@@ -320,7 +320,7 @@ $transactionEmail->send();
 
 ### Send / Bulk custom emails
 The implementation of API call ``send/custom-emails-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_emails
-## Full transactional email example
+## Full custom email example
 ```php
 $transactionEmail = new BulkCustomEmails($api);
 
@@ -361,6 +361,36 @@ $transactionEmail->setSenderCredentials($credentials);
 $transactionEmail->addTask($task);
 
 $transactionEmail->send();
+```
+
+### Send / Bulk custom sms
+The implementation of API call ``send/custom-sms-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_SMS
+## Full send sms example
+```php
+$bulkCustomSms = new BulkCustomSms($api);
+
+$recipient = new Recipient();
+$recipient->setEmailAddress('kirk@example.com');
+$recipient->setCellphone('+420777888777');
+
+$replace1 = new Replace();
+$replace1->setKey('key1');
+$replace1->setContent('content1');
+
+$replace2 = new Replace();
+$replace2->setKey('key2');
+$replace2->setContent('content2');
+
+$task = new Task();
+$task->setRecipient($recipient);
+$task->addReplace($replace1);
+$task->addReplace($replace2);
+
+$bulkCustomSms->setTag('tag_tag');
+$bulkCustomSms->setSmsId(5);
+$bulkCustomSms->addTask($task);
+
+$bulkCustomSms->send();
 ```
 
 ## Changelog
