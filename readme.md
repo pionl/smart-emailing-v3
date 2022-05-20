@@ -46,7 +46,7 @@ then use the `$api` with desired method/component.
 $api->import()->addContact(new Contact('test@test.cz'))->send();
 ```
 
-or 
+or
 
 ```php
 // Creates a new instance
@@ -95,6 +95,7 @@ try {
 * [x] [Emails](https://app.smartemailing.cz/docs/api/v3/index.html#api-Emails)
 * [x] [Newsletter](https://app.smartemailing.cz/docs/api/v3/index.html#api-Newsletter)
 * [ ] [Webhooks](https://app.smartemailing.cz/docs/api/v3/index.html#api-Webhooks)
+* [x] [E shops](https://app.smartemailing.cz/docs/api/v3/index.html#api-E_shops) Notifies SmartEmailing about new order in e-shop.
 
 ## Advanced docs
 
@@ -139,12 +140,12 @@ use SmartEmailing\v3\Request\CustomFields\Create\Response;
 ...
 // Create the new customField and send the request now.
 $response = $api->customFields()->create(new CustomField('test', CustomField::TEXT));
-    
+
  // Get the customField in data
 $customFieldId = $response->data()->id;
 ```
 
-or 
+or
 
 ```php
 $request = $api->customFields()->createRequest(); // You can pass the customField object
@@ -241,7 +242,7 @@ Allows filtering custom fields with multiple filter conditions.
     * byName($value)
     * byType($value)
     * byId($value)
-    
+
 ### Exists
 Runs a search query with name filter and checks if the given name is found in customFields. Returns `false` or the `CustomFields\CustomField`.
 Uses send logic (throws RequestException).
@@ -254,7 +255,6 @@ if ($customField = $api->customFields()->exists('name')) {
     throw new Exception('Not found!', 404);
 }
 ```
-
 ### Send / Transactional emails
 The implementation of API call ``send/transactional-emails-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_transactional_emails
 ## Full transactional email example
@@ -320,7 +320,7 @@ $transactionEmail->send();
 
 ### Send / Bulk custom emails
 The implementation of API call ``send/custom-emails-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_emails
-## Full transactional email example
+## Full custom email example
 ```php
 $transactionEmail = new BulkCustomEmails($api);
 
@@ -363,48 +363,65 @@ $transactionEmail->addTask($task);
 $transactionEmail->send();
 ```
 
-## Changelog
 
-### 0.1.8
+## E_shops - Add Placed order
 
-* Added purposes for contacts.
+The E_shops section have two endpoints to set single Order or import orders in bulk.
 
-### 0.1.7
+Example add single order
+```php
+use \SmartEmailing\v3\Request\Eshops\Model\Order;
+use \SmartEmailing\v3\Request\Eshops\Model\OrderItem;
+use \SmartEmailing\v3\Request\Eshops\Model\Price;
 
-* Fix incorrect namespace for confirmation request.
+$order = new Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
+$order->orderItems()->add(
+    new OrderItem(
+        'ABC123',   // item Id
+        'My Product', // item name
+        10,          // quantity
+        new Price(
+            100, // without vat
+            121, // with vat
+            'CZK' // currency code
+        ),
+        'https://myeshop.cz/product/ABC123'  // product url
+    )
+);
+$api->eshopOrders()->addOrder($order)->send();
+```
 
-### 0.1.6
+### Send / Bulk custom sms
+The implementation of API call ``send/custom-sms-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_SMS
 
-* Added confirmation request to import settings.
+## Full send sms example
 
-### 0.1.5
+```php
+$bulkCustomSms = new BulkCustomSms($api);
 
-* Removed deprecated API usage in Contact.php: `addContactList` and `newContactList`
+$recipient = new Recipient();
+$recipient->setEmailAddress('kirk@example.com');
+$recipient->setCellphone('+420777888777');
 
-### 0.1.4
+$replace1 = new Replace();
+$replace1->setKey('key1');
+$replace1->setContent('content1');
 
-* CustomFields can be imported only once (unique by id)
+$replace2 = new Replace();
+$replace2->setKey('key2');
+$replace2->setContent('content2');
 
-### 0.1.3
+$task = new Task();
+$task->setRecipient($recipient);
+$task->addReplace($replace1);
+$task->addReplace($replace2);
 
-* Added automatic chunk send for contact import - when number of contacts exceeds 500, the `send()` method will send multiple request (chunk's the contact array)
+$bulkCustomSms->setTag('tag_tag');
+$bulkCustomSms->setSmsId(5);
+$bulkCustomSms->addTask($task);
 
-### 0.1.2
-
-* Added exists custom field request. A quick way how to get custom field by it's name. `$api->customFields()->exists('name') : CustomField|bool`
-* Contacts list allows only unique id's (when already added ignores the value) 
-
-### 0.1.1
-
-* Removed deprecated methods for Import\Contact\CustomField (newCustomField, setCustomFields, addCustomField)
-* Added `createValue` to `CustomFields\CustomField` to enable quick creating of CustomField for import.
-* **Moved the CustomField `Create`**  request and response to its own namespace `SmartEmailing\v3\Request\CustomFields\Create` and renamed to only `Request` class
-* **Changed the JSON structure** from `array` to `stdClass`. Update all the `json()` usage
-* Added search request for custom fields
-
-### 0.1
-
-* Added Custom-fields create request
+$bulkCustomSms->send();
+```
 
 ## Contribution or overriding
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute changes. All contributions are welcome.
@@ -412,7 +429,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute changes. All contri
 ## Copyright and License
 
 [smart-emailing-v3](https://github.com/pionl/smart-emailing-v3)
-was written by [Martin Kluska](http://kluska.cz) and is released under the 
+was written by [Martin Kluska](http://kluska.cz) and is released under the
 [MIT License](LICENSE.md).
 
-Copyright (c) 2016 Martin Kluska
+Copyright (c) 2016 - 2022 Martin Kluska and contributors
