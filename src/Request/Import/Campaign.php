@@ -2,16 +2,16 @@
 namespace SmartEmailing\v3\Request\Import;
 
 use SmartEmailing\v3\Models\Model;
+use SmartEmailing\v3\Request\Send\Replace;
 
 /**
- * Class ConfirmationRequest
+ * Class Campaign
  *
- * ConfirmationRequest for Settings.
+ * Campaign for DoubleOptInSettings.
  *
- * @author Stanislav Janů info@lweb.cz
  * @package SmartEmailing\v3\Request\Import
  */
-class ConfirmationRequest extends Model
+class Campaign extends Model
 {
     //region Properties
     /**
@@ -45,26 +45,40 @@ class ConfirmationRequest extends Model
      * Default value: null
      * @var bool
      */
-    public $confirmationThankYouPageUrl = null;
+    private $confirmationThankYouPageUrl = null;
+
+    /**
+     * Date and time in YYYY-MM-DD HH:MM:SS format, when double opt-in e-mail will be expired.
+     * 
+     * @var string
+     */
+    private $validTo = null;
+    
+    /** @var Replace[] */
+    private $replace = [];
     //endregion
 
     //region Setters
     /**
-     * ConfirmationRequest constructor.
+     * Campaign constructor.
      *
      * @param int           $emailId
      * @param string        $from
      * @param string        $replyTo
      * @param string        $senderName
      * @param string|null   $confirmationThankYouPageUrl
+     * @param string|null   $validTo
+     * @param Replace[]     $replace
      */
-    public function __construct($emailId, $from, $replyTo, $senderName, $confirmationThankYouPageUrl = null)
+    public function __construct($emailId, $from, $replyTo, $senderName, $confirmationThankYouPageUrl = null, $validTo = null, $replace = [])
     {
         $this->emailId = $emailId;
         $this->from = $from;
         $this->replyTo = $replyTo;
         $this->senderName = $senderName;
         $this->confirmationThankYouPageUrl = $confirmationThankYouPageUrl;
+        $this->validTo = $validTo;
+        $this->replace = $replace;
     }
 
     /**
@@ -73,12 +87,32 @@ class ConfirmationRequest extends Model
      *
      * @param string $confirmationThankYouPageUrl
      *
-     * @return ConfirmationRequest
+     * @return Campaign
      */
     public function setConfirmationThankYouPageUrl($confirmationThankYouPageUrl)
     {
         $this->confirmationThankYouPageUrl = $confirmationThankYouPageUrl;
         return $this;
+    }
+
+    /**
+     * @return Replace[]
+     */
+    public function getReplace(): array
+    {
+        return $this->replace;
+    }
+
+    /**
+     * Dynamic content used to preprocess template before rendering it. This can be used to modify template structure and may contain HTML, dynamic fields and template scripts.
+     * 
+     * @param Replace $replace
+     * 
+     * @return void
+     */
+    public function addReplace(Replace $replace): void
+    {
+        $this->replace[] = $replace;
     }
     //endregion
 
@@ -95,7 +129,9 @@ class ConfirmationRequest extends Model
                 'reply_to' => $this->replyTo,
                 'sender_name' => $this->senderName
             ],
-            'confirmation_thank_you_page_url' => $this->confirmationThankYouPageUrl
+            'confirmation_thank_you_page_url' => $this->confirmationThankYouPageUrl,
+            'valid_to' => $this->validTo,
+            'replace' => $this->getReplace()
         ];
     }
 

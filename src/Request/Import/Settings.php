@@ -68,9 +68,9 @@ class Settings extends Model
      * be written when they click through confirmation link.
      *
      * Default value: null
-     * @var ConfirmationRequest|null
+     * @var DoubleOptInSettings|null
      */
-    public $confirmationRequest = null;
+    public $doubleOptInSettings = null;
     //endregion
 
     //region Setters
@@ -164,13 +164,13 @@ class Settings extends Model
      * opt-in e-amil to blacklisted contacts can be forced by setting preserve_unsubscribed=false). Imported data will
      * be written when they click through confirmation link.
      *
-     * @param ConfirmationRequest $confirmationRequest Default value: null
+     * @param DoubleOptInSettings $doubleOptInSettings Default value: null
      *
      * @return Settings
      */
-    public function setConfirmationRequest($confirmationRequest)
+    public function setDoubleOptInSettings($doubleOptInSettings)
     {
-        $this->confirmationRequest = $confirmationRequest;
+        $this->doubleOptInSettings = $doubleOptInSettings;
         return $this;
     }
     //endregion
@@ -188,7 +188,7 @@ class Settings extends Model
             'add_salutions' => $this->addSalutations,
             'preserve_unsubscribed' => $this->preserveUnSubscribed,
             'skip_invalid_emails' => $this->skipInvalidEmails,
-            'confirmation_request' => $this->confirmationRequest
+            'double_opt_in_settings' => $this->doubleOptInSettings
         ];
     }
 
