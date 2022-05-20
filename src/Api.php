@@ -1,12 +1,14 @@
 <?php
+
 namespace SmartEmailing\v3;
 
 use GuzzleHttp\Client;
 use SmartEmailing\v3\Request\Contactlists\ContactlistEndpoint;
-use SmartEmailing\v3\Request\Contactlists\Contactlists;
 use SmartEmailing\v3\Request\Credentials\Credentials;
 use SmartEmailing\v3\Request\CustomFields\CustomFields;
 use SmartEmailing\v3\Request\Email\EmailsEndpoint;
+use SmartEmailing\v3\Request\Eshops\EshopOrders;
+use SmartEmailing\v3\Request\Eshops\EshopOrdersBulk;
 use SmartEmailing\v3\Request\Import\Import;
 use SmartEmailing\v3\Request\Newsletter\Newsletter;
 use SmartEmailing\v3\Request\Ping\Ping;
@@ -27,17 +29,17 @@ class Api
      */
     private $apiUrl;
 
-    /** @var \GuzzleHttp\Client */
+    /** @var Client */
     private $client;
 
     /**
      * Api constructor.
      *
-     * @param string      $username
-     * @param string      $apiKey
+     * @param string $username
+     * @param string $apiKey
      * @param string|null $apiUrl
      */
-    public function __construct($username, $apiKey, $apiUrl = null)
+    public function __construct(string $username, string $apiKey, $apiUrl = null)
     {
         $this->apiUrl = $apiUrl;
         $this->client = new Client([
@@ -50,7 +52,7 @@ class Api
      * Returns current API client with auth setup and base URL
      * @return Client
      */
-    public function client()
+    public function client(): Client
     {
         return $this->client;
     }
@@ -91,7 +93,7 @@ class Api
     /**
      * @return Ping
      */
-    public function ping()
+    public function ping(): Ping
     {
         return new Ping($this);
     }
@@ -99,16 +101,26 @@ class Api
     /**
      * @return Credentials
      */
-    public function credentials()
+    public function credentials(): Credentials
     {
         return new Credentials($this);
     }
 
-    public function customFields()
+    public function customFields(): CustomFields
     {
         return new CustomFields($this);
     }
 
+    public function eshopOrders(): EshopOrders
+    {
+        return new EshopOrders($this);
+    }
+
+    public function eshopOrdersBulk(): EshopOrdersBulk
+    {
+        return new EshopOrdersBulk($this);
+    }
+  
     public function customEmailsBulk(): BulkCustomEmails
     {
         return new BulkCustomEmails($this);
@@ -123,5 +135,4 @@ class Api
     {
         return new TransactionalEmails($this);
     }
-
 }
