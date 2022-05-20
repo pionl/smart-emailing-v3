@@ -52,6 +52,7 @@ class BulkCustomEmailsTest extends ApiStubTestCase
 		$credentials->setFrom('from@example.com');
 		$credentials->setReplyTo('to@example.com');
 		$credentials->setSenderName('Jean-Luc Picard');
+		self::assertSame('Jean-Luc Picard', $credentials->getSenderName());
 
 		$recipient = new Recipient();
 		$recipient->setEmailAddress('kirk@example.com');
