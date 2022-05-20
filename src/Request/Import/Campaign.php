@@ -3,6 +3,7 @@ namespace SmartEmailing\v3\Request\Import;
 
 use SmartEmailing\v3\Models\Model;
 use SmartEmailing\v3\Request\Send\Replace;
+use SmartEmailing\v3\Request\Send\SenderCredentials;
 
 /**
  * Class Campaign
@@ -21,23 +22,9 @@ class Campaign extends Model
      */
     private $emailId = null;
     /**
-     * From e-mail address of opt-in campaign
-     *
-     * @var string
+     * @var SenderCredentials|null
      */
-    private $from = true;
-    /**
-     * Reply-To e-mail address in opt-in campaign
-     *
-     * @var string
-     */
-    private $replyTo = true;
-    /**
-     * From name of opt-in campaign
-     *
-     * @var string
-     */
-    private $senderName = true;
+    private $senderCredentials = null;
     /**
      * URL of thank-you page where contact will be redirected after clicking at confirmation link. If not provided,
      * contact will be redirected to default page
@@ -62,20 +49,16 @@ class Campaign extends Model
     /**
      * Campaign constructor.
      *
-     * @param int           $emailId
-     * @param string        $from
-     * @param string        $replyTo
-     * @param string        $senderName
-     * @param string|null   $confirmationThankYouPageUrl
-     * @param string|null   $validTo
-     * @param Replace[]     $replace
+     * @param int               $emailId
+     * @param SenderCredentials $senderCredentials
+     * @param string|null       $confirmationThankYouPageUrl
+     * @param string|null       $validTo
+     * @param Replace[]         $replace
      */
-    public function __construct($emailId, $from, $replyTo, $senderName, $confirmationThankYouPageUrl = null, $validTo = null, $replace = [])
+    public function __construct($emailId, SenderCredentials $senderCredentials, $confirmationThankYouPageUrl = null, $validTo = null, $replace = [])
     {
         $this->emailId = $emailId;
-        $this->from = $from;
-        $this->replyTo = $replyTo;
-        $this->senderName = $senderName;
+        $this->senderCredentials = $senderCredentials;
         $this->confirmationThankYouPageUrl = $confirmationThankYouPageUrl;
         $this->validTo = $validTo;
         $this->replace = $replace;
@@ -95,6 +78,19 @@ class Campaign extends Model
         return $this;
     }
 
+    /**
+     * Date and time in YYYY-MM-DD HH:MM:SS format, when double opt-in e-mail will be expired.
+     * 
+     * @param string $validTo
+     * 
+     * @return Campaign
+     */
+    public function setValidTo($validTo)
+    {
+        $this->validTo = $validTo;
+        return $this;
+    }
+    
     /**
      * @return Replace[]
      */
@@ -124,11 +120,7 @@ class Campaign extends Model
     {
         return [
             'email_id' => $this->emailId,
-            'sender_credentials' => [
-                'from' => $this->from,
-                'reply_to' => $this->replyTo,
-                'sender_name' => $this->senderName
-            ],
+            'sender_credentials' => $this->senderCredentials,
             'confirmation_thank_you_page_url' => $this->confirmationThankYouPageUrl,
             'valid_to' => $this->validTo,
             'replace' => $this->getReplace()
