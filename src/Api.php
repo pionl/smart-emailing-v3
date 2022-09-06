@@ -15,6 +15,7 @@ use SmartEmailing\v3\Request\Ping\Ping;
 use SmartEmailing\v3\Request\Send\BulkCustomEmails;
 use SmartEmailing\v3\Request\Send\BulkCustomSms;
 use SmartEmailing\v3\Request\Send\TransactionalEmails;
+use SmartEmailing\v3\Request\CustomRequest\CustomRequest;
 
 /**
  * Class Api
@@ -96,6 +97,11 @@ class Api
     public function ping(): Ping
     {
         return new Ping($this);
+    }
+
+    public function customRequest(string $action, string $method = 'GET', array $postData = []): CustomRequest
+    {
+        return new CustomRequest($this, $action, $method, $postData);
     }
 
     /**
