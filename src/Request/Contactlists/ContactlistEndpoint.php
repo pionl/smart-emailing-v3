@@ -25,4 +25,9 @@ class ContactlistEndpoint
         return new Contactlist($this->api, $listId);
     }
 
+    public function truncate(int $listId): ContactlistTruncate
+    {
+        return new ContactlistTruncate($this->api, $listId);
+    }
+
 }
