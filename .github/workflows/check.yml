@@ -1,0 +1,26 @@
+name: "Code check"
+
+on:
+  workflow_call: null
+  pull_request: null
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: larastrict-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  code:
+    name: "Code check"
+    uses: wrk-flow/reusable-workflows/.github/workflows/php-check.yml@b0886c7fa81dab2fb2615c06eb66e94711652056
+    secrets: inherit
+
+  tests:
+    name: "Run tests"
+    strategy:
+      matrix:
+        php-version: [ "7.4", "8.0", "8.1", "8.2" ]
+    uses: wrk-flow/reusable-workflows/.github/workflows/php-tests.yml@7b6e90f753beb05d979bf4ad39a009b353a7c6cc
+    secrets: inherit
