@@ -1,0 +1,23 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+
+parameters:
+
+    parallel:
+        processTimeout: 600.0
+
+    paths:
+        - src
+        - tests
+
+    level: 5
+
+    checkMissingIterableValueType: false
+
+    ignoreErrors:
+      -
+         message: '#^Unreachable statement - code above always terminates\.#'
+         path: '*/tests/*'
