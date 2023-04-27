@@ -14,7 +14,7 @@ class ImportLiveTest extends BaseTestCase
     protected $import;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         /** @var  $apiStub */
@@ -33,9 +33,8 @@ class ImportLiveTest extends BaseTestCase
      */
     public function testContactImport()
     {
-        // Uncomment if you want to try
-        $this->assertNull(null);
-        return;
+        // Comment if you want to try
+        $this->markTestSkipped();
 
         $contactFull = new Contact('test2@test.cz');
 

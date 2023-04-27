@@ -12,7 +12,7 @@ class EshopOrdersTest extends ApiStubTestCase
      */
     protected EshopOrders $orders;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

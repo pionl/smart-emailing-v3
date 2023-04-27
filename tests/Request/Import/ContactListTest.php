@@ -12,7 +12,7 @@ class ContactListTest extends BaseTestCase
      */
     protected $list;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->list = new ContactList(1);
     }

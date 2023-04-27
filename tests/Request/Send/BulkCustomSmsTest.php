@@ -3,6 +3,7 @@
 namespace SmartEmailing\v3\Tests\Request\Send;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Exceptions\RequestException;
@@ -17,7 +18,7 @@ class BulkCustomSmsTest extends ApiStubTestCase
 	/** @var BulkCustomSms */
 	protected $bulkCustomSms;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
@@ -75,6 +76,8 @@ class BulkCustomSmsTest extends ApiStubTestCase
 		$this->bulkCustomSms->setTag('tag_tag');
 		$this->bulkCustomSms->setSmsId(5);
 		$this->bulkCustomSms->addTask($task);
+
+		$this->assertIsArray($this->bulkCustomSms->jsonSerialize());
 	}
 
 	public function testRecipientNotValid()
@@ -168,11 +171,11 @@ class BulkCustomSmsTest extends ApiStubTestCase
 		// Make a response that is valid and ok - prevent exception
 		$response->expects($this->atLeastOnce())
 			->method('getBody')
-			->willReturn('{
+			->willReturn(Utils::streamFor('{
             "status": "error",
             "meta": [],
             "message": "Problem at key tasks: Problem at key recipient: Problem at key emailaddress: Invalid emailaddress: invalid@email@gmail.com"
-        }');
+        }'));
 		$response->expects($this->once())->method('getStatusCode')->willReturn(422);
 
 		$client->expects($this->once())->method('request')->with(

@@ -17,7 +17,7 @@ class TransactionEmailsTest extends ApiStubTestCase
 	/** @var TransactionalEmails  */
 	private $transactionEmails;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

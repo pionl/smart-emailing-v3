@@ -14,7 +14,7 @@ class PingTestCase extends ApiStubTestCase
     /**
      * Builds the ping instance on every test
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->ping = new Ping($this->apiStub);

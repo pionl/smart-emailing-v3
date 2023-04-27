@@ -11,7 +11,7 @@ class MessageContentsTest extends TestCase
 	/** @var MessageContents  */
 	private $model;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->model = new MessageContents();
 	}

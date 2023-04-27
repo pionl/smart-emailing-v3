@@ -1,6 +1,7 @@
 <?php
 namespace SmartEmailing\v3\Tests\Request\CustomFields;
 
+use GuzzleHttp\Psr7\Utils;
 use SmartEmailing\v3\Exceptions\JsonDataMissingException;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Request\CustomFields\CustomFields;
@@ -17,7 +18,7 @@ class CustomFieldsTest extends ApiStubTestCase
      */
     protected $fields;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->fields = new CustomFields($this->apiStub);
@@ -76,7 +77,7 @@ class CustomFieldsTest extends ApiStubTestCase
         // The exact endpoint test are in specific tests for the request
         // Checks if request is called in the send method
 
-        $this->defaultReturnResponse = '{
+        $this->defaultReturnResponse = Utils::streamFor('{
             "status": "ok",
             "meta": {
                 "total_count": 8,
@@ -92,7 +93,7 @@ class CustomFieldsTest extends ApiStubTestCase
                     "type": "checkbox"
                 }
             ]
-        }';
+        }');
         $this->stubClientResponse(null, null, null);
 
         $customField = $this->fields->exists('test');

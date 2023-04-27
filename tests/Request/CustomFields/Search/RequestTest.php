@@ -1,6 +1,7 @@
 <?php
 namespace SmartEmailing\v3\Tests\Request\CustomFields\Search;
 
+use GuzzleHttp\Psr7\Utils;
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Request\CustomFields\Search\Filters;
@@ -15,14 +16,14 @@ class RequestTest extends ApiStubTestCase
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->request = new Request($this->apiStub);
 
         //region Default response setup
-        $this->defaultReturnResponse = '{
+        $this->defaultReturnResponse = Utils::streamFor('{
             "status": "ok",
             "meta": {
                 "total_count": 8,
@@ -44,7 +45,7 @@ class RequestTest extends ApiStubTestCase
                     "type": "checkbox"
                 }
             ]
-        }';
+        }');
         //endregion
     }
 
@@ -199,7 +200,7 @@ class RequestTest extends ApiStubTestCase
             $this->createQueryValue('byType', 'test', 'type', 'type', $this->request->filter());
             $this->fail('The value is not valid. Should raise an exception');
         } catch (InvalidFormatException $exception) {
-            $this->assertContains("Value 'test' not allowed", $exception->getMessage());
+            $this->assertStringContainsString("Value 'test' not allowed", $exception->getMessage());
         }
     }
     //endregion

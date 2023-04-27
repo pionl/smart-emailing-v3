@@ -14,7 +14,7 @@ class TaskTest extends TestCase
 	/** @var Task  */
 	private $model;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->model = new Task();
 	}

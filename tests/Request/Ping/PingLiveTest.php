@@ -16,7 +16,7 @@ class PingLiveTest extends BaseTestCase
     /**
      * Builds the ping instance on every test
      */
-    public function setUp()
+    public function setUp(): void
     {
         /** @var  $apiStub */
         $this->ping = $this->createApi()->ping();

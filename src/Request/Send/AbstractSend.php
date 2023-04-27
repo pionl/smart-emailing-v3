@@ -85,10 +85,7 @@ abstract class AbstractSend extends AbstractRequest implements JsonSerializable
 		return $this->tasks;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function jsonSerialize()
+	public function jsonSerialize(): array
 	{
 		return $this->toArray();
 	}

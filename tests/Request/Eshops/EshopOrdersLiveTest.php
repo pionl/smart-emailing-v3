@@ -14,7 +14,7 @@ class EshopOrdersLiveTest extends BaseTestCase
     protected $orders;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         /** @var  $apiStub */
@@ -33,8 +33,8 @@ class EshopOrdersLiveTest extends BaseTestCase
      */
     public function testContactImport()
     {
-        // Uncomment if you want to try
-        return;
+        // Comment if you want to try
+        $this->markTestSkipped();
 
         $order = new Order(
 	        'my-eshop',

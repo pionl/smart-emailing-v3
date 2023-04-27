@@ -11,7 +11,7 @@ class PurposeTest extends BaseTestCase
      */
     protected $field;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->field = new Purpose(12);
     }
@@ -47,14 +47,14 @@ class PurposeTest extends BaseTestCase
             $this->field->setValidFrom('1991-06-17');
             $this->fail('The options should require format YYYY-MM-DD HH:MM:SS');
         } catch (\Exception $exception) {
-            $this->assertContains('Invalid date and time format', $exception->getMessage());
+            $this->assertStringContainsString('Invalid date and time format', $exception->getMessage());
         }
 
         try {
             $this->field->setValidFrom('test');
             $this->fail('The options should require format YYYY-MM-DD HH:MM:SS');
         } catch (\Exception $exception) {
-            $this->assertContains('Invalid date and time format', $exception->getMessage());
+            $this->assertStringContainsString('Invalid date and time format', $exception->getMessage());
         }
     }
 }

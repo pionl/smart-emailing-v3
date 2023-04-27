@@ -11,7 +11,7 @@ class SenderCredentialsTest extends TestCase
 	/** @var SenderCredentials  */
 	private $model;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->model = new SenderCredentials();
 	}

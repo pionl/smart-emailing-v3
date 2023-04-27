@@ -10,7 +10,7 @@ class TemplateVariableTest extends TestCase
 	/** @var TemplateVariable  */
 	private $model;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->model = new TemplateVariable();
 	}

@@ -2,6 +2,9 @@
 namespace SmartEmailing\v3\Tests\Request\Import;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Stream;
+use GuzzleHttp\Psr7\StreamWrapper;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Exceptions\RequestException;
 use SmartEmailing\v3\Request\Import\Contact;
@@ -16,7 +19,7 @@ class ImportTestCase extends ApiStubTestCase
      */
     protected $import;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -114,11 +117,11 @@ class ImportTestCase extends ApiStubTestCase
         // Make a response that is valid and ok - prevent exception
         $response->expects($this->atLeastOnce())
             ->method('getBody')
-            ->willReturn('{
+            ->willReturn(Utils::streamFor('{
             "status": "error",
             "meta": [],
             "message": "Emailaddress invalid@email@gmail.com is not valid email address."
-        }');
+        }'));
         $response->expects($this->once())->method('getStatusCode')->willReturn(422);
 
         $client->expects($this->once())->method('request')->with(
