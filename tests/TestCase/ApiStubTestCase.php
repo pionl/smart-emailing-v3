@@ -1,6 +1,7 @@
 <?php
 namespace SmartEmailing\v3\Tests\TestCase;
 
+use GuzzleHttp\Psr7\Utils;
 use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Request\AbstractRequest;
 use Psr\Http\Message\ResponseInterface;
@@ -25,19 +26,19 @@ abstract class ApiStubTestCase extends BaseTestCase
      */
     protected $apiStub;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         /** @var  $apiStub */
         $this->apiStub = $this->createMock(Api::class);
 
-        $this->defaultReturnResponse = '{
+        $this->defaultReturnResponse = Utils::streamFor('{
                "status": "ok",
                "meta": [
                ],
                "message": "Hi there! API version 3 here!"
-           }';
+           }');
     }
 
 

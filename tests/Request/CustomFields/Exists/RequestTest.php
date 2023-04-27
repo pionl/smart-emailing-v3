@@ -1,6 +1,7 @@
 <?php
 namespace SmartEmailing\v3\Tests\Request\CustomFields\Exists;
 
+use GuzzleHttp\Psr7\Utils;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Request\CustomFields\Exists\Request;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
@@ -29,7 +30,7 @@ class RequestTest extends ApiStubTestCase
 
     public function testExists()
     {
-        $this->defaultReturnResponse = '{
+        $this->defaultReturnResponse = Utils::streamFor('{
             "status": "ok",
             "meta": {
                 "total_count": 8,
@@ -51,7 +52,7 @@ class RequestTest extends ApiStubTestCase
                     "type": "checkbox"
                 }
             ]
-        }';
+        }');
         $customField = $this->request()->exists();
 
         $this->assertTrue(is_object($customField), 'The item is in the source');
@@ -61,7 +62,7 @@ class RequestTest extends ApiStubTestCase
 
     public function testNotExistsWithResults()
     {
-        $this->defaultReturnResponse = '{
+        $this->defaultReturnResponse = Utils::streamFor('{
             "status": "ok",
             "meta": {
                 "total_count": 8,
@@ -83,7 +84,7 @@ class RequestTest extends ApiStubTestCase
                     "type": "checkbox"
                 }
             ]
-        }';
+        }');
 
         $customField = $this->request()->exists();
 
@@ -92,7 +93,7 @@ class RequestTest extends ApiStubTestCase
 
     public function testNotExistsWithoutResults()
     {
-        $this->defaultReturnResponse = '{
+        $this->defaultReturnResponse = Utils::streamFor('{
             "status": "ok",
             "meta": {
                 "total_count": 8,
@@ -102,7 +103,7 @@ class RequestTest extends ApiStubTestCase
             },
             "data": [
             ]
-        }';
+        }');
 
         $customField = $this->request()->exists();
 

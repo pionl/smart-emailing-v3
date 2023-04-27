@@ -11,7 +11,7 @@ class ReplaceTest extends TestCase
 	/** @var Replace  */
 	private $model;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->model = new Replace();
 	}

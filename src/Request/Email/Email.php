@@ -84,10 +84,7 @@ class Email extends AbstractRequest implements \JsonSerializable
         return $data;
     }
 
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

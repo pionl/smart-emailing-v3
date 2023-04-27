@@ -11,7 +11,7 @@ class RecipientTest extends TestCase
 	/** @var Recipient  */
 	private $model;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->model = new Recipient();
 	}

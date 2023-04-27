@@ -1,6 +1,7 @@
 <?php
 namespace SmartEmailing\v3\Tests\Request\CustomFields\Create;
 
+use GuzzleHttp\Psr7\Utils;
 use SmartEmailing\v3\Request\CustomFields\Create\Request;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Request\CustomFields\Create\Response;
@@ -13,11 +14,11 @@ class RequestTestCase extends ApiStubTestCase
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->request = new Request($this->apiStub);
-        $this->defaultReturnResponse = '{
+        $this->defaultReturnResponse = Utils::streamFor('{
             "status": "created",
             "meta": [],
             "data": {
@@ -26,7 +27,7 @@ class RequestTestCase extends ApiStubTestCase
                 "name": "Fruit",
                 "type": "text"
             }
-        }';
+        }');
     }
 
     public function testEndpointAndResponse()

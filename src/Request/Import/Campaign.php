@@ -36,11 +36,11 @@ class Campaign extends Model
 
     /**
      * Date and time in YYYY-MM-DD HH:MM:SS format, when double opt-in e-mail will be expired.
-     * 
+     *
      * @var string
      */
     private $validTo = null;
-    
+
     /** @var Replace[] */
     private $replace = [];
     //endregion
@@ -80,9 +80,9 @@ class Campaign extends Model
 
     /**
      * Date and time in YYYY-MM-DD HH:MM:SS format, when double opt-in e-mail will be expired.
-     * 
+     *
      * @param string $validTo
-     * 
+     *
      * @return Campaign
      */
     public function setValidTo($validTo)
@@ -90,7 +90,7 @@ class Campaign extends Model
         $this->validTo = $validTo;
         return $this;
     }
-    
+
     /**
      * @return Replace[]
      */
@@ -101,9 +101,9 @@ class Campaign extends Model
 
     /**
      * Dynamic content used to preprocess template before rendering it. This can be used to modify template structure and may contain HTML, dynamic fields and template scripts.
-     * 
+     *
      * @param Replace $replace
-     * 
+     *
      * @return void
      */
     public function addReplace(Replace $replace): void
@@ -127,10 +127,7 @@ class Campaign extends Model
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         // Don't remove any null/empty array - not needed
         return $this->toArray();

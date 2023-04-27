@@ -12,7 +12,7 @@ class ModelTest extends BaseTestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->model = new ModelMock();

@@ -47,10 +47,7 @@ class Newsletter extends AbstractRequest implements \JsonSerializable
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

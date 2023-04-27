@@ -15,7 +15,7 @@ class CredentialsTestCase extends ApiStubTestCase
     /**
      * Builds the ping instance on every test
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->credentials = new Credentials($this->apiStub);

@@ -88,7 +88,7 @@ class BulkCustomEmailsTest extends ApiStubTestCase
 		$this->bulkCustomEmails->addTask($task);
 	}
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$api = new Api('user_name', 'password', '');
 		$this->bulkCustomEmails = new BulkCustomEmails($api);

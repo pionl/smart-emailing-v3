@@ -21,7 +21,7 @@ class DoubleOptInSettings extends Model
     private $campaign = null;
     /**
      * By adding silence period you will not send double opt-in e-mail to any e-mailmaddress that recieved any opt-in e-mail in specified period.
-     * 
+     *
      * Note: to prevent double opt-in spam, silence_period is now added to double_opt_in_settings by default (if not already provided) and set to 1 day.
      *
      * @var SilencePeriod|null
@@ -53,11 +53,11 @@ class DoubleOptInSettings extends Model
 
     /**
      * By adding silence period you will not send double opt-in e-mail to any e-mailmaddress that recieved any opt-in e-mail in specified period.
-     * 
+     *
      * Note: to prevent double opt-in spam, silence_period is now added to double_opt_in_settings by default (if not already provided) and set to 1 day.
      *
      * @param SilencePeriod $silencePeriod
-     * 
+     *
      * @return DoubleOptInSettings
      */
     public function setSilencePeriod(SilencePeriod $silencePeriod)
@@ -70,9 +70,9 @@ class DoubleOptInSettings extends Model
      * Double-opt in send-to mode. Fill-in all to send double opt-in e-email to every contact in batch, new-in-database to send to send double opt-in e-email only to contacts that do not exist in the database yet.
      *
      * Default value: 'all'
-     * 
+     *
      * @param string $sendToMode
-     * 
+     *
      * @return DoubleOptInSettings
      */
     public function setSendToMode($sendToMode)
@@ -95,10 +95,7 @@ class DoubleOptInSettings extends Model
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         // Don't remove any null/empty array - not needed
         return $this->toArray();

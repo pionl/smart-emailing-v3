@@ -11,7 +11,7 @@ class CustomFieldTest extends BaseTestCase
      */
     protected $field;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->field = new CustomField(12);
     }
@@ -47,9 +47,9 @@ class CustomFieldTest extends BaseTestCase
             $this->field->setOptions('test');
             $this->fail('The options should require an array and raise warning');
         } catch (\Exception $exception) {
-            $this->assertContains('the type array', $exception->getMessage());
+            $this->assertStringContainsString('type array', $exception->getMessage());
         } catch (\TypeError $exception) {
-            $this->assertContains('the type array', $exception->getMessage());
+            $this->assertStringContainsString('type array', $exception->getMessage());
         }
     }
 

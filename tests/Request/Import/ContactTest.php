@@ -15,7 +15,7 @@ class ContactTest extends BaseTestCase
      */
     protected $contact;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->contact = new Contact('email@gmail.com');
     }
