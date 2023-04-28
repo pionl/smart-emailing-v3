@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SmartEmailing\v3\Request\Send;
 
@@ -9,26 +11,21 @@ namespace SmartEmailing\v3\Request\Send;
  */
 class BulkCustomEmails extends AbstractSend
 {
-	/**
-	 * Converts data to array
-	 *
-	 * @return array
-	 */
-	public function toArray(): array
-	{
-		return [
-			'sender_credentials' => $this->getSenderCredentials(),
-			'tag' => $this->getTag(),
-			'email_id' => $this->getEmailId(),
-			'tasks' => $this->getTasks(),
-		];
-	}
+    /**
+     * Converts data to array
+     */
+    public function toArray(): array
+    {
+        return [
+            'sender_credentials' => $this->getSenderCredentials(),
+            'tag' => $this->getTag(),
+            'email_id' => $this->getEmailId(),
+            'tasks' => $this->getTasks(),
+        ];
+    }
 
-	/**
-	 * @return string
-	 */
-	protected function endpoint()
-	{
-		return 'send/custom-emails-bulk';
-	}
+    protected function endpoint(): string
+    {
+        return 'send/custom-emails-bulk';
+    }
 }

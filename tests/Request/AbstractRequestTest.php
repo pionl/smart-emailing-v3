@@ -1,22 +1,25 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request;
 
 use SmartEmailing\v3\Request\AbstractRequest;
 use SmartEmailing\v3\Request\Response;
-use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 use SmartEmailing\v3\Tests\Mock\RequestMock;
+use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class AbstractRequestTestCase extends ApiStubTestCase
 {
     /**
-     * @var AbstractRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractRequest|RequestMock
      */
     protected $request;
 
     /**
      * Builds the ping instance on every test
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->request = new RequestMock($this->apiStub);
@@ -52,11 +55,17 @@ class AbstractRequestTestCase extends ApiStubTestCase
                "message": "An error"
            }', 'An error', Response::ERROR, [], Response::class, 500);
 
-        $this->assertEquals('Client error: An error', $exception->getMessage(),
-            'The exception should use json message if Guzzle returns simple error');
+        $this->assertEquals(
+            'Client error: An error',
+            $exception->getMessage(),
+            'The exception should use json message if Guzzle returns simple error'
+        );
         $this->assertEquals(500, $exception->getCode(), 'Exception must have same code as status code');
         $this->assertEquals(500, $exception->response()->statusCode());
-        $this->assertNotNull($exception->request(), 'Non 200 status code should have request - passed from guzzle exception');
+        $this->assertNotNull(
+            $exception->request(),
+            'Non 200 status code should have request - passed from guzzle exception'
+        );
     }
 
     /**
@@ -71,7 +80,11 @@ class AbstractRequestTestCase extends ApiStubTestCase
                "message": "An error"
            }', 'An error', Response::ERROR, [], Response::class, 200);
 
-        $this->assertEquals('Client error: An error', $exception->getMessage(), 'The exception should use json message');
+        $this->assertEquals(
+            'Client error: An error',
+            $exception->getMessage(),
+            'The exception should use json message'
+        );
         $this->assertEquals(200, $exception->getCode(), 'Exception must have same code as status code');
         $this->assertEquals(200, $exception->response()->statusCode());
         $this->assertNull($exception->request(), 'Error with 200 status code has no request');
@@ -83,13 +96,22 @@ class AbstractRequestTestCase extends ApiStubTestCase
     public function testResponseStatusCode()
     {
         $exception = $this->createSendErrorResponse(
-            $this->request, null, null, Response::ERROR, [], Response::class, 500
+            $this->request,
+            null,
+            null,
+            Response::ERROR,
+            null,
+            Response::class,
+            500
         );
 
         $this->assertEquals('Client error', $exception->getMessage(), 'The exception should use the Guzzles message');
         $this->assertEquals(500, $exception->getCode(), 'Exception must have same code as status code');
         $this->assertEquals(500, $exception->response()->statusCode());
-        $this->assertNotNull($exception->request(), 'Non 200 status code should have request - passed from guzzle exception');
+        $this->assertNotNull(
+            $exception->request(),
+            'Non 200 status code should have request - passed from guzzle exception'
+        );
     }
 
     /**
@@ -98,18 +120,30 @@ class AbstractRequestTestCase extends ApiStubTestCase
     public function testResponseStatusCodeWithJson()
     {
         $exception = $this->createSendErrorResponse(
-            $this->request, '{
+            $this->request,
+            '{
                "status": "error",
                "meta": [
                ],
                "message": "An error"
-           }', 'An error', Response::ERROR, [], Response::class, 500
+           }',
+            'An error',
+            Response::ERROR,
+            [],
+            Response::class,
+            500
         );
 
-        $this->assertEquals('Client error: An error', $exception->getMessage(), 'The guzzle message is simple, append message');
+        $this->assertEquals(
+            'Client error: An error',
+            $exception->getMessage(),
+            'The guzzle message is simple, append message'
+        );
         $this->assertEquals(500, $exception->getCode(), 'Exception must have same code as status code');
         $this->assertEquals(500, $exception->response()->statusCode());
-        $this->assertNotNull($exception->request(), 'Non 200 status code should have request - passed from guzzle exception');
+        $this->assertNotNull(
+            $exception->request(),
+            'Non 200 status code should have request - passed from guzzle exception'
+        );
     }
-
 }

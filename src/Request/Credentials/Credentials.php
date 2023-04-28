@@ -1,12 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\Credentials;
 
 use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Request\AbstractRequest;
 
+/**
+ * @extends AbstractRequest<Response>
+ */
 class Credentials extends AbstractRequest
 {
-    protected function endpoint()
+    protected function endpoint(): string
     {
         return 'check-credentials';
     }
@@ -17,15 +23,6 @@ class Credentials extends AbstractRequest
     }
 
     /**
-     * @return Response
-     */
-    public function send()
-    {
-        return parent::send();
-    }
-
-
-    /**
      * @param ResponseInterface|null $response
      *
      * @return Response
@@ -34,6 +31,4 @@ class Credentials extends AbstractRequest
     {
         return new Response($response);
     }
-
-
 }

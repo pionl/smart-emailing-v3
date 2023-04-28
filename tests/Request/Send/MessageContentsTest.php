@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\Send;
 
 use PHPUnit\Framework\TestCase;
@@ -8,60 +10,59 @@ use SmartEmailing\v3\Request\Send\MessageContents;
 
 class MessageContentsTest extends TestCase
 {
-	/** @var MessageContents  */
-	private $model;
+    private MessageContents $model;
 
-	protected function setUp(): void
-	{
-		$this->model = new MessageContents();
-	}
+    protected function setUp(): void
+    {
+        $this->model = new MessageContents();
+    }
 
-	public function testShouldThrowExceptionWhenMissingAllData()
-	{
-		$this->expectException(PropertyRequiredException::class);
-		$this->model->toArray();
-	}
+    public function testShouldThrowExceptionWhenMissingAllData()
+    {
+        $this->expectException(PropertyRequiredException::class);
+        $this->model->toArray();
+    }
 
-	public function testShouldThrowExceptionWhenMissingPartialData()
-	{
-		$this->model->setSubject('Email subject');
-		$this->expectException(PropertyRequiredException::class);
-		$this->model->toArray();
-	}
+    public function testShouldThrowExceptionWhenMissingPartialData()
+    {
+        $this->model->setSubject('Email subject');
+        $this->expectException(PropertyRequiredException::class);
+        $this->model->toArray();
+    }
 
+    public function testShouldReturnArrayWithData()
+    {
+        $this->model->setSubject('Email_subject');
+        $this->model->setHtmlBody('HTMLBODY');
+        $this->model->setTextBody('TEXTBODY');
 
-	public function testShouldReturnArrayWithData()
-	{
-		$this->model->setSubject('Email_subject');
-		$this->model->setHtmlBody('HTMLBODY');
-		$this->model->setTextBody('TEXTBODY');
-		$data = $this->model->toArray();
+        $data = $this->model->toArray();
 
-		self::assertSame([
-			'subject' => 'Email_subject',
-			'html_body' => 'HTMLBODY',
-			'text_body' => 'TEXTBODY',
-		], $data);
-	}
+        self::assertSame([
+            'subject' => 'Email_subject',
+            'html_body' => 'HTMLBODY',
+            'text_body' => 'TEXTBODY',
+        ], $data);
+    }
 
-	public function testShouldReturnSameDataFromSerializer()
-	{
-		$this->model->setSubject('Email_subject');
-		$this->model->setHtmlBody('HTMLBODY');
-		$this->model->setTextBody('TEXTBODY');
+    public function testShouldReturnSameDataFromSerializer()
+    {
+        $this->model->setSubject('Email_subject');
+        $this->model->setHtmlBody('HTMLBODY');
+        $this->model->setTextBody('TEXTBODY');
 
-		self::assertSame($this->model->toArray(), $this->model->jsonSerialize());
-	}
+        self::assertSame($this->model->toArray(), $this->model->jsonSerialize());
+    }
 
-	public function testShouldSetSettersAndReadGetters()
-	{
-		$this->model->setSubject('Email_subject');
-		self::assertSame('Email_subject', $this->model->getSubject());
+    public function testShouldSetSettersAndReadGetters()
+    {
+        $this->model->setSubject('Email_subject');
+        self::assertSame('Email_subject', $this->model->getSubject());
 
-		$this->model->setHtmlBody('HTMLBODY');
-		self::assertSame('HTMLBODY', $this->model->getHtmlBody());
+        $this->model->setHtmlBody('HTMLBODY');
+        self::assertSame('HTMLBODY', $this->model->getHtmlBody());
 
-		$this->model->setTextBody('TEXTBODY');
-		self::assertSame('TEXTBODY', $this->model->getTextBody());
-	}
+        $this->model->setTextBody('TEXTBODY');
+        self::assertSame('TEXTBODY', $this->model->getTextBody());
+    }
 }

@@ -1,65 +1,62 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SmartEmailing\v3\Request\Send;
 
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Models\Model;
 
-
 class Recipient extends Model
 {
-	/** @var string */
-	private $emailAddress;
-	/** @var string */
-	private $cellphone = '';
+    /**
+     * @var string
+     */
+    private ?string $emailAddress = null;
 
-	public function getEmailAddress(): ?string
-	{
-		return $this->emailAddress;
-	}
+    private string $cellphone = '';
 
-	public function setEmailAddress(string $emailAddress): void
-	{
-		$this->emailAddress = $emailAddress;
-	}
+    public function getEmailAddress(): ?string
+    {
+        return $this->emailAddress;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getCellphone(): string
-	{
-		return $this->cellphone;
-	}
+    public function setEmailAddress(string $emailAddress): void
+    {
+        $this->emailAddress = $emailAddress;
+    }
 
-	/**
-	 * @param string $cellphone
-	 */
-	public function setCellphone(string $cellphone): void
-	{
-		$this->cellphone = $cellphone;
-	}
+    public function getCellphone(): string
+    {
+        return $this->cellphone;
+    }
 
-	public function toArray(): array
-	{
-		PropertyRequiredException::throwIf(
-			'emailaddress',
-			!empty($this->getEmailAddress()),
-			'You must set emailaddress - missing emailaddress'
-		);
+    public function setCellphone(string $cellphone): void
+    {
+        $this->cellphone = $cellphone;
+    }
 
-		$data = [
-			'emailaddress' => $this->getEmailAddress()
-		];
+    public function toArray(): array
+    {
+        PropertyRequiredException::throwIf(
+            'emailaddress',
+            empty($this->getEmailAddress()) === false,
+            'You must set emailaddress - missing emailaddress'
+        );
 
-		if (!empty($this->getCellphone())) {
-			$data['cellphone'] = $this->getCellphone();
-		}
+        $data = [
+            'emailaddress' => $this->getEmailAddress(),
+        ];
 
-		return $data;
-	}
+        if (empty($this->getCellphone()) === false) {
+            $data['cellphone'] = $this->getCellphone();
+        }
 
-	public function jsonSerialize(): array
-	{
-		return $this->toArray();
-	}
+        return $data;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

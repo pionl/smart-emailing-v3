@@ -1,8 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\Import;
 
+use Exception;
 use SmartEmailing\v3\Request\Import\CustomField;
 use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
+use TypeError;
 
 class CustomFieldTest extends BaseTestCase
 {
@@ -38,17 +43,15 @@ class CustomFieldTest extends BaseTestCase
 
     public function testSetOptions()
     {
-        $this->assertEquals([1,2], $this->field->setOptions([1,2])->options);
+        $this->assertEquals([1, 2], $this->field->setOptions([1, 2])->options);
     }
 
     public function testNonArray()
     {
         try {
-            $this->field->setOptions('test');
+            $this->field->setOptions('test'); /** @phpstan-ignore-line */
             $this->fail('The options should require an array and raise warning');
-        } catch (\Exception $exception) {
-            $this->assertStringContainsString('type array', $exception->getMessage());
-        } catch (\TypeError $exception) {
+        } catch (Exception|TypeError $exception) {
             $this->assertStringContainsString('type array', $exception->getMessage());
         }
     }

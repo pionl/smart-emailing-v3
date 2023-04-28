@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\Credentials;
 
 use SmartEmailing\v3\Request\Credentials\Credentials;
@@ -15,7 +18,7 @@ class CredentialsTestCase extends ApiStubTestCase
     /**
      * Builds the ping instance on every test
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->credentials = new Credentials($this->apiStub);

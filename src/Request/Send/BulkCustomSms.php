@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SmartEmailing\v3\Request\Send;
 
@@ -9,95 +11,92 @@ use SmartEmailing\v3\Request\Response;
  * Class BulkCustomSms
  *
  * @link https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_SMS
+ *
+ * @extends AbstractSend<Response>
  */
 class BulkCustomSms extends AbstractSend
 {
-	/**
-	 * The maximum tasks per single request
-	 * Single request is restricted to contain 500 SMS at most. Multiple simultaneous calls is allowed.
-	 * @var int
-	 */
-	protected $chunkLimit = 500;
+    /**
+     * The maximum tasks per single request Single request is restricted to contain 500 SMS at most. Multiple
+     * simultaneous calls is allowed.
+     *
+     * @var int
+     */
+    protected $chunkLimit = 500;
 
-	/** @var int|null */
-	protected $smsId;
+    /**
+     * @var int|null
+     */
+    protected $smsId;
 
-	/**
-	 * Will send multiple requests because of the 500 count limit
-	 * @inheritDoc
-	 */
-	public function send(): ?Response
-	{
-		// There is not enough contacts to enable chunk mode
-		if ($this->chunkLimit >= count($this->getTasks())) {
-			return parent::send();
-		}
+    /**
+     * Will send multiple requests because of the 500 count limit
+     *
+     * @inheritDoc
+     */
+    public function send(): ?Response
+    {
+        // There is not enough contacts to enable chunk mode
+        if ($this->chunkLimit >= count($this->getTasks())) {
+            return parent::send();
+        }
 
-		return $this->sendInChunkMode();
-	}
+        return $this->sendInChunkMode();
+    }
 
-	/**
-	 * Sends tasks in chunk mode
-	 * @return Response
-	 */
-	protected function sendInChunkMode(): ?Response
-	{
-		$originalFullTaskList = $this->getTasks();
-		$lastResponse = null;
+    public function getSmsId(): ?int
+    {
+        return $this->smsId;
+    }
 
-		foreach (array_chunk($this->getTasks(), $this->chunkLimit) as $tasks) {
-			$this->tasks = $tasks;
+    public function setSmsId(int $smsId)
+    {
+        $this->smsId = $smsId;
+    }
 
-			$lastResponse = parent::send();
-		}
+    /**
+     * Converts data to array
+     */
+    public function toArray(): array
+    {
+        foreach ($this->getTasks() as $task) {
+            PropertyRequiredException::throwIf(
+                'cellphone',
+                $task->getRecipient() !== null && empty($task->getRecipient()->getCellphone()) === false,
+                'You must set cellphone for recipient - missing cellphone'
+            );
+        }
 
-		$this->tasks = $originalFullTaskList;
+        return [
+            'tag' => $this->getTag(),
+            'sms_id' => $this->getSmsId(),
+            'tasks' => $this->getTasks(),
+        ];
+    }
 
-		return $lastResponse;
-	}
+    /**
+     * Sends tasks in chunk mode
+     *
+     * @return Response
+     */
+    protected function sendInChunkMode(): ?Response
+    {
+        $originalFullTaskList = $this->getTasks();
+        $lastResponse = null;
 
-	/**
-	 * @return int|null
-	 */
-	public function getSmsId(): ?int
-	{
-		return $this->smsId;
-	}
+        foreach (array_chunk($this->getTasks(), $this->chunkLimit) as $tasks) {
+            $this->tasks = $tasks;
 
-	/**
-	 * @param int|null $smsId
-	 */
-	public function setSmsId(int $smsId)
-	{
-		$this->smsId = $smsId;
-	}
+            $lastResponse = parent::send();
+        }
 
-	/**
-	 * Converts data to array
-	 *
-	 * @return array
-	 */
-	public function toArray(): array
-	{
-		foreach ($this->getTasks() as $task) {
-			PropertyRequiredException::throwIf(
-				'cellphone',
-				!is_null($task->getRecipient()) && !empty($task->getRecipient()->getCellphone()),
-				'You must set cellphone for recipient - missing cellphone'
-			);
-		}
-		return [
-			'tag' => $this->getTag(),
-			'sms_id' => $this->getSmsId(),
-			'tasks' => $this->getTasks(),
-		];
-	}
+        $this->tasks = $originalFullTaskList;
 
-	/**
-	 * @return string
-	 */
-	protected function endpoint()
-	{
-		return 'send/custom-sms-bulk';
-	}
+        return $lastResponse;
+    }
+
+    protected function endpoint(): string
+    {
+        return 'send/custom-sms-bulk';
+    }
 }

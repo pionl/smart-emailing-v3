@@ -1,13 +1,21 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\Import;
 
 use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Request\AbstractRequest;
+use SmartEmailing\v3\Request\Response;
 
+/**
+ * @extends AbstractRequest<Response>
+ */
 class Import extends AbstractRequest implements \JsonSerializable
 {
     /**
      * The maximum contacts per single request
+     *
      * @var int
      */
     public $chunkLimit = 500;
@@ -29,8 +37,6 @@ class Import extends AbstractRequest implements \JsonSerializable
     }
 
     /**
-     * @param Contact $contact
-     *
      * @return $this
      */
     public function addContact(Contact $contact)
@@ -71,6 +77,7 @@ class Import extends AbstractRequest implements \JsonSerializable
 
     /**
      * Will send multiple requests because of the 500 count limit
+     *
      * @inheritDoc
      */
     public function send()
@@ -83,9 +90,31 @@ class Import extends AbstractRequest implements \JsonSerializable
         return $this->sendInChunkMode();
     }
 
+    //endregion
+
+    //region Data convert
+    /**
+     * Converts data to array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'settings' => $this->settings,
+            'data' => $this->contacts,
+        ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
     /**
      * Sends contact list in chunk mode
-     * @return \SmartEmailing\v3\Request\Response
+     *
+     * @return Response
      */
     protected function sendInChunkMode()
     {
@@ -108,7 +137,7 @@ class Import extends AbstractRequest implements \JsonSerializable
     }
 
     //region AbstractRequest implementation
-    protected function endpoint()
+    protected function endpoint(): string
     {
         return 'import';
     }
@@ -116,34 +145,14 @@ class Import extends AbstractRequest implements \JsonSerializable
     protected function options()
     {
         return [
-            'json' => $this->jsonSerialize()
+            'json' => $this->jsonSerialize(),
         ];
     }
 
-    protected function method()
+    protected function method(): string
     {
         return 'POST';
     }
 
     //endregion
-
-    //region Data convert
-    /**
-     * Converts data to array
-     * @return array
-     */
-    public function toArray()
-    {
-        return [
-            'settings' => $this->settings,
-            'data' => $this->contacts
-        ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
-    //endregion
-
 }

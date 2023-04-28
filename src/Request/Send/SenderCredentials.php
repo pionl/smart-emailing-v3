@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SmartEmailing\v3\Request\Send;
 
@@ -7,55 +9,69 @@ use SmartEmailing\v3\Models\Model;
 
 class SenderCredentials extends Model
 {
-	private $from;
-	private $replyTo;
-	private $senderName;
+    private ?string $from = null;
 
-	public function getFrom(): ?String
-	{
-		return $this->from;
-	}
+    private ?string $replyTo = null;
 
-	public function setFrom(String $from): void
-	{
-		$this->from = $from;
-	}
+    private ?string $senderName = null;
 
-	public function getReplyTo(): ?String
-	{
-		return $this->replyTo;
-	}
+    public function getFrom(): ?String
+    {
+        return $this->from;
+    }
 
-	public function setReplyTo(String $replyTo): void
-	{
-		$this->replyTo = $replyTo;
-	}
+    public function setFrom(String $from): void
+    {
+        $this->from = $from;
+    }
 
-	public function getSenderName(): ?String
-	{
-		return $this->senderName;
-	}
+    public function getReplyTo(): ?String
+    {
+        return $this->replyTo;
+    }
 
-	public function setSenderName(String $senderName): void
-	{
-		$this->senderName = $senderName;
-	}
+    public function setReplyTo(String $replyTo): void
+    {
+        $this->replyTo = $replyTo;
+    }
 
-	public function toArray(): array
-	{
-		PropertyRequiredException::throwIf('from', !empty($this->getFrom()), 'You must set from - missing from');
-		PropertyRequiredException::throwIf('reply_to', !empty($this->getReplyTo()), 'You must set reply_to - missing reply_to');
-		PropertyRequiredException::throwIf('from', !empty($this->getSenderName()), 'You must set sender_name - missing sender_name');
+    public function getSenderName(): ?String
+    {
+        return $this->senderName;
+    }
 
-		return [
-			'from' => $this->getFrom(),
-			'reply_to' => $this->getReplyTo(),
-			'sender_name' => $this->getSenderName(),
-		];
-	}
+    public function setSenderName(String $senderName): void
+    {
+        $this->senderName = $senderName;
+    }
 
-	public function jsonSerialize(): array
-	{
-		return $this->toArray();
-	}
+    public function toArray(): array
+    {
+        PropertyRequiredException::throwIf(
+            'from',
+            empty($this->getFrom()) === false,
+            'You must set from - missing from'
+        );
+        PropertyRequiredException::throwIf(
+            'reply_to',
+            empty($this->getReplyTo()) === false,
+            'You must set reply_to - missing reply_to'
+        );
+        PropertyRequiredException::throwIf(
+            'from',
+            empty($this->getSenderName()) === false,
+            'You must set sender_name - missing sender_name'
+        );
+
+        return [
+            'from' => $this->getFrom(),
+            'reply_to' => $this->getReplyTo(),
+            'sender_name' => $this->getSenderName(),
+        ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }

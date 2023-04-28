@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\CustomFields\Create;
 
 use SmartEmailing\v3\Api;
@@ -7,8 +10,7 @@ use SmartEmailing\v3\Request\AbstractRequest;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
 
 /**
- * Class CreateRequest
- * @package SmartEmailing\v3\Request\CustomFields\Requests
+ * @extends AbstractRequest<Response>
  */
 class Request extends AbstractRequest
 {
@@ -26,8 +28,6 @@ class Request extends AbstractRequest
     /**
      * Sets the custom field
      *
-     * @param CustomField $customField
-     *
      * @return $this
      */
     public function setCustomField(CustomField $customField)
@@ -44,7 +44,7 @@ class Request extends AbstractRequest
         return $this->customField;
     }
 
-    protected function endpoint()
+    protected function endpoint(): string
     {
         return 'customfields';
     }
@@ -54,33 +54,17 @@ class Request extends AbstractRequest
         PropertyRequiredException::throwIf('customField', is_object($this->customField));
 
         return [
-            'json' => $this->customField->jsonSerialize()
+            'json' => $this->customField->jsonSerialize(),
         ];
     }
 
-    protected function method()
+    protected function method(): string
     {
         return 'POST';
     }
 
-    /**
-     * @inheritDoc
-     *
-     * @return Response
-     */
-    public function send()
-    {
-        return parent::send();
-    }
-
-
-    /**
-     * @inheritDoc
-     */
     protected function createResponse($response)
     {
         return new Response($response);
     }
-
-
 }

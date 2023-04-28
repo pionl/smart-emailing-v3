@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector;
+use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Set\ValueObject\LevelSetList;
@@ -18,6 +20,7 @@ return static function (RectorConfig $config): void {
     $config->import(SetList::CODE_QUALITY);
     $config->import(SetList::CODING_STYLE);
     $config->importNames();
+    $config->importShortClasses(false);
 
     $config->ruleWithConfiguration(
         BooleanInBooleanNotRuleFixerRector::class,
@@ -25,4 +28,6 @@ return static function (RectorConfig $config): void {
             AbstractFalsyScalarRuleFixerRector::TREAT_AS_NON_EMPTY => false,
         ]
     );
+
+    $config->skip([VarConstantCommentRector::class, NewlineAfterStatementRector::class]);
 };

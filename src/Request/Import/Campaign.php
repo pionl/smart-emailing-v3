@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\Import;
 
 use SmartEmailing\v3\Models\Model;
@@ -9,8 +12,6 @@ use SmartEmailing\v3\Request\Send\SenderCredentials;
  * Class Campaign
  *
  * Campaign for DoubleOptInSettings.
- *
- * @package SmartEmailing\v3\Request\Import
  */
 class Campaign extends Model
 {
@@ -21,16 +22,16 @@ class Campaign extends Model
      * @var int
      */
     private $emailId = null;
-    /**
-     * @var SenderCredentials|null
-     */
-    private $senderCredentials = null;
+
+    private ?SenderCredentials $senderCredentials = null;
+
     /**
      * URL of thank-you page where contact will be redirected after clicking at confirmation link. If not provided,
      * contact will be redirected to default page
      *
      * Default value: null
-     * @var bool
+     *
+     * @var string|null
      */
     private $confirmationThankYouPageUrl = null;
 
@@ -41,8 +42,11 @@ class Campaign extends Model
      */
     private $validTo = null;
 
-    /** @var Replace[] */
-    private $replace = [];
+    /**
+     * @var Replace[]
+     */
+    private array $replace = [];
+
     //endregion
 
     //region Setters
@@ -50,13 +54,17 @@ class Campaign extends Model
      * Campaign constructor.
      *
      * @param int               $emailId
-     * @param SenderCredentials $senderCredentials
      * @param string|null       $confirmationThankYouPageUrl
      * @param string|null       $validTo
      * @param Replace[]         $replace
      */
-    public function __construct($emailId, SenderCredentials $senderCredentials, $confirmationThankYouPageUrl = null, $validTo = null, $replace = [])
-    {
+    public function __construct(
+        $emailId,
+        SenderCredentials $senderCredentials,
+        $confirmationThankYouPageUrl = null,
+        $validTo = null,
+        $replace = []
+    ) {
         $this->emailId = $emailId;
         $this->senderCredentials = $senderCredentials;
         $this->confirmationThankYouPageUrl = $confirmationThankYouPageUrl;
@@ -100,20 +108,19 @@ class Campaign extends Model
     }
 
     /**
-     * Dynamic content used to preprocess template before rendering it. This can be used to modify template structure and may contain HTML, dynamic fields and template scripts.
-     *
-     * @param Replace $replace
-     *
-     * @return void
+     * Dynamic content used to preprocess template before rendering it. This can be used to modify template structure
+     * and may contain HTML, dynamic fields and template scripts.
      */
     public function addReplace(Replace $replace): void
     {
         $this->replace[] = $replace;
     }
+
     //endregion
 
     /**
      * Converts the settings to array
+     *
      * @return array
      */
     public function toArray()
@@ -123,7 +130,7 @@ class Campaign extends Model
             'sender_credentials' => $this->senderCredentials,
             'confirmation_thank_you_page_url' => $this->confirmationThankYouPageUrl,
             'valid_to' => $this->validTo,
-            'replace' => $this->getReplace()
+            'replace' => $this->getReplace(),
         ];
     }
 
@@ -132,5 +139,4 @@ class Campaign extends Model
         // Don't remove any null/empty array - not needed
         return $this->toArray();
     }
-
 }

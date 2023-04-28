@@ -1,27 +1,34 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\CustomFields\Search;
 
 use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use SmartEmailing\v3\Request\AbstractRequest;
-use function \SmartEmailing\v3\Helpers\value;
 
+/**
+ * @extends AbstractRequest<Response>
+ */
 class Request extends AbstractRequest
 {
     //region Properties
     /**
      * @var int
      */
-    public $page = 1;
+    public $page;
+
     /**
      * @var int
      */
-    public $limit = 100;
+    public $limit;
 
     /**
      * Comma separated list of properties to select. eg. "?select=id,name" If not provided, all fields are selected.
      *
      * Allowed values: "id", "name", "type"
+     *
      * @var string|null
      */
     public $select = null;
@@ -31,6 +38,7 @@ class Request extends AbstractRequest
      * expanded data. See examples below For more information see "/customfield-options" endpoint.
      *
      * Allowed values: "customfield_options"
+     *
      * @var string
      */
     public $expand = null;
@@ -40,12 +48,14 @@ class Request extends AbstractRequest
      * "?sort=type,-name"
      *
      * Allowed values: "id", "name", "type"
+     *
      * @var string|null
      */
     public $sort = null;
 
     /**
      * Filters holder object
+     *
      * @var Filters
      */
     protected $filters;
@@ -55,7 +65,6 @@ class Request extends AbstractRequest
     /**
      * SearchRequest constructor.
      *
-     * @param Api      $api
      * @param int|null $page  desired page
      * @param int|null $limit Number of records on page. Maximum (default) allowed value is 500
      */
@@ -63,13 +72,14 @@ class Request extends AbstractRequest
     {
         parent::__construct($api);
 
-        $this->page = value($page, $this->page);
-        $this->limit = value($limit, $this->limit);
+        $this->page = $page ?? 1;
+        $this->limit = $limit ?? 100;
         $this->filters = new Filters($this);
     }
 
     /**
      * Current filters
+     *
      * @return Filters
      */
     public function filter()
@@ -87,8 +97,6 @@ class Request extends AbstractRequest
      * @param string $expand
      *
      * @return Request
-     *
-     * @throws InvalidFormatException
      */
     public function expandBy($expand)
     {
@@ -165,13 +173,14 @@ class Request extends AbstractRequest
 
     /**
      * Builds a GET query
+     *
      * @return array
      */
     public function query()
     {
         $query = [
             'limit' => $this->limit,
-            'offset' => $this->offset()
+            'offset' => $this->offset(),
         ];
 
         // Append the optional filters/setup
@@ -185,38 +194,20 @@ class Request extends AbstractRequest
         return $query;
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function endpoint()
     {
         return 'customfields';
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function options()
     {
-
         return [
-            'query' => $this->query()
+            'query' => $this->query(),
         ];
     }
 
     /**
-     * @inheritDoc
-     * @return \SmartEmailing\v3\Request\CustomFields\Search\Response
-     */
-    public function send()
-    {
-        return parent::send();
-    }
-
-
-    /**
-     * @inheritDoc
-     * @return \SmartEmailing\v3\Request\CustomFields\Search\Response
+     * @return Response
      */
     protected function createResponse($response)
     {
@@ -226,15 +217,14 @@ class Request extends AbstractRequest
     /**
      * Sets the value into array if not valid
      *
-     * @param array  $array
      * @param string $key
-     * @param string $value
+     * @param mixed $value
      *
      * @return $this
      */
     protected function setIfNotNull(array &$array, $key, $value)
     {
-        if (is_null($value)) {
+        if ($value === null) {
             return $this;
         }
 

@@ -1,30 +1,26 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request;
 
-
 use Psr\Http\Message\ResponseInterface;
-use stdClass;
 
 class Response
 {
-    const ERROR = 'error';
-    const SUCCESS = 'ok';
-    const CREATED = 'created';
+    public const ERROR = 'error';
+    public const SUCCESS = 'ok';
+    public const CREATED = 'created';
 
     /**
-     * @var ResponseInterface|null
-     */
-    private $response;
-
-    /**
-     * @var array|null
+     * @var array|object|null
      */
     protected $data = null;
 
     /**
-     * @var stdClass|null
+     * @var \stdClass|null
      */
-    protected $meta = [];
+    protected $meta = null;
 
     /**
      * @var string|null
@@ -37,9 +33,14 @@ class Response
     protected $status = self::ERROR;
 
     /**
-     * @var stdClass|null
+     * @var \stdClass|null
      */
     protected $json = null;
+
+    /**
+     * @var ResponseInterface|null
+     */
+    private $response;
 
     /**
      * @param ResponseInterface|null $response
@@ -48,30 +49,23 @@ class Response
     {
         $this->response = $response;
 
-        if ($response == null) {
+        if ($response === null) {
             return;
         }
 
-        $json = json_decode($response->getBody());
+        try {
+            $json = json_decode((string) $response->getBody(), null, 512, JSON_THROW_ON_ERROR);
 
-        // If we have valid json, lets get the data
-        if (is_object($json) && property_exists($json, 'status')) {
-            $this->json = $json;
+            // If we have valid json, lets get the data
+            if (is_object($json) && property_exists($json, 'status')) {
+                $this->json = $json;
 
-            // Fill the data
-            $this->setupData();
+                // Fill the data
+                $this->setupData();
+            }
+        } catch (\JsonException $jsonException) {
+            $this->json = null;
         }
-    }
-
-    /**
-     * When json is valid, setups the data
-     * @return $this
-     */
-    protected function setupData()
-    {
-        return $this->set('status')
-            ->set('meta')
-            ->set('message');
     }
 
     //region Getters
@@ -89,7 +83,7 @@ class Response
     /**
      * Response meta list
      *
-     * @return stdClass|null
+     * @return \stdClass|null
      */
     public function meta()
     {
@@ -107,7 +101,7 @@ class Response
     }
 
     /**
-     * @return ResponseInterface
+     * @return ResponseInterface|null
      */
     public function response()
     {
@@ -126,6 +120,7 @@ class Response
 
     /**
      * Fully decoded json if avail.
+     *
      * @return array|mixed|null
      */
     public function json()
@@ -135,6 +130,7 @@ class Response
 
     /**
      * Checks if status is success
+     *
      * @return bool
      */
     public function isSuccess()
@@ -144,22 +140,37 @@ class Response
 
     /**
      * Returns the status code from guzzle response
+     *
      * @return int
      */
     public function statusCode()
     {
-        if (is_null($this->response())) {
+        if ($this->response() === null) {
             return 500;
         }
-        return $this->response()->getStatusCode();
+
+        return $this->response()
+            ->getStatusCode();
+    }
+
+    /**
+     * When json is valid, setups the data
+     *
+     * @return $this
+     */
+    protected function setupData()
+    {
+        return $this->set('status')
+            ->set('meta')
+            ->set('message');
     }
 
     //endregion
 
     //region Helpers
     /**
-     * Sets the property by given key with a value from current json (using the same key). If not found
-     * uses the current property value.
+     * Sets the property by given key with a value from current json (using the same key). If not found uses the current
+     * property value.
      *
      * @param string      $key the key in array and a propertyName if not provided
      * @param string|null $propertyName
@@ -168,7 +179,7 @@ class Response
      */
     protected function set($key, $propertyName = null)
     {
-        if (is_null($propertyName)) {
+        if ($propertyName === null) {
             $propertyName = $key;
         }
 
@@ -179,7 +190,7 @@ class Response
     /**
      * Tries to get data from given array
      *
-     * @param stdClass   $object
+     * @param \stdClass   $object
      * @param string     $key
      * @param mixed|null $default
      *
@@ -193,5 +204,6 @@ class Response
 
         return $default;
     }
+
     //endregion
 }

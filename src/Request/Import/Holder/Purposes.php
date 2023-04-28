@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\Import\Holder;
 
 use SmartEmailing\v3\Models\AbstractMapHolder;
@@ -8,8 +11,6 @@ class Purposes extends AbstractMapHolder
 {
     /**
      * Inserts purposes into the items. Unique items only.
-     *
-     * @param Purpose $list
      *
      * @return $this
      */
@@ -24,10 +25,10 @@ class Purposes extends AbstractMapHolder
      *
      * @param int         $id
      * @param string|null $valid_from   Date and time since processing purpose is valid in YYYY-MM-DD HH:MM:SS format.
-     *                                  If empty, current date and time will be used.
+     * If empty, current date and time will be used.
      * @param string|null $valid_to     Date and time of processing purpose validity end in YYYY-MM-DD HH:MM:SS format.
-     *                                  If empty, it will be calculated as valid_from + default duration of particular
-     *                                  purpose.
+     * If empty, it will be calculated as valid_from + default duration of particular
+     * purpose.
      *
      * @return Purpose
      */

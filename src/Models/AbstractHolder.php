@@ -1,17 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Models;
 
 abstract class AbstractHolder implements \JsonSerializable
 {
     /**
      * A list of items
+     *
      * @var array
      */
     protected $items = [];
 
     /**
-     * @param $index
-     *
      * @return mixed
      */
     public function get($index)
@@ -24,7 +26,7 @@ abstract class AbstractHolder implements \JsonSerializable
      */
     public function isEmpty()
     {
-        return empty($this->items);
+        return $this->items === [];
     }
 
     public function toArray()

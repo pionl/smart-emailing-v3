@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Models;
 
 use SmartEmailing\v3\Models\Model;
@@ -35,14 +38,18 @@ class ModelTest extends BaseTestCase
     public function testFromJSON()
     {
         /** @var ModelMock $model */
-        $model = ModelMock::fromJSON((object)[
+        $model = ModelMock::fromJSON((object) [
             'unsupported' => 'test',
             'boolean' => true,
             'null' => null,
-            'array' => []
+            'array' => [],
         ]);
 
-        $this->assertObjectNotHasAttribute('unsupported', $model, 'A key should not be imported if not found in default toArray data');
+        $this->assertObjectNotHasAttribute(
+            'unsupported',
+            $model,
+            'A key should not be imported if not found in default toArray data'
+        );
         $this->assertTrue($model->boolean);
         $this->assertNull($model->null);
         $this->assertEquals([], $model->array);
@@ -54,8 +61,8 @@ class ModelTest extends BaseTestCase
     public function testFromJSONParseNull()
     {
         /** @var ModelMock $model */
-        $model = ModelMock::fromJSON((object)[
-            'array' => null
+        $model = ModelMock::fromJSON((object) [
+            'array' => null,
         ]);
         $this->assertNull($model->array);
     }

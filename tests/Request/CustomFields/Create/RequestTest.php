@@ -1,10 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\CustomFields\Create;
 
 use GuzzleHttp\Psr7\Utils;
 use SmartEmailing\v3\Request\CustomFields\Create\Request;
-use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Request\CustomFields\Create\Response;
+use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class RequestTestCase extends ApiStubTestCase
@@ -35,17 +38,22 @@ class RequestTestCase extends ApiStubTestCase
         $this->request->setCustomField(new CustomField('Fruit', CustomField::TEXT));
 
         /** @var Response $response */
-        $response = $this->createEndpointTest($this->request, 'customfields', 'POST', $this->callback(function ($array) {
-            $this->assertTrue(is_array($array), 'Options must return an array');
-            $this->assertArrayHasKey('json', $array, 'Options must return an json value');
-            $this->assertTrue(is_array($array['json']), 'Json must be an array');
-            $this->assertEquals([
-                'name' => 'Fruit',
-                'type' => CustomField::TEXT
-            ], $array['json']);
+        $response = $this->createEndpointTest(
+            $this->request,
+            'customfields',
+            'POST',
+            $this->callback(function ($array): bool {
+                $this->assertTrue(is_array($array), 'Options must return an array');
+                $this->assertArrayHasKey('json', $array, 'Options must return an json value');
+                $this->assertTrue(is_array($array['json']), 'Json must be an array');
+                $this->assertEquals([
+                    'name' => 'Fruit',
+                    'type' => CustomField::TEXT,
+                ], $array['json']);
 
-            return true;
-        }));
+                return true;
+            })
+        );
 
         $this->assertInstanceOf(Response::class, $response, 'Create request must return own response');
         $customField = $response->data();

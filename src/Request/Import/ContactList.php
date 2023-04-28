@@ -1,26 +1,30 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\Import;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use SmartEmailing\v3\Models\Model;
 
 /**
- * Contact list wrapper with public properties (allows force set and easy getter). The fluent setter will help
- * to set values in correct format.
- * @package SmartEmailing\v3\Request\Import
+ * Contact list wrapper with public properties (allows force set and easy getter). The fluent setter will help to set
+ * values in correct format.
  */
 class ContactList extends Model
 {
-    const CONFIRMED = 'confirmed';
-    const REMOVED = 'removed';
-    const UNSUBSCRIBED = 'unsubscribed';
+    public const CONFIRMED = 'confirmed';
+    public const REMOVED = 'removed';
+    public const UNSUBSCRIBED = 'unsubscribed';
 
     /**
      * @var int|null
      */
     public $id;
+
     /**
      * Contact's status in Contactlist. Allowed values: "confirmed", "unsubscribed", "removed"
+     *
      * @var string Default value: confirmed
      */
     public $status = self::CONFIRMED;
@@ -35,7 +39,7 @@ class ContactList extends Model
     {
         $this->setId($id);
 
-        if (!is_null($status)) {
+        if ($status !== null) {
             $this->setStatus($status);
         }
     }
@@ -47,7 +51,7 @@ class ContactList extends Model
      */
     public function setId($id)
     {
-        $this->id = intval($id);
+        $this->id = (int) $id;
         return $this;
     }
 
@@ -65,16 +69,16 @@ class ContactList extends Model
         return $this;
     }
 
-
     /**
      * Converts data to array
+     *
      * @return array
      */
     public function toArray()
     {
         return [
             'id' => $this->id,
-            'status' => $this->status
+            'status' => $this->status,
         ];
     }
 

@@ -1,23 +1,31 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\CustomFields\Search;
 
-use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
+use SmartEmailing\v3\Request\CustomFields\CustomField;
 
 class Filters
 {
     /**
      * Filters the results by the name
+     *
      * @var string|null
      */
     public $name = null;
+
     /**
      * Filters the results by the id
+     *
      * @var int|null
      */
     public $id = null;
+
     /**
      * Filters the results by the type
+     *
      * @var string|null
      */
     public $type = null;
@@ -27,11 +35,6 @@ class Filters
      */
     protected $request;
 
-    /**
-     * Filters constructor.
-     *
-     * @param Request $request
-     */
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -63,8 +66,6 @@ class Filters
      * @param null|string $byType
      *
      * @return Filters
-     *
-     * @throws InvalidFormatException if type is not valid
      */
     public function byType($byType)
     {
@@ -72,5 +73,4 @@ class Filters
         $this->type = $byType;
         return $this;
     }
-
 }

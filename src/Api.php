@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SmartEmailing\v3;
 
 use GuzzleHttp\Client;
 use SmartEmailing\v3\Request\Contactlists\ContactlistEndpoint;
 use SmartEmailing\v3\Request\Credentials\Credentials;
 use SmartEmailing\v3\Request\CustomFields\CustomFields;
+use SmartEmailing\v3\Request\CustomRequest\CustomRequest;
 use SmartEmailing\v3\Request\Email\EmailsEndpoint;
 use SmartEmailing\v3\Request\Eshops\EshopOrders;
 use SmartEmailing\v3\Request\Eshops\EshopOrdersBulk;
@@ -15,43 +18,32 @@ use SmartEmailing\v3\Request\Ping\Ping;
 use SmartEmailing\v3\Request\Send\BulkCustomEmails;
 use SmartEmailing\v3\Request\Send\BulkCustomSms;
 use SmartEmailing\v3\Request\Send\TransactionalEmails;
-use SmartEmailing\v3\Request\CustomRequest\CustomRequest;
 
 /**
  * Class Api
- * @package SmartEmailing\v3
+ *
  * @link https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Aliveness_test
  */
 class Api
 {
     /**
      * The final API endpoint
-     * @var string
      */
-    private $apiUrl;
+    private string $apiUrl;
 
-    /** @var Client */
-    private $client;
+    private Client $client;
 
-    /**
-     * Api constructor.
-     *
-     * @param string $username
-     * @param string $apiKey
-     * @param string|null $apiUrl
-     */
-    public function __construct(string $username, string $apiKey, $apiUrl = null)
+    public function __construct(string $username, string $apiKey, string $apiUrl = null)
     {
-        $this->apiUrl = $apiUrl;
+        $this->apiUrl = $apiUrl ?? 'https://app.smartemailing.cz/api/v3/';
         $this->client = new Client([
             'auth' => [$username, $apiKey],
-            'base_uri' => ($apiUrl ? $apiUrl : 'https://app.smartemailing.cz/api/v3/')
+            'base_uri' => $this->apiUrl,
         ]);
     }
 
     /**
      * Returns current API client with auth setup and base URL
-     * @return Client
      */
     public function client(): Client
     {
@@ -60,6 +52,7 @@ class Api
 
     /**
      * Creates new import request
+     *
      * @return Import
      */
     public function import()
@@ -91,9 +84,6 @@ class Api
         return new Newsletter($this, $emailId, $contactLists);
     }
 
-    /**
-     * @return Ping
-     */
     public function ping(): Ping
     {
         return new Ping($this);
@@ -104,9 +94,6 @@ class Api
         return new CustomRequest($this, $action, $method, $postData);
     }
 
-    /**
-     * @return Credentials
-     */
     public function credentials(): Credentials
     {
         return new Credentials($this);
@@ -126,7 +113,7 @@ class Api
     {
         return new EshopOrdersBulk($this);
     }
-  
+
     public function customEmailsBulk(): BulkCustomEmails
     {
         return new BulkCustomEmails($this);

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\Import\Holder;
 
 use SmartEmailing\v3\Models\AbstractMapHolder;
@@ -8,8 +11,6 @@ class CustomFields extends AbstractMapHolder
 {
     /**
      * Inserts custom filed into the items. Unique items only.
-     *
-     * @param CustomField $list
      *
      * @return $this
      */
@@ -24,10 +25,9 @@ class CustomFields extends AbstractMapHolder
      *
      * @param int         $id
      * @param string|null $value   String value for simple customfields, and YYYY-MM-DD HH:MM:SS for date customfields.
-     *                             Value size is limited to
-     *                             64KB. Required for simple customfields
+     * Value size is limited to  64KB. Required for simple customfields
      * @param array       $options Array of Customfields options IDs matching with selected Customfield. Required for
-     *                             composite customfields
+     * composite customfields
      *
      * @return CustomField
      */

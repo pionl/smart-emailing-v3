@@ -1,21 +1,26 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SmartEmailing\v3\Request\Contactlists;
 
 use SmartEmailing\v3\Api;
-use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use SmartEmailing\v3\Request\AbstractRequest;
 
 class ContactlistTruncate extends AbstractRequest
 {
-    /** @var int */
-    private $listId;
+    private int $listId;
 
     public function __construct(Api $api, int $listId)
     {
         parent::__construct($api);
 
         $this->listId = $listId;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 
     protected function method(): string
@@ -31,17 +36,12 @@ class ContactlistTruncate extends AbstractRequest
     protected function options(): array
     {
         return [
-            'json' => $this->jsonSerialize()
+            'json' => $this->jsonSerialize(),
         ];
     }
 
     private function toArray(): array
     {
         return [];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

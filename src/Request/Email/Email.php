@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SmartEmailing\v3\Request\Email;
 
@@ -8,18 +10,13 @@ use SmartEmailing\v3\Request\AbstractRequest;
 
 class Email extends AbstractRequest implements \JsonSerializable
 {
+    private string $title;
 
-    /** @var string */
-    private $title;
+    private ?string $name = null;
 
-    /** @var string|null */
-    private $name;
+    private ?string $htmlBody = null;
 
-    /** @var string|null */
-    private $htmlBody;
-
-    /** @var string|null */
-    private $textBody;
+    private ?string $textBody = null;
 
     public function __construct(Api $api, string $title)
     {
@@ -45,12 +42,17 @@ class Email extends AbstractRequest implements \JsonSerializable
         return $this;
     }
 
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
     protected function endpoint(): string
     {
         return 'emails';
     }
 
-    protected function method()
+    protected function method(): string
     {
         return 'POST';
     }
@@ -62,7 +64,7 @@ class Email extends AbstractRequest implements \JsonSerializable
         }
 
         return [
-            'json' => $this->jsonSerialize()
+            'json' => $this->jsonSerialize(),
         ];
     }
 
@@ -83,10 +85,4 @@ class Email extends AbstractRequest implements \JsonSerializable
 
         return $data;
     }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
-
 }

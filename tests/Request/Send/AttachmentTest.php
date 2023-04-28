@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\Send;
 
 use PHPUnit\Framework\TestCase;
@@ -8,59 +10,59 @@ use SmartEmailing\v3\Request\Send\Attachment;
 
 class AttachmentTest extends TestCase
 {
-	/** @var Attachment  */
-	private $model;
+    private Attachment $model;
 
-	protected function setUp(): void
-	{
-		$this->model = new Attachment();
-	}
+    protected function setUp(): void
+    {
+        $this->model = new Attachment();
+    }
 
-	public function testShouldThrowExceptionWhenMissingAllData()
-	{
-		$this->expectException(PropertyRequiredException::class);
-		$this->model->toArray();
-	}
+    public function testShouldThrowExceptionWhenMissingAllData()
+    {
+        $this->expectException(PropertyRequiredException::class);
+        $this->model->toArray();
+    }
 
-	public function testShouldThrowExceptionWhenMissingPartialData()
-	{
-		$this->model->setFileName('car.png');
-		$this->expectException(PropertyRequiredException::class);
-		$this->model->toArray();
-	}
+    public function testShouldThrowExceptionWhenMissingPartialData()
+    {
+        $this->model->setFileName('car.png');
+        $this->expectException(PropertyRequiredException::class);
+        $this->model->toArray();
+    }
 
-	public function testShouldReturnArrayWithData()
-	{
-		$this->model->setFileName('car.png');
-		$this->model->setContentType('image/png');
-		$this->model->setDataBase64('data');
-		$data = $this->model->toArray();
+    public function testShouldReturnArrayWithData()
+    {
+        $this->model->setFileName('car.png');
+        $this->model->setContentType('image/png');
+        $this->model->setDataBase64('data');
 
-		self::assertSame([
-			'file_name' => 'car.png',
-			'content_type' => 'image/png',
-			'data_base64' => 'data',
-		], $data);
-	}
+        $data = $this->model->toArray();
 
-	public function testShouldReturnSameDataFromSerializer()
-	{
-		$this->model->setFileName('car.png');
-		$this->model->setContentType('image/png');
-		$this->model->setDataBase64('data');
+        self::assertSame([
+            'file_name' => 'car.png',
+            'content_type' => 'image/png',
+            'data_base64' => 'data',
+        ], $data);
+    }
 
-		self::assertSame($this->model->toArray(), $this->model->jsonSerialize());
-	}
+    public function testShouldReturnSameDataFromSerializer()
+    {
+        $this->model->setFileName('car.png');
+        $this->model->setContentType('image/png');
+        $this->model->setDataBase64('data');
 
-	public function testShouldSetSettersAndReadGetters()
-	{
-		$this->model->setFileName('car.png');
-		self::assertSame('car.png', $this->model->getFileName());
+        self::assertSame($this->model->toArray(), $this->model->jsonSerialize());
+    }
 
-		$this->model->setContentType('image/png');
-		self::assertSame('image/png', $this->model->getContentType());
+    public function testShouldSetSettersAndReadGetters()
+    {
+        $this->model->setFileName('car.png');
+        self::assertSame('car.png', $this->model->getFileName());
 
-		$this->model->setDataBase64('data');
-		self::assertSame('data', $this->model->getDataBase64());
-	}
+        $this->model->setContentType('image/png');
+        self::assertSame('image/png', $this->model->getContentType());
+
+        $this->model->setDataBase64('data');
+        self::assertSame('data', $this->model->getDataBase64());
+    }
 }

@@ -1,8 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\CustomFields\Search;
 
-use SmartEmailing\v3\Request\CustomFields\Search\Request;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
+use SmartEmailing\v3\Request\CustomFields\Search\Request;
 use SmartEmailing\v3\Request\CustomFields\Search\Response;
 use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
@@ -16,7 +19,9 @@ class RequestLiveTestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->request = $this->createApi()->customFields()->searchRequest();
+        $this->request = $this->createApi()
+            ->customFields()
+            ->searchRequest();
     }
 
     public function testInstance()

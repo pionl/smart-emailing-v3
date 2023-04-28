@@ -1,15 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\CustomFields\Search;
 
 use SmartEmailing\v3\Exceptions\JsonDataInvalidException;
 use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Request\Response as BaseResponse;
 
-/**
- * Class SearchResponse
- *
- * @package SmartEmailing\v3\Request\CustomFields\Search
- */
 class Response extends BaseResponse
 {
     /**
@@ -21,16 +19,14 @@ class Response extends BaseResponse
     }
 
     /**
-     * @return MetaDataInterface
+     * @return \stdClass&MetaDataInterface
      */
     public function meta()
     {
+        /** @var \stdClass&MetaDataInterface */
         return parent::meta();
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function setupData()
     {
         parent::setupData();
@@ -42,7 +38,7 @@ class Response extends BaseResponse
                 $this->data[] = CustomField::fromJSON($customField);
             }
         }
+
         return $this;
     }
-
 }

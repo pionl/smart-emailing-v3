@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\Import;
 
 use SmartEmailing\v3\Request\Import\Contact;
@@ -13,18 +16,19 @@ class ImportLiveTest extends BaseTestCase
      */
     protected $import;
 
-
     protected function setUp(): void
     {
         parent::setUp();
-        /** @var  $apiStub */
-        $this->import = $this->createApi()->import();
+
+        $this->import = $this->createApi()
+            ->import();
     }
 
     /**
      * Tests if the endpoint/options is passed to request
      */
-    public function testBasic() {
+    public function testBasic()
+    {
         $this->assertInstanceOf(Import::class, $this->import);
     }
 
@@ -38,16 +42,20 @@ class ImportLiveTest extends BaseTestCase
 
         $contactFull = new Contact('test2@test.cz');
 
-        $contactFull->setGender('M')->setNotes('test')->setBirthday('today')->setBlacklisted(true);
+        $contactFull->setGender('M')
+            ->setNotes('test')
+            ->setBirthday('today')
+            ->setBlacklisted(true);
 
-        $this->import->addContact(new Contact('test@test.cz'))->addContact($contactFull);
+        $this->import->addContact(new Contact('test@test.cz'))
+            ->addContact($contactFull);
 
-        $this->import->settings()->setSkipInvalidEmails(true);
+        $this->import->settings()
+            ->setSkipInvalidEmails(true);
 
         $response = $this->import->send();
 
         $this->assertEquals(Response::CREATED, $response->status());
         $this->assertEquals(201, $response->statusCode());
     }
-
 }

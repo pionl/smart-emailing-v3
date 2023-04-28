@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SmartEmailing\v3\Request\Send;
 
@@ -6,76 +8,78 @@ use SmartEmailing\v3\Models\Model;
 
 class Task extends Model
 {
-	/** @var Recipient */
-	private $recipient;
+    private ?Recipient $recipient = null;
 
-	/** @var Replace[] */
-	private $replace = [];
+    /**
+     * @var Replace[]
+     */
+    private array $replace = [];
 
-	/** @var TemplateVariable  */
-	private $templateVariables;
+    private ?TemplateVariable $templateVariables = null;
 
-	/** @var Attachment[] */
-	private $attachments = [];
+    /**
+     * @var Attachment[]
+     */
+    private array $attachments = [];
 
-	public function getRecipient(): ?Recipient
-	{
-		return $this->recipient;
-	}
+    public function getRecipient(): ?Recipient
+    {
+        return $this->recipient;
+    }
 
-	public function setRecipient(Recipient $recipient): void
-	{
-		$this->recipient = $recipient;
-	}
+    public function setRecipient(Recipient $recipient): void
+    {
+        $this->recipient = $recipient;
+    }
 
-	/**
-	 * @return Replace[]
-	 */
-	public function getReplace(): array
-	{
-		return $this->replace;
-	}
+    /**
+     * @return Replace[]
+     */
+    public function getReplace(): array
+    {
+        return $this->replace;
+    }
 
-	public function addReplace(Replace $replace): void
-	{
-		$this->replace[] = $replace;
-	}
+    public function addReplace(Replace $replace): void
+    {
+        $this->replace[] = $replace;
+    }
 
-	public function getTemplateVariables(): ?TemplateVariable
-	{
-		return $this->templateVariables;
-	}
+    public function getTemplateVariables(): ?TemplateVariable
+    {
+        return $this->templateVariables;
+    }
 
-	public function setTemplateVariables(TemplateVariable $templateVariables): void
-	{
-		$this->templateVariables = $templateVariables;
-	}
+    public function setTemplateVariables(TemplateVariable $templateVariables): void
+    {
+        $this->templateVariables = $templateVariables;
+    }
 
-	/**
-	 * @return Attachment[]
-	 */
-	public function getAttachments(): array
-	{
-		return $this->attachments;
-	}
+    /**
+     * @return Attachment[]
+     */
+    public function getAttachments(): array
+    {
+        return $this->attachments;
+    }
 
-	public function addAttachment(Attachment $attachment): void
-	{
-		$this->attachments[] = $attachment;
-	}
+    public function addAttachment(Attachment $attachment): void
+    {
+        $this->attachments[] = $attachment;
+    }
 
-	public function toArray(): array
-	{
-		return [
-			'recipient' => $this->getRecipient(),
-			'replace' => $this->getReplace(),
-			'template_variables' => $this->getTemplateVariables(),
-			'attachments' => $this->getAttachments(),
-		];
-	}
+    public function toArray(): array
+    {
+        return [
+            'recipient' => $this->getRecipient(),
+            'replace' => $this->getReplace(),
+            'template_variables' => $this->getTemplateVariables(),
+            'attachments' => $this->getAttachments(),
+        ];
+    }
 
-	public function jsonSerialize(): array
-	{
-		return $this->toArray();
-	}
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 }
