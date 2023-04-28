@@ -1,0 +1,14 @@
+name: Release
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  deploy:
+    name: Enable github actions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hello
+        run: |
+          echo "Hello!"
