@@ -1,20 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\CustomFields;
 
 use SmartEmailing\v3\Api;
+use SmartEmailing\v3\Request\CustomFields\Create\Request;
 
 class CustomFields
 {
-    /**
-     * @var Api
-     */
-    private $api;
+    private Api $api;
 
-    /**
-     * CustomFields constructor.
-     *
-     * @param Api $api
-     */
     public function __construct(Api $api)
     {
         $this->api = $api;
@@ -24,26 +20,24 @@ class CustomFields
     /**
      * Creates a request and sends it
      *
-     * @param CustomField $customField
-     *
      * @return Create\Response
      */
     public function create(CustomField $customField)
     {
-        return $this->createRequest($customField)->send();
+        return $this->createRequest($customField)
+            ->send();
     }
 
     /**
      * Creates a request
      *
-     * @param CustomField|null $customField
-     *
      * @return Create\Request
      */
     public function createRequest(CustomField $customField = null)
     {
-        return new Create\Request($this->api, $customField);
+        return new Request($this->api, $customField);
     }
+
     //endregion
 
     //region Search
@@ -57,7 +51,8 @@ class CustomFields
      */
     public function search($page = null, $limit = null)
     {
-        return $this->searchRequest($page, $limit)->send();
+        return $this->searchRequest($page, $limit)
+            ->send();
     }
 
     /**
@@ -72,6 +67,7 @@ class CustomFields
     {
         return new Search\Request($this->api, $page, $limit);
     }
+
     //endregion
 
     /**
@@ -85,5 +81,4 @@ class CustomFields
     {
         return (new Exists\Request($this->api, $name))->exists();
     }
-
 }

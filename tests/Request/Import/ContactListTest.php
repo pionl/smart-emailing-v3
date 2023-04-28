@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\Import;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
@@ -32,8 +35,8 @@ class ContactListTest extends BaseTestCase
     {
         try {
             $this->list->setStatus('test');
-        } catch (InvalidFormatException $exception) {
-            $this->assertStringStartsWith("Value 'test'", $exception->getMessage());
+        } catch (InvalidFormatException $invalidFormatException) {
+            $this->assertStringStartsWith("Value 'test'", $invalidFormatException->getMessage());
         }
     }
 
@@ -41,7 +44,7 @@ class ContactListTest extends BaseTestCase
     {
         $this->assertEquals([
             'id' => 1,
-            'status' => ContactList::CONFIRMED
+            'status' => ContactList::CONFIRMED,
         ], $this->list->toArray());
     }
 
@@ -49,7 +52,7 @@ class ContactListTest extends BaseTestCase
     {
         $this->assertEquals([
             'id' => 1,
-            'status' => ContactList::CONFIRMED
+            'status' => ContactList::CONFIRMED,
         ], $this->list->jsonSerialize());
     }
 }

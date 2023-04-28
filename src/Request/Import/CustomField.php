@@ -1,12 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\Import;
 
 use SmartEmailing\v3\Models\Model;
 
 /**
- * Contact field wrapper with public properties (allows force set and easy getter). The fluent setter will help
- * to set values in correct format.
- * @package SmartEmailing\v3\Request\Import
+ * Contact field wrapper with public properties (allows force set and easy getter). The fluent setter will help to set
+ * values in correct format.
  */
 class CustomField extends Model
 {
@@ -17,6 +19,7 @@ class CustomField extends Model
 
     /**
      * Array of Customfields options IDs matching with selected Custom-field. Required for composite custom-fields
+     *
      * @var array
      */
     public $options = [];
@@ -24,6 +27,7 @@ class CustomField extends Model
     /**
      * String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields. Value size is limited to
      * 64KB. Required for simple custom-fields
+     *
      * @var string|null
      */
     public $value = null;
@@ -31,23 +35,22 @@ class CustomField extends Model
     /**
      * CustomField constructor.
      *
-     * @param int|null    $id
+     * @param int|numeric-string|null    $id
      * @param string|null $value String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields.
-     *                           Value size is limited to
-     *                           64KB. Required for simple custom-fields
+     * Value size is limited to
+     * 64KB. Required for simple custom-fields
      */
     public function __construct($id, $value = null)
     {
         $this->setId($id);
 
-        if (!is_null($value)) {
+        if ($value !== null) {
             $this->setValue($value);
         }
     }
 
-
     /**
-     * @param int|null $id
+     * @param int|numeric-string|null $id
      *
      * @return CustomField
      */
@@ -59,8 +62,6 @@ class CustomField extends Model
 
     /**
      * Array of Customfields options IDs matching with selected Customfield. Required for composite customfields
-     *
-     * @param array $options
      *
      * @return CustomField
      */
@@ -79,7 +80,7 @@ class CustomField extends Model
      */
     public function addOption($customFiledId)
     {
-        $this->options[] = intval($customFiledId);
+        $this->options[] = (int) $customFiledId;
         return $this;
     }
 
@@ -97,9 +98,9 @@ class CustomField extends Model
         return $this;
     }
 
-
     /**
      * Converts data to array
+     *
      * @return array
      */
     public function toArray()
@@ -107,7 +108,7 @@ class CustomField extends Model
         return [
             'id' => $this->id,
             'options' => $this->options,
-            'value' => $this->value
+            'value' => $this->value,
         ];
     }
 }

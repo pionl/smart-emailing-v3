@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Helpers;
 
 /**
@@ -7,29 +10,13 @@ namespace SmartEmailing\v3\Helpers;
  * @param string $date date string that can be converted by strtotime
  * @param bool   $convert
  *
- * @return false|string
+ * @return string
  */
 function convertDate($date, $convert = true)
 {
-    if (!$convert) {
+    if ($convert === false) {
         return $date;
     }
 
     return date('Y-m-d H:i:s', strtotime($date));
-}
-
-/**
- * If given value is null, the $onNullValue is returned
- *
- * @param mixed $value
- * @param mixed $onNullValue
- *
- * @return mixed
- */
-function value($value, $onNullValue) {
-    if (is_null($value)) {
-        return $onNullValue;
-    }
-
-    return $value;
 }

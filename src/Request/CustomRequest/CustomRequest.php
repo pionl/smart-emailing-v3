@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\CustomRequest;
 
 use SmartEmailing\v3\Api;
@@ -7,7 +10,9 @@ use SmartEmailing\v3\Request\AbstractRequest;
 class CustomRequest extends AbstractRequest
 {
     private string $action;
+
     private string $method;
+
     private array $postData;
 
     public function __construct(Api $api, string $action, string $method = 'GET', array $postData = [])
@@ -31,7 +36,7 @@ class CustomRequest extends AbstractRequest
     protected function options()
     {
         return [
-            'json' => $this->postData
+            'json' => $this->postData,
         ];
     }
 }

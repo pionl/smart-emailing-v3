@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\CustomFields\Exists;
 
 use GuzzleHttp\Psr7\Utils;
@@ -8,26 +11,6 @@ use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class RequestTest extends ApiStubTestCase
 {
-    protected function request()
-    {
-        $this->stubClientResponse('customfields', 'GET', $this->callback(function ($value) {
-            $this->assertTrue(is_array($value), 'Options must return array');
-            $this->assertArrayHasKey('query', $value);
-
-            // The query parameters to send
-            $query = $value['query'];
-            $this->assertArrayHasKey('limit', $query);
-            $this->assertArrayHasKey('offset', $query);
-            $this->assertEquals(0, $query['offset'], 'Exists wants always first page');
-            $this->assertEquals(1, $query['limit'], 'The limit should be only single item');
-            $this->assertEquals('test', $query['name']);
-            $this->assertCount(3, $query, 'Default query should have only limit and offset and test filter');
-
-            return true;
-        }));
-        return new Request($this->apiStub, 'test');
-    }
-
     public function testExists()
     {
         $this->defaultReturnResponse = Utils::streamFor('{
@@ -53,7 +36,8 @@ class RequestTest extends ApiStubTestCase
                 }
             ]
         }');
-        $customField = $this->request()->exists();
+        $customField = $this->request()
+            ->exists();
 
         $this->assertTrue(is_object($customField), 'The item is in the source');
         $this->assertInstanceOf(CustomField::class, $customField);
@@ -86,7 +70,8 @@ class RequestTest extends ApiStubTestCase
             ]
         }');
 
-        $customField = $this->request()->exists();
+        $customField = $this->request()
+            ->exists();
 
         $this->assertFalse($customField, 'The exists should return false if not found');
     }
@@ -105,8 +90,29 @@ class RequestTest extends ApiStubTestCase
             ]
         }');
 
-        $customField = $this->request()->exists();
+        $customField = $this->request()
+            ->exists();
 
         $this->assertFalse($customField, 'The exists should return false if not found');
+    }
+
+    protected function request()
+    {
+        $this->stubClientResponse('customfields', 'GET', $this->callback(function ($value): bool {
+            $this->assertTrue(is_array($value), 'Options must return array');
+            $this->assertArrayHasKey('query', $value);
+
+            // The query parameters to send
+            $query = $value['query'];
+            $this->assertArrayHasKey('limit', $query);
+            $this->assertArrayHasKey('offset', $query);
+            $this->assertEquals(0, $query['offset'], 'Exists wants always first page');
+            $this->assertEquals(1, $query['limit'], 'The limit should be only single item');
+            $this->assertEquals('test', $query['name']);
+            $this->assertCount(3, $query, 'Default query should have only limit and offset and test filter');
+
+            return true;
+        }));
+        return new Request($this->apiStub, 'test');
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\Ping;
 
 use SmartEmailing\v3\Request\Ping\Ping;
@@ -14,7 +17,7 @@ class PingTestCase extends ApiStubTestCase
     /**
      * Builds the ping instance on every test
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->ping = new Ping($this->apiStub);
@@ -23,7 +26,8 @@ class PingTestCase extends ApiStubTestCase
     /**
      * Tests if the endpoint/options is passed to request
      */
-    public function testEndpointAndOptions() {
+    public function testEndpointAndOptions()
+    {
         $this->createEndpointTest($this->ping, 'ping');
     }
 

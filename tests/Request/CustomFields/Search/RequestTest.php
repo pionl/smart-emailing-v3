@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\CustomFields\Search;
 
 use GuzzleHttp\Psr7\Utils;
@@ -49,43 +52,10 @@ class RequestTest extends ApiStubTestCase
         //endregion
     }
 
-    /**
-     * Tests the setter method + query result
-     *
-     * @param string               $setMethod
-     * @param mixed                $value
-     * @param string               $getProperty
-     * @param string               $queryKey
-     * @param Filters|Request|null $setAndGetObject object that will be used for setting/getting the value. Default is
-     *                                              Request
-     */
-    protected function createQueryValue($setMethod, $value, $getProperty, $queryKey, $setAndGetObject = null)
-    {
-        if (is_null($setAndGetObject)) {
-            $setAndGetObject = $this->request;
-        }
-
-        // Set the value
-        $setAndGetObject->{$setMethod}($value);
-
-        // Run the query
-        $query = $this->request->query();
-
-        // Check the value if it was set by the function
-        $this->assertEquals($value, $setAndGetObject->{$getProperty});
-
-        $this->assertCount(3, $query, "The query should have 3 items: limit, offset, {$queryKey}");
-        $this->assertEquals($value, $query[$queryKey]);
-
-        // Test override by public property
-        $this->request->{$getProperty} = null;
-        $this->assertNull($this->request->{$getProperty});
-    }
-
     //region Test endpoint
     public function testDefaultEndpoint()
     {
-        $this->createEndpointTest($this->request, 'customfields', 'GET', $this->callback(function ($value) {
+        $this->createEndpointTest($this->request, 'customfields', 'GET', $this->callback(function ($value): bool {
             $this->assertTrue(is_array($value), 'Options must return array');
             $this->assertArrayHasKey('query', $value);
 
@@ -108,9 +78,10 @@ class RequestTest extends ApiStubTestCase
             ->limit(50);
 
         // Apply filters
-        $this->request->filter()->byType(CustomField::CHECKBOX);
+        $this->request->filter()
+            ->byType(CustomField::CHECKBOX);
 
-        $this->createEndpointTest($this->request, 'customfields', 'GET', $this->callback(function ($value) {
+        $this->createEndpointTest($this->request, 'customfields', 'GET', $this->callback(function ($value): bool {
             $this->assertTrue(is_array($value), 'Options must return array');
             $this->assertArrayHasKey('query', $value);
 
@@ -149,8 +120,8 @@ class RequestTest extends ApiStubTestCase
         $this->assertEquals('my select', $response->data()[0]->name);
 
         $this->assertEquals(8, $response->meta()->total_count);
-
     }
+
     //endregion
 
     //region Test query
@@ -169,8 +140,8 @@ class RequestTest extends ApiStubTestCase
         try {
             $this->createQueryValue('expandBy', 'test', 'expand', 'expand');
             $this->fail('The value is not valid. Should raise an exception');
-        } catch (InvalidFormatException $exception) {
-            $this->assertEquals("Value 'test' not allowed: customfield_options", $exception->getMessage());
+        } catch (InvalidFormatException $invalidFormatException) {
+            $this->assertEquals("Value 'test' not allowed: customfield_options", $invalidFormatException->getMessage());
         }
     }
 
@@ -199,11 +170,43 @@ class RequestTest extends ApiStubTestCase
         try {
             $this->createQueryValue('byType', 'test', 'type', 'type', $this->request->filter());
             $this->fail('The value is not valid. Should raise an exception');
-        } catch (InvalidFormatException $exception) {
-            $this->assertStringContainsString("Value 'test' not allowed", $exception->getMessage());
+        } catch (InvalidFormatException $invalidFormatException) {
+            $this->assertStringContainsString("Value 'test' not allowed", $invalidFormatException->getMessage());
         }
     }
+
+    /**
+     * Tests the setter method + query result
+     *
+     * @param string               $setMethod
+     * @param mixed                $value
+     * @param string               $getProperty
+     * @param string               $queryKey
+     * @param Filters|Request|null $setAndGetObject object that will be used for setting/getting the value. Default is
+     * Request
+     */
+    protected function createQueryValue($setMethod, $value, $getProperty, $queryKey, $setAndGetObject = null)
+    {
+        if ($setAndGetObject === null) {
+            $setAndGetObject = $this->request;
+        }
+
+        // Set the value
+        $setAndGetObject->{$setMethod}($value);
+
+        // Run the query
+        $query = $this->request->query();
+
+        // Check the value if it was set by the function
+        $this->assertEquals($value, $setAndGetObject->{$getProperty});
+
+        $this->assertCount(3, $query, sprintf('The query should have 3 items: limit, offset, %s', $queryKey));
+        $this->assertEquals($value, $query[$queryKey]);
+
+        // Test override by public property
+        $this->request->{$getProperty} = null;
+        $this->assertNull($this->request->{$getProperty});
+    }
+
     //endregion
-
-
 }

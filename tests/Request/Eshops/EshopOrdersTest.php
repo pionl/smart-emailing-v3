@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\Eshops;
 
 use SmartEmailing\v3\Request\Eshops\EshopOrders;
@@ -7,9 +10,6 @@ use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class EshopOrdersTest extends ApiStubTestCase
 {
-    /**
-     * @var EshopOrders
-     */
     protected EshopOrders $orders;
 
     protected function setUp(): void
@@ -30,17 +30,9 @@ class EshopOrdersTest extends ApiStubTestCase
     public function testAddOrder()
     {
         $this->assertCount(1, $this->orders->addOrder(
-        	new Order(
-        		'my-eshop',
-		        'ORDER0001',
-		        'jan.novak@smartemailing.cz'
-	        ))->orders());
-	    $orders = $this->orders->addOrder(
-		    new Order(
-			    'eshop_name2',
-			    'eshop_code2',
-			    'jan.novak2@smartemailing.cz'
-		    ));
+            new Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz')
+        )->orders());
+        $orders = $this->orders->addOrder(new Order('eshop_name2', 'eshop_code2', 'jan.novak2@smartemailing.cz'));
         $this->assertCount(1, $orders->orders());
 
         $order = $orders->order();
@@ -51,19 +43,16 @@ class EshopOrdersTest extends ApiStubTestCase
 
     public function testNewOrder()
     {
-        $this->orders->newOrder(
-        	'my-eshop',
-	        'ORDER0001',
-	        'jan.novak@smartemailing.cz'
-        );
-	    $this->assertCount(1, $this->orders->orders());
+        $this->orders->newOrder('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
+        $this->assertCount(1, $this->orders->orders());
     }
-	/**
-	 * Mocks the request and checks if request is returned via send method
-	 */
-	public function testSend()
-	{
-		$this->createSendResponse($this->orders, '{
+
+    /**
+     * Mocks the request and checks if request is returned via send method
+     */
+    public function testSend()
+    {
+        $this->createSendResponse($this->orders, '{
         "status": "ok",
         "meta": [],
         "data": {
@@ -126,5 +115,5 @@ class EshopOrdersTest extends ApiStubTestCase
             ]
         }
 }', null);
-	}
+    }
 }

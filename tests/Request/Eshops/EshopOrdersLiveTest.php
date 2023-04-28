@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\Eshops;
 
 use SmartEmailing\v3\Request\Eshops\EshopOrders;
@@ -13,18 +16,19 @@ class EshopOrdersLiveTest extends BaseTestCase
      */
     protected $orders;
 
-
     protected function setUp(): void
     {
         parent::setUp();
-        /** @var  $apiStub */
-        $this->orders = $this->createApi()->eshopOrders();
+
+        $this->orders = $this->createApi()
+            ->eshopOrders();
     }
 
     /**
      * Tests if the endpoint/options is passed to request
      */
-    public function testBasic() {
+    public function testBasic()
+    {
         $this->assertInstanceOf(EshopOrders::class, $this->orders);
     }
 
@@ -36,11 +40,7 @@ class EshopOrdersLiveTest extends BaseTestCase
         // Comment if you want to try
         $this->markTestSkipped();
 
-        $order = new Order(
-	        'my-eshop',
-	        'ORDER0001',
-	        'jan.novak@smartemailing.cz'
-        );
+        $order = new Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
 
         $this->orders->addOrder($order);
 
@@ -49,5 +49,4 @@ class EshopOrdersLiveTest extends BaseTestCase
         $this->assertEquals(Response::SUCCESS, $response->status());
         $this->assertEquals(200, $response->statusCode());
     }
-
 }

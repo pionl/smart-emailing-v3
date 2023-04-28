@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\CustomFields\Exists;
 
 use SmartEmailing\v3\Request\CustomFields\Exists\Request;

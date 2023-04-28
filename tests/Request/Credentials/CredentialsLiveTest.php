@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\Credentials;
 
 use SmartEmailing\v3\Api;
@@ -8,19 +11,20 @@ use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class CredentialsLiveTest extends BaseTestCase
 {
-
     /**
      * Mocks the request and checks if request is returned via send method
      */
     public function testSend()
     {
-        if (!$this->canDoLiveTest) {
+        if (! $this->canDoLiveTest) {
             // Always proof test - ignores the no test phpunit warning
             $this->assertTrue(true);
             return;
         }
 
-        $response = $this->createApi()->credentials()->send();
+        $response = $this->createApi()
+            ->credentials()
+            ->send();
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::SUCCESS, $response->status());
         $this->assertEquals('Hi there! Your credentials are valid!', $response->message());
@@ -33,11 +37,14 @@ class CredentialsLiveTest extends BaseTestCase
     public function testSend401()
     {
         try {
-            (new Api('test', 'password'))->credentials()->send();
-            $this->fail('The response should raise an RequestException due incorrect credentials - Guzzle raises an exception');
-        } catch (RequestException $exception) {
+            (new Api('test', 'password'))->credentials()
+                ->send();
+            $this->fail(
+                'The response should raise an RequestException due incorrect credentials - Guzzle raises an exception'
+            );
+        } catch (RequestException $requestException) {
             /** @var Response $response */
-            $response = $exception->response();
+            $response = $requestException->response();
             $this->assertInstanceOf(Response::class, $response);
             $this->assertEquals(Response::ERROR, $response->status());
             $this->assertEquals('Authentication Failed', $response->message());

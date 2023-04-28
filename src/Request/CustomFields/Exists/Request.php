@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\CustomFields\Exists;
 
 use SmartEmailing\v3\Api;
@@ -9,19 +12,15 @@ use SmartEmailing\v3\Request\CustomFields\Search\Request as SearchRequest;
  * Class Request
  *
  * Runs a search query for the given name and checks it was found
- *
- * @package SmartEmailing\v3\Request\CustomFields\Exists
  */
 class Request extends SearchRequest
 {
-    /**
-     * @inheritDoc
-     */
     public function __construct(Api $api, $name)
     {
         parent::__construct($api, null, 1);
 
-        $this->filter()->byName(trim($name));
+        $this->filter()
+            ->byName(trim($name));
     }
 
     /**
@@ -34,7 +33,7 @@ class Request extends SearchRequest
     {
         $response = $this->send();
 
-        if (!$response->isSuccess()) {
+        if ($response->isSuccess() === false) {
             return false;
         }
 

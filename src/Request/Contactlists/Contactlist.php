@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SmartEmailing\v3\Request\Contactlists;
 
@@ -8,7 +10,6 @@ use SmartEmailing\v3\Request\AbstractRequest;
 
 class Contactlist extends AbstractRequest implements \JsonSerializable
 {
-
     private const ALL_FIELDS = [
         'id',
         'name',
@@ -21,11 +22,12 @@ class Contactlist extends AbstractRequest implements \JsonSerializable
         'segment_id',
     ];
 
-    /** @var string[] */
-    private $select = self::ALL_FIELDS;
+    /**
+     * @var string[]
+     */
+    private array $select = self::ALL_FIELDS;
 
-    /** @var int */
-    private $listId;
+    private int $listId;
 
     public function __construct(Api $api, int $listId)
     {
@@ -42,6 +44,11 @@ class Contactlist extends AbstractRequest implements \JsonSerializable
         return $this;
     }
 
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
     protected function endpoint(): string
     {
         return 'contactlists/' . $this->listId;
@@ -50,7 +57,7 @@ class Contactlist extends AbstractRequest implements \JsonSerializable
     protected function options(): array
     {
         return [
-            'json' => $this->jsonSerialize()
+            'json' => $this->jsonSerialize(),
         ];
     }
 
@@ -60,10 +67,4 @@ class Contactlist extends AbstractRequest implements \JsonSerializable
             'select' => implode(',', $this->select),
         ];
     }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
-
 }

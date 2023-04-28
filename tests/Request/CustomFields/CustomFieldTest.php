@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\CustomFields;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
@@ -43,11 +46,11 @@ class CustomFieldTest extends BaseTestCase
         try {
             new CustomField('Test', 'test');
             $this->fail('The construct should use setType method that checks the correct type');
-        } catch (InvalidFormatException $exception) {
+        } catch (InvalidFormatException $invalidFormatException) {
             // Check if all the types are passed
             $this->assertEquals(
                 "Value 'test' not allowed: text, textarea, date, checkbox, radio, select",
-                $exception->getMessage()
+                $invalidFormatException->getMessage()
             );
         }
     }
@@ -78,7 +81,8 @@ class CustomFieldTest extends BaseTestCase
 
     public function testJsonSerializeFilterArray()
     {
-        $this->field->setName('test')->addOption(1);
+        $this->field->setName('test')
+            ->addOption(1);
         $array = $this->field->jsonSerialize();
         $this->assertArrayHasKey('name', $array);
         $this->assertArrayHasKey('options', $array);
@@ -90,14 +94,18 @@ class CustomFieldTest extends BaseTestCase
         // Test non saved custom field - without id
         try {
             $this->field->createValue();
-        } catch (PropertyRequiredException $exception) {
-            $this->assertEquals('You must register the custom field - missing id', $exception->getMessage());
+        } catch (PropertyRequiredException $propertyRequiredException) {
+            $this->assertEquals(
+                'You must register the custom field - missing id',
+                $propertyRequiredException->getMessage()
+            );
         }
     }
 
     public function testCreateValue()
     {
-        $importField = $this->field->setId(10)->createValue('Test');
+        $importField = $this->field->setId(10)
+            ->createValue('Test');
 
         $this->assertInstanceOf(\SmartEmailing\v3\Request\Import\CustomField::class, $importField);
         $this->assertEquals(10, $importField->id);
@@ -106,7 +114,8 @@ class CustomFieldTest extends BaseTestCase
 
     public function testCreateValueEmpty()
     {
-        $importField = $this->field->setId(11)->createValue();
+        $importField = $this->field->setId(11)
+            ->createValue();
 
         $this->assertInstanceOf(\SmartEmailing\v3\Request\Import\CustomField::class, $importField);
         $this->assertEquals(11, $importField->id);

@@ -1,16 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Exceptions;
 
-use Exception;
-
-class JsonDataMissingException extends Exception
+class JsonDataMissingException extends \Exception
 {
-    /**
-     * @inheritDoc
-     */
-    public function __construct($key, $code = 500, Exception $previous = null)
+    public function __construct($key, $code = 500, \Exception $previous = null)
     {
-        parent::__construct("The JSON response is missing '{$key}' value", $code, $previous);
+        parent::__construct(sprintf("The JSON response is missing '%s' value", $key), $code, $previous);
     }
 
     /**
@@ -20,24 +18,21 @@ class JsonDataMissingException extends Exception
      * @param string          $key
      *
      * @return mixed the value
-     *
-     * @throws JsonDataMissingException
      */
     public static function throwIfSet($arrayOrObject, $key)
     {
         if (is_array($arrayOrObject)) {
-            if (!array_key_exists($key, $arrayOrObject)) {
-                throw new JsonDataMissingException($key);
+            if (array_key_exists($key, $arrayOrObject) === false) {
+                throw new self($key);
             }
 
             return $arrayOrObject[$key];
         }
 
-        if (!property_exists($arrayOrObject, $key)) {
-            throw new JsonDataMissingException($key);
+        if (property_exists($arrayOrObject, $key) === false) {
+            throw new self($key);
         }
 
         return $arrayOrObject->{$key};
     }
-
 }

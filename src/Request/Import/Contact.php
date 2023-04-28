@@ -1,123 +1,157 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\Import;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
-use function \SmartEmailing\v3\Helpers\convertDate;
+use function SmartEmailing\v3\Helpers\convertDate;
 use SmartEmailing\v3\Models\Model;
 use SmartEmailing\v3\Request\Import\Holder\ContactLists;
 use SmartEmailing\v3\Request\Import\Holder\CustomFields;
 use SmartEmailing\v3\Request\Import\Holder\Purposes;
 
 /**
- * Contact wrapper with public properties (allows force set and easy getter). The fluent setter will help
- * to set values in correct format.
- *
- * @package SmartEmailing\v3\Request\Import
+ * Contact wrapper with public properties (allows force set and easy getter). The fluent setter will help to set values
+ * in correct format.
  */
 class Contact extends Model
 {
     //region Properties
     /**
      * E-mail address of imported contact. This is the only required field.
+     *
      * @var string|null required
      */
     public $emailAddress = null;
+
     /**
      * First name
+     *
      * @var string|null
      */
     public $name = null;
+
     /**
      * @var string|null
      */
     public $surname = null;
+
     /**
      * Titles before name
+     *
      * @var string|null
      */
     public $titlesBefore = null;
+
     /**
      * Titles after name
+     *
      * @var string|null
      */
     public $titlesAfter = null;
+
     /**
      * @var string|null
      */
     public $salutation = null;
+
     /**
      * @var string|null
      */
     public $company = null;
+
     /**
      * @var string|null
      */
     public $street = null;
+
     /**
      * @var string|null
      */
     public $town = null;
+
     /**
      * @var string|null
      */
     public $postalCode = null;
+
     /**
      * @var string|null
      */
     public $country = null;
+
     /**
      * @var string|null
      */
     public $cellphone = null;
+
     /**
      * @var string|null
      */
     public $phone = null;
+
     /**
      * @var string|null
      */
     public $language = null;
+
     /**
      * Custom notes
+     *
      * @var string|null
      */
     public $notes = null;
+
     /**
      * Allowed values: "M,F,NULL"
+     *
      * @var string|null
      */
     public $gender = null;
+
     /**
      * 0 if Contact is OK, 1 if Contact does not want to receive any of your e-mails anymore. This flag will stop
      * further campaigns. Be careful, setting this value to 1 will also un-subscribe contact from all lists. It is
      * recommended not to send this parameter at all if you do not know what you are doing.
+     *
      * @var int
      */
     public $blacklisted = null;
+
     /**
      * Date of Contact's nameday in YYYY-MM-DD 00:00:00 format
+     *
      * @var string|null
      */
     public $nameDay = null;
+
     /**
      * Date of Contact's birthday in YYYY-MM-DD 00:00:00 format
+     *
      * @var string|null
      */
     public $birthday = null;
+
     /**
      * Contact lists presence of imported contacts. Any contact list presence unlisted in imported data will be
      * untouched. Unsubscribed contacts will stay unsubscribed if settings.preserve_unsubscribed=1
+     *
      * @var ContactLists
      */
     protected $contactLists;
+
     /**
      * Custom fields belonging to contact Custom fields unlisted in imported data will be untouched.
+     *
      * @var CustomFields
      */
     protected $customFields;
+
     /**
-     * Processing purposes assigned to contact. Every purpose may be assigned multiple times for different time intervals.
-     * Exact duplicities will be silently skipped.
+     * Processing purposes assigned to contact. Every purpose may be assigned multiple times for different time
+     * intervals. Exact duplicities will be silently skipped.
+     *
      * @var Purposes
      */
     protected $purposes;
@@ -309,14 +343,10 @@ class Contact extends Model
      * @param null|string $gender
      *
      * @return Contact
-     *
-     * @throws InvalidFormatException
      */
     public function setGender($gender)
     {
-        InvalidFormatException::checkInArray($gender, [
-            'M', 'F', null
-        ]);
+        InvalidFormatException::checkInArray($gender, ['M', 'F', null]);
 
         $this->gender = $gender;
         return $this;
@@ -327,13 +357,13 @@ class Contact extends Model
      * will stop further campaigns. Be careful, setting this value to 1 will also un-subscribe contact from all lists.
      * It is recommended not to send this parameter at all if you do not know what you are doing.
      *
-     * @param boolean $blacklisted
+     * @param 0|1|boolean $blacklisted
      *
      * @return Contact
      */
     public function setBlacklisted($blacklisted = true)
     {
-        $this->blacklisted = intval($blacklisted);
+        $this->blacklisted = (int) $blacklisted;
         return $this;
     }
 
@@ -393,6 +423,7 @@ class Contact extends Model
 
     /**
      * Converts data to array
+     *
      * @return array
      */
     public function toArray()
@@ -419,7 +450,7 @@ class Contact extends Model
             'birthday' => $this->birthday,
             'contactlists' => $this->contactLists,
             'customfields' => $this->customFields,
-            'purposes' => $this->purposes
+            'purposes' => $this->purposes,
         ];
     }
 }

@@ -1,17 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Exceptions;
 
 class InvalidFormatException extends \LogicException
 {
     /**
      * Checks if the value is in the array. Throws exception if not
+     *
      * @param mixed $value
-     * @param array $allowed
      */
     public static function checkInArray($value, array $allowed)
     {
-        if (!in_array($value, $allowed)) {
-            throw new InvalidFormatException("Value '{$value}' not allowed: ".implode(', ', $allowed));
+        if (in_array($value, $allowed, true) === false) {
+            throw new self(sprintf("Value '%s' not allowed: ", $value) . implode(', ', $allowed));
         }
     }
 
@@ -19,8 +22,8 @@ class InvalidFormatException extends \LogicException
     {
         $invalidFields = array_diff($values, $allowed);
 
-        if (count($invalidFields) > 0) {
-            throw new InvalidFormatException('These values are not allowed: '. implode(', ', $invalidFields));
+        if ($invalidFields !== []) {
+            throw new self('These values are not allowed: ' . implode(', ', $invalidFields));
         }
     }
 }

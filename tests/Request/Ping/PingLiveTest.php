@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\Ping;
 
 use SmartEmailing\v3\Request\Ping\Ping;
@@ -12,14 +15,13 @@ class PingLiveTest extends BaseTestCase
      */
     protected $ping;
 
-
     /**
      * Builds the ping instance on every test
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
-        /** @var  $apiStub */
-        $this->ping = $this->createApi()->ping();
+        $this->ping = $this->createApi()
+            ->ping();
     }
 
     /**
@@ -27,11 +29,12 @@ class PingLiveTest extends BaseTestCase
      */
     public function testSend()
     {
-        if (!$this->canDoLiveTest) {
+        if (! $this->canDoLiveTest) {
             // Always proof test - ignores the no test phpunit warning
             $this->assertInstanceOf(Ping::class, $this->ping);
             return;
         }
+
         $response = $this->ping->send();
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(Response::SUCCESS, $response->status());

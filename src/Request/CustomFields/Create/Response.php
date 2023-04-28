@@ -1,18 +1,26 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\CustomFields\Create;
 
 use SmartEmailing\v3\Request\CustomFields\CustomField;
 use SmartEmailing\v3\Request\Response as BaseResponse;
 
-/**
- * Class Response
- *
- * @package SmartEmailing\v3\Request\CustomFields\Responses
- */
 class Response extends BaseResponse
 {
     /**
+     * @return CustomField|null
+     */
+    public function data()
+    {
+        /** @var CustomField|null */
+        return parent::data();
+    }
+
+    /**
      * Parses the CustomField data
+     *
      * @inheritdoc
      */
     protected function setupData()
@@ -22,18 +30,10 @@ class Response extends BaseResponse
         $data = $this->value($this->json, 'data');
 
         // Import the data
-        if (!is_null($data)) {
+        if ($data !== null) {
             $this->data = CustomField::fromJSON($data);
         }
+
+        return $this;
     }
-
-    /**
-     * @return CustomField|null
-     */
-    public function data()
-    {
-        return parent::data();
-    }
-
-
 }

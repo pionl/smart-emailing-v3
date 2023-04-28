@@ -1,12 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Request\CustomFields;
 
 use GuzzleHttp\Psr7\Utils;
 use SmartEmailing\v3\Exceptions\JsonDataMissingException;
-use SmartEmailing\v3\Request\CustomFields\CustomField;
-use SmartEmailing\v3\Request\CustomFields\CustomFields;
 use SmartEmailing\v3\Request\CustomFields\Create\Request as CreateRequest;
 use SmartEmailing\v3\Request\CustomFields\Create\Response as CreateResponse;
+use SmartEmailing\v3\Request\CustomFields\CustomField;
+use SmartEmailing\v3\Request\CustomFields\CustomFields;
 use SmartEmailing\v3\Request\CustomFields\Search\Request as SearchRequest;
 use SmartEmailing\v3\Request\CustomFields\Search\Response as SearchResponse;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
@@ -67,8 +70,8 @@ class CustomFieldsTest extends ApiStubTestCase
         try {
             $response = $this->fields->search();
             $this->assertInstanceOf(SearchResponse::class, $response);
-        } catch (JsonDataMissingException $exception) {
-            $this->assertEquals("The JSON response is missing 'data' value", $exception->getMessage());
+        } catch (JsonDataMissingException $jsonDataMissingException) {
+            $this->assertEquals("The JSON response is missing 'data' value", $jsonDataMissingException->getMessage());
         }
     }
 

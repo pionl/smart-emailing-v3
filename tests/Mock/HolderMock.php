@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Tests\Mock;
 
 use SmartEmailing\v3\Models\AbstractHolder;

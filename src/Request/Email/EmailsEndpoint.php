@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SmartEmailing\v3\Request\Email;
 
@@ -6,9 +8,7 @@ use SmartEmailing\v3\Api;
 
 class EmailsEndpoint
 {
-
-    /** @var Api */
-    private $api;
+    private Api $api;
 
     public function __construct(Api $api)
     {
@@ -19,5 +19,4 @@ class EmailsEndpoint
     {
         return new Email($this->api, $title);
     }
-
 }

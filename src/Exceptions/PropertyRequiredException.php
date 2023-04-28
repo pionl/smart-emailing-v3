@@ -1,10 +1,17 @@
 <?php
-namespace SmartEmailing\v3\Exceptions;
 
-use Exception;
+declare(strict_types=1);
+
+namespace SmartEmailing\v3\Exceptions;
 
 class PropertyRequiredException extends \LogicException
 {
+    public function __construct($propertyName, $customMessage = null, $code = 500, \Exception $previous = null)
+    {
+        $message = $customMessage ?? sprintf('Property %s is required to be set', $propertyName);
+        parent::__construct($message, $code, $previous);
+    }
+
     /**
      * Throws PropertyRequiredException if $condition is false
      *
@@ -14,15 +21,8 @@ class PropertyRequiredException extends \LogicException
      */
     public static function throwIf($propertyName, $condition, $customMessage = null)
     {
-        if (!$condition) {
-            throw new PropertyRequiredException($propertyName, $customMessage);
+        if ($condition === false) {
+            throw new self($propertyName, $customMessage);
         }
     }
-
-    public function __construct($propertyName, $customMessage = null, $code = 500, Exception $previous = null)
-    {
-        $message = is_null($customMessage) ? "Property {$propertyName} is required to be set" : $customMessage;
-        parent::__construct($message, $code, $previous);
-    }
-
 }

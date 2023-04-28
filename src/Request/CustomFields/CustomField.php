@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace SmartEmailing\v3\Request\CustomFields;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
@@ -8,16 +11,19 @@ use SmartEmailing\v3\Request\Import\CustomField as ImportCustomField;
 
 class CustomField extends Model
 {
-    const TEXT = 'text';
-    const TEXT_AREA = "textarea";
-    const DATE = "date";
-    const CHECKBOX = "checkbox";
-    const RADIO = "radio";
-    const SELECT = "select";
+    public const TEXT = 'text';
+    public const TEXT_AREA = 'textarea';
+    public const DATE = 'date';
+    public const CHECKBOX = 'checkbox';
+    public const RADIO = 'radio';
+    public const SELECT = 'select';
 
     public $id = null;
+
     public $name = null;
+
     public $type = null;
+
     public $options = [];
 
     /**
@@ -28,33 +34,27 @@ class CustomField extends Model
      */
     public function __construct($name = null, $type = null)
     {
-        if (!is_null($name)) {
+        if ($name !== null) {
             $this->setName($name);
         }
 
-        if (!is_null($type)) {
+        if ($type !== null) {
             $this->setType($type);
         }
     }
 
     /**
      * Returns a list of supported types
+     *
      * @return array
      */
     public static function types()
     {
-        return [
-            self::TEXT,
-            self::TEXT_AREA,
-            self::DATE,
-            self::CHECKBOX,
-            self::RADIO,
-            self::SELECT
-        ];
+        return [self::TEXT, self::TEXT_AREA, self::DATE, self::CHECKBOX, self::RADIO, self::SELECT];
     }
 
     /**
-     * @param null $id
+     * @param int|numeric-string|null $id
      *
      * @return CustomField
      */
@@ -92,7 +92,6 @@ class CustomField extends Model
      * @param string $type
      *
      * @return CustomField
-     * @throws InvalidFormatException
      */
     public function setType($type)
     {
@@ -106,19 +105,24 @@ class CustomField extends Model
      * Creates import custom field object from the CustomField
      *
      * @param string|null $value String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields.
-     *                           Value size is limited to
-     *                           64KB. Required for simple custom-fields
+     * Value size is limited to
+     * 64KB. Required for simple custom-fields
      *
      * @return ImportCustomField
      */
     public function createValue($value = null)
     {
-        PropertyRequiredException::throwIf('id', is_numeric($this->id), 'You must register the custom field - missing id');
+        PropertyRequiredException::throwIf(
+            'id',
+            is_numeric($this->id),
+            'You must register the custom field - missing id'
+        );
         return new ImportCustomField($this->id, $value);
     }
 
     /**
      * Returns the array representation
+     *
      * @return array
      */
     public function toArray()
@@ -127,7 +131,7 @@ class CustomField extends Model
             'id' => $this->id,
             'name' => $this->name,
             'type' => $this->type,
-            'options' => $this->options
+            'options' => $this->options,
         ];
     }
 }

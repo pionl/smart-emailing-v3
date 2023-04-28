@@ -1,90 +1,73 @@
 <?php
 
+declare(strict_types=1);
 
 namespace SmartEmailing\v3\Request\Eshops;
 
-use JsonSerializable;
 use SmartEmailing\v3\Request\AbstractRequest;
 use SmartEmailing\v3\Request\Eshops\Model\Order;
+use SmartEmailing\v3\Request\Response;
 
 /**
- * Class AbstractEshopOrders
- * @package SmartEmailing\v3\Request\Eshops
+ * @template TResponse of Response
+ * @extends AbstractRequest<TResponse>
  */
-abstract class AbstractEshopOrders extends AbstractRequest implements JsonSerializable
+abstract class AbstractEshopOrders extends AbstractRequest implements \JsonSerializable
 {
-	/**
-	 * @var Order[]
-	 */
-	protected array $orders = [];
+    /**
+     * @var Order[]
+     */
+    protected array $orders = [];
 
-	/**
-	 * Creates Returns the newly created order
-	 *
-	 * @param $eshopName
-	 * @param $eshopCode
-	 * @param $emailAddress
-	 *
-	 * @return Order
-	 */
-	public function newOrder($eshopName, $eshopCode, $emailAddress): Order
-	{
-		$order = new Order($eshopName, $eshopCode, $emailAddress);
-		$this->addOrder($order);
-		return $order;
-	}
+    /**
+     * Creates Returns the newly created order
+     */
+    public function newOrder($eshopName, $eshopCode, $emailAddress): Order
+    {
+        $order = new Order($eshopName, $eshopCode, $emailAddress);
+        $this->addOrder($order);
+        return $order;
+    }
 
-	/**
-	 * @param Order $order
-	 *
-	 * @return AbstractEshopOrders
-	 */
-	public function addOrder(Order $order): AbstractEshopOrders
-	{
-		$this->orders[] = $order;
-		return $this;
-	}
+    public function addOrder(Order $order): self
+    {
+        $this->orders[] = $order;
+        return $this;
+    }
 
-	/**
-	 * @return Order[]
-	 */
-	public function orders(): array
-	{
-		return $this->orders;
-	}
+    /**
+     * @return Order[]
+     */
+    public function orders(): array
+    {
+        return $this->orders;
+    }
 
-	/**
-	 * @return array[]
-	 */
-	protected function options(): array
-	{
-		return [
-			'json' => $this->jsonSerialize()
-		];
-	}
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
 
-	/**
-	 * @return string
-	 */
-	protected function method(): string
-	{
-		return 'POST';
-	}
+    /**
+     * Converts data to array
+     */
+    public function toArray(): array
+    {
+        return $this->orders;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function jsonSerialize(): array
-	{
-		return $this->toArray();
-	}
-	/**
-	 * Converts data to array
-	 * @return array
-	 */
-	public function toArray(): array
-	{
-		return $this->orders;
-	}
+    /**
+     * @return array[]
+     */
+    protected function options(): array
+    {
+        return [
+            'json' => $this->jsonSerialize(),
+        ];
+    }
 
+    protected function method(): string
+    {
+        return 'POST';
+    }
 }
