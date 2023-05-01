@@ -10,8 +10,8 @@ API wrapper for [Smart emailing](http://smartemailing.cz) API. Currenlty in deve
 * [Usage](#usage)
 * [Supports](#supports)
 * [Advanced docs](#advanced-docs)
-* [Changelog](#changelog)
 * [Contribution or overriding](#contribution-or-overriding)
+* [Upgrading](#upgrading)
 * [Copyright and License](#copyright-and-license)
 * [Smart emailing API](https://app.smartemailing.cz/docs/api/v3/index.html)
 
@@ -43,14 +43,14 @@ then use the `$api` with desired method/component.
 
 ```php
 // Creates a new instance
-$api->import()->addContact(new Contact('test@test.cz'))->send();
+$api->importRequest()->addContact(new Contact('test@test.cz'))->send();
 ```
 
 or
 
 ```php
 // Creates a new instance
-$import = $api->import();
+$import = $api->importRequest();
 $contact = new Contact('test@test.cz');
 $contact->setName('Martin')->setNameDay('2017-12-11 11:11:11');
 $import->addContact($contact);
@@ -65,13 +65,13 @@ $import->send();
 ```
 ### Error handling
 
-When using the `send()` method in any request class you can catch the error exception `RequestException`.
+When sending any request you can catch the error exception `RequestException`.
 
 ```php
 use SmartEmailing\v3\Exceptions\RequestException;
 
 try {
-    $api->ping()->send();
+    $api->ping();
 } catch (RequestException $exception) {
     $exception->response(); // to get the real response, will hold status and message (also data if provided)
     $exception->request(); // Can be null if the request was 200/201 but API returned error status text
@@ -107,7 +107,7 @@ The import holds 2 main data points:
 
 Example of usage is above.
 
-### [Contact](./src/Request/Import/Contact.php)
+### [Contact](./src/Models/Contact.php)
 
 The import holds 3 main data points:
 1. All data accessible via public properties. Fluent set method has basic validation and date convert logic
@@ -116,7 +116,7 @@ The import holds 3 main data points:
 
 See source code for all methods/properties that you can use
 
-#### [CustomFields](./src/Request/Import/Holder/CustomFields.php) and [ContactLists](./src/Request/Import/Holder/ContactLists.php)
+#### [CustomFields](./src/Models/Holder/CustomFields.php) and [ContactLists](./src/Models/Holder/ContactLists.php)
 
 Uses a data holder with `create`/`add`/`get`/`isEmpty`/`toArray`/`jsonSerialize` methods.
 
@@ -133,16 +133,17 @@ On this object you can create any request that is currently implemented. See bel
 ### Create
 
 Quick way that will create request with required customField
+
 ```php
-use SmartEmailing\v3\Request\CustomFields\CustomField;
-use SmartEmailing\v3\Request\CustomFields\Create\Response;
+use SmartEmailing\v3\Models\CustomFieldDefinition;
 
 ...
 // Create the new customField and send the request now.
-$response = $api->customFields()->create(new CustomField('test', CustomField::TEXT));
+$customField = new CustomFieldDefinition('test', CustomFieldDefinition::TEXT);
+$data = $api->customFields()->create($customField);
 
  // Get the customField in data
-$customFieldId = $response->data()->id;
+$customFieldId = $data->id;
 ```
 
 or
@@ -159,33 +160,36 @@ $customField->setType(CustomField::RADIO)->setName('test');
 
 // Send the request
 $response = $request->send();
+$data = $response->data();
+$customFieldId = $data->id;
 ```
 
 ### Search / List
 [API DOCS](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields-Get_Customfields)
 
 Enables searching threw the custom fields with a filter/sort support. Results are limited by 100 per page. The response
-returns meta data (MetaDataInterface) and an array of `CustomField\CustomField` by calling `$response->data()`.
+returns meta data (MetaDataInterface) and an array of `Models\CustomFieldDefinition` by calling `$response->data()`.
 
 #### Response
 
-* data() returns an array `CustomField\CustomField`
+* data() returns an array `Models\CustomFieldDefinition`
 * meta() returns a `stdClass` with properties (defined in `MetaDataInterface`)
 
-#### Get a list without advanced setup
+#### Get a list without advanced search
 Creates a search request and setups only `$page` or `$limit`. The full response from api with `customfield_options_url` or
-```php
-$response = $api->customFields()->search($page = 1);
 
-/** @var \SmartEmailing\v3\Request\CustomFields\CustomField $customField */
-foreach ($response->data() as $customField) {
+```php
+$data = $api->customFields()->list();
+
+/** @var \SmartEmailing\v3\Models\CustomFieldDefinition $customField */
+foreach ($data as $customField) {
     echo $customField->id;
     echo $customField->name;
     echo $customField->type;
 }
 ```
 
-#### Advanced setup - filter/sort/etc
+#### Advanced search - filter/sort/etc
 
 ```php
 $request = $api->customFields()->searchRequest(1);
@@ -196,6 +200,7 @@ $request->sortBy('name');
 
 // Send the request
 $response = $request->send();
+$data = $response->data();
 ```
 ##### Request methods
 
@@ -243,23 +248,23 @@ Allows filtering custom fields with multiple filter conditions.
     * byType($value)
     * byId($value)
 
-### Exists
+### Get by name
 Runs a search query with name filter and checks if the given name is found in customFields. Returns `false` or the `CustomFields\CustomField`.
 Uses send logic (throws RequestException).
 
 ```php
 // Can throw RequestException - uses send.
-if ($customField = $api->customFields()->exists('name')) {
+if ($customField = $api->customFields()->getByName('name')) {
     return $customField->id;
 } else {
     throw new Exception('Not found!', 404);
 }
 ```
-### Send / Transactional emails
+## Send / Transactional emails
 The implementation of API call ``send/transactional-emails-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_transactional_emails
-## Full transactional email example
+### Full transactional email example
 ```php
-$transactionEmail = new TransactionalEmails($api);
+$transactionEmail = $api->transactionalEmailsRequest();
 
 $credentials = new SenderCredentials();
 $credentials->setFrom('from@example.com');
@@ -318,11 +323,11 @@ $transactionEmail->setMessageContents($messageContents);
 $transactionEmail->send();
 ```
 
-### Send / Bulk custom emails
+## Send / Bulk custom emails
 The implementation of API call ``send/custom-emails-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_emails
-## Full custom email example
+### Full custom email example
 ```php
-$transactionEmail = new BulkCustomEmails($api);
+$transactionEmail = $api->customEmailsBulkRequest();
 
 $credentials = new SenderCredentials();
 $credentials->setFrom('from@example.com');
@@ -362,42 +367,13 @@ $transactionEmail->addTask($task);
 
 $transactionEmail->send();
 ```
-
-
-## E_shops - Add Placed order
-
-The E_shops section have two endpoints to set single Order or import orders in bulk.
-
-Example add single order
-```php
-use \SmartEmailing\v3\Request\Eshops\Model\Order;
-use \SmartEmailing\v3\Request\Eshops\Model\OrderItem;
-use \SmartEmailing\v3\Request\Eshops\Model\Price;
-
-$order = new Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
-$order->orderItems()->add(
-    new OrderItem(
-        'ABC123',   // item Id
-        'My Product', // item name
-        10,          // quantity
-        new Price(
-            100, // without vat
-            121, // with vat
-            'CZK' // currency code
-        ),
-        'https://myeshop.cz/product/ABC123'  // product url
-    )
-);
-$api->eshopOrders()->addOrder($order)->send();
-```
-
-### Send / Bulk custom sms
+## Send / Bulk custom sms
 The implementation of API call ``send/custom-sms-bulk``: https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_SMS
 
-## Full send sms example
+### Full send sms example
 
 ```php
-$bulkCustomSms = new BulkCustomSms($api);
+$bulkCustomSms = $api->customSmsBulkRequest();
 
 $recipient = new Recipient();
 $recipient->setEmailAddress('kirk@example.com');
@@ -422,6 +398,10 @@ $bulkCustomSms->addTask($task);
 
 $bulkCustomSms->send();
 ```
+
+## Upgrading
+See [UPGRADE.md](UPGRADE.md) for how to upgrade to newer versions.
+
 
 ## Contribution or overriding
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute changes. All contributions are welcome.

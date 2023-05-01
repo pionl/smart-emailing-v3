@@ -15,9 +15,10 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use SmartEmailing\v3\Api;
+use SmartEmailing\v3\Endpoints\AbstractCollectionResponse;
+use SmartEmailing\v3\Endpoints\AbstractRequest;
+use SmartEmailing\v3\Endpoints\AbstractResponse;
 use SmartEmailing\v3\Exceptions\RequestException;
-use SmartEmailing\v3\Request\AbstractRequest;
-use SmartEmailing\v3\Request\Response as InternalResponse;
 
 abstract class ApiStubTestCase extends BaseTestCase
 {
@@ -56,15 +57,15 @@ abstract class ApiStubTestCase extends BaseTestCase
      * @param string          $responseClass
      * @param int             $responseCode
      *
-     * @return InternalResponse
+     * @return AbstractResponse
      */
     public function createSendResponse(
         $request,
         $responseText,
         $responseMessage,
-        $responseStatus = InternalResponse::SUCCESS,
+        $responseStatus = AbstractResponse::SUCCESS,
         array $meta = [],
-        $responseClass = InternalResponse::class,
+        $responseClass = AbstractResponse::class,
         $responseCode = 200
     ) {
         $this->createMockHandlerToApi($responseText, $responseCode);
@@ -92,9 +93,9 @@ abstract class ApiStubTestCase extends BaseTestCase
         $request,
         $responseText,
         $responseMessage,
-        $responseStatus = InternalResponse::SUCCESS,
+        $responseStatus = AbstractResponse::SUCCESS,
         $meta = null,
-        $responseClass = InternalResponse::class,
+        $responseClass = AbstractResponse::class,
         $responseCode = 200
     ) {
         $this->createMockHandlerToApi($responseText, $responseCode);
@@ -120,12 +121,12 @@ abstract class ApiStubTestCase extends BaseTestCase
     /**
      * Creates a tests for send request that will check if correct parameters are send to clients request method
      *
-     * @param AbstractRequest                                 $request
+     * @param AbstractRequest   $request
      * @param string|null|mixed $endpointName
      * @param string|null|mixed $httpMethod
      * @param string|null|mixed $options
      *
-     * @return \SmartEmailing\v3\Request\Response
+     * @return AbstractResponse
      */
     protected function createEndpointTest($request, $endpointName, $httpMethod = 'GET', $options = [])
     {
@@ -150,6 +151,10 @@ abstract class ApiStubTestCase extends BaseTestCase
         $response->expects($this->once())
             ->method('getBody')
             ->willReturn($this->defaultReturnResponse);
+
+        $response->expects($this->any())
+            ->method('getStatusCode')
+            ->willReturn(200);
 
         // The send method will trigger the request once with given properties (request methods)
         $client->expects($this->once())
@@ -216,17 +221,19 @@ abstract class ApiStubTestCase extends BaseTestCase
     }
 
     /**
-     * @param InternalResponse $response
+     * @param AbstractResponse $response
      * @param string           $responseClass
      * @param string           $responseStatus
      * @param string           $responseMessage
      */
-    protected function assertResponse($response, $responseClass, $responseStatus, $responseMessage, $meta)
+    protected function assertResponse($response, $responseClass, $responseStatus, $responseMessage, $meta = [])
     {
         // Check the response
         $this->assertInstanceOf($responseClass, $response);
         $this->assertEquals($responseStatus, $response->status());
         $this->assertEquals($responseMessage, $response->message());
-        $this->assertEquals($meta, $response->meta());
+        if ($response instanceof AbstractCollectionResponse) {
+            $this->assertEquals($meta, $response->meta());
+        }
     }
 }

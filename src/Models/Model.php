@@ -35,12 +35,17 @@ abstract class Model implements \JsonSerializable
      */
     abstract public function toArray();
 
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
     /**
      * Returns items in array with removed null/empty array values
      */
-    public function jsonSerialize(): array
+    protected function removeEmptyValues(array $data): array
     {
-        return array_filter($this->toArray(), static function ($val) {
+        return array_filter($data, static function ($val) {
             // Don`t show empty array
             if (is_array($val)) {
                 return $val !== [];

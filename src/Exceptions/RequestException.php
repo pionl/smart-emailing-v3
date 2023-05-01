@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace SmartEmailing\v3\Exceptions;
 
 use Psr\Http\Message\RequestInterface;
-use SmartEmailing\v3\Request\Response;
+use SmartEmailing\v3\Endpoints\AbstractResponse;
 
 class RequestException extends \RuntimeException
 {
     private ?RequestInterface $request = null;
 
-    private Response $response;
+    private AbstractResponse $response;
 
     /**
      * RequestException constructor.
@@ -21,7 +21,7 @@ class RequestException extends \RuntimeException
      * @param \Exception|null       $exception
      */
     public function __construct(
-        Response $response,
+        AbstractResponse $response,
         RequestInterface $request = null,
         $message = null,
         $code = 0,
@@ -34,7 +34,7 @@ class RequestException extends \RuntimeException
     }
 
     /**
-     * @return Response
+     * @return AbstractResponse
      */
     public function response()
     {

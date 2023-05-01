@@ -5,23 +5,24 @@ declare(strict_types=1);
 namespace SmartEmailing\v3;
 
 use GuzzleHttp\Client;
-use SmartEmailing\v3\Request\Contactlists\ContactlistEndpoint;
-use SmartEmailing\v3\Request\Credentials\Credentials;
-use SmartEmailing\v3\Request\CustomFields\CustomFields;
-use SmartEmailing\v3\Request\CustomRequest\CustomRequest;
-use SmartEmailing\v3\Request\Email\EmailsEndpoint;
-use SmartEmailing\v3\Request\Eshops\EshopOrders;
-use SmartEmailing\v3\Request\Eshops\EshopOrdersBulk;
-use SmartEmailing\v3\Request\Import\Import;
-use SmartEmailing\v3\Request\Newsletter\Newsletter;
-use SmartEmailing\v3\Request\Ping\Ping;
-use SmartEmailing\v3\Request\Send\BulkCustomEmails;
-use SmartEmailing\v3\Request\Send\BulkCustomSms;
-use SmartEmailing\v3\Request\Send\TransactionalEmails;
+use SmartEmailing\v3\Endpoints\Contactlists\ContactlistEndpoint;
+use SmartEmailing\v3\Endpoints\Credentials\CredentialsRequest;
+use SmartEmailing\v3\Endpoints\Credentials\CredentialsResponse;
+use SmartEmailing\v3\Endpoints\CustomFields\CustomFieldsEndpoint;
+use SmartEmailing\v3\Endpoints\CustomRequest\CustomRequest;
+use SmartEmailing\v3\Endpoints\Email\EmailsEndpoint;
+use SmartEmailing\v3\Endpoints\Eshops\EshopOrdersBulkRequest;
+use SmartEmailing\v3\Endpoints\Eshops\EshopOrdersRequest;
+use SmartEmailing\v3\Endpoints\IdentifierResponse;
+use SmartEmailing\v3\Endpoints\Import\Contacts\ImportContactsRequest;
+use SmartEmailing\v3\Endpoints\Newsletter\NewsletterRequest;
+use SmartEmailing\v3\Endpoints\Ping\PingRequest;
+use SmartEmailing\v3\Endpoints\Send\BulkCustomEmails\BulkCustomEmailsRequest;
+use SmartEmailing\v3\Endpoints\Send\BulkCustomSms\BulkCustomSmsRequest;
+use SmartEmailing\v3\Endpoints\Send\TransactionalEmails\TransactionalEmailsRequest;
+use SmartEmailing\v3\Endpoints\StatusResponse;
 
 /**
- * Class Api
- *
  * @link https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Aliveness_test
  */
 class Api
@@ -52,12 +53,10 @@ class Api
 
     /**
      * Creates new import request
-     *
-     * @return Import
      */
-    public function import()
+    public function importRequest(): ImportContactsRequest
     {
-        return new Import($this);
+        return new ImportContactsRequest($this);
     }
 
     /**
@@ -76,17 +75,14 @@ class Api
         return new EmailsEndpoint($this);
     }
 
-    /**
-     * Creates new contactlists proxy
-     */
-    public function newsletter(int $emailId, array $contactLists): Newsletter
+    public function newsletter(int $emailId, array $contactLists): IdentifierResponse
     {
-        return new Newsletter($this, $emailId, $contactLists);
+        return (new NewsletterRequest($this, $emailId, $contactLists))->send();
     }
 
-    public function ping(): Ping
+    public function ping(): StatusResponse
     {
-        return new Ping($this);
+        return (new PingRequest($this))->send();
     }
 
     public function customRequest(string $action, string $method = 'GET', array $postData = []): CustomRequest
@@ -94,38 +90,44 @@ class Api
         return new CustomRequest($this, $action, $method, $postData);
     }
 
-    public function credentials(): Credentials
+    public function credentials(): CredentialsResponse
     {
-        return new Credentials($this);
+        return (new CredentialsRequest($this))->send();
     }
 
-    public function customFields(): CustomFields
+    public function customFields(): CustomFieldsEndpoint
     {
-        return new CustomFields($this);
+        return new CustomFieldsEndpoint($this);
     }
 
-    public function eshopOrders(): EshopOrders
+    /**
+     * @deprecated Use import-orders instead
+     */
+    public function eshopOrders(): EshopOrdersRequest
     {
-        return new EshopOrders($this);
+        return new EshopOrdersRequest($this);
     }
 
-    public function eshopOrdersBulk(): EshopOrdersBulk
+    /**
+     * @deprecated Use import-orders instead
+     */
+    public function eshopOrdersBulk(): EshopOrdersBulkRequest
     {
-        return new EshopOrdersBulk($this);
+        return new EshopOrdersBulkRequest($this);
     }
 
-    public function customEmailsBulk(): BulkCustomEmails
+    public function customEmailsBulkRequest(): BulkCustomEmailsRequest
     {
-        return new BulkCustomEmails($this);
+        return new BulkCustomEmailsRequest($this);
     }
 
-    public function customSmsBulk(): BulkCustomSms
+    public function customSmsBulkRequest(): BulkCustomSmsRequest
     {
-        return new BulkCustomSms($this);
+        return new BulkCustomSmsRequest($this);
     }
 
-    public function transactionalEmails(): TransactionalEmails
+    public function transactionalEmailsRequest(): TransactionalEmailsRequest
     {
-        return new TransactionalEmails($this);
+        return new TransactionalEmailsRequest($this);
     }
 }

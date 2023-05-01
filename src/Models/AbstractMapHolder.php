@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace SmartEmailing\v3\Models;
 
 /**
- * Class AbstractMapHolder
- *
  * Supports map of ids to ensure only unique values
  */
 abstract class AbstractMapHolder extends AbstractHolder
