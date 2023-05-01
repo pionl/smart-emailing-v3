@@ -26,4 +26,9 @@ class ModelMock extends Model
             'holder_empty' => new HolderMock(),
         ];
     }
+
+    public function jsonSerialize(): array
+    {
+        return $this->removeEmptyValues($this->toArray());
+    }
 }

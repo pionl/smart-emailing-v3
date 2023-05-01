@@ -21,7 +21,7 @@ class ModelTest extends BaseTestCase
         $this->model = new ModelMock();
     }
 
-    public function testJsonSerializeFilterCount()
+    public function testJsonSerializeCount()
     {
         $this->assertCount(4, $this->model->jsonSerialize());
     }

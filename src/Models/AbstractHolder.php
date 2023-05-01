@@ -29,13 +29,12 @@ abstract class AbstractHolder implements \JsonSerializable
         return $this->items === [];
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return $this->items;
     }
 
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }
