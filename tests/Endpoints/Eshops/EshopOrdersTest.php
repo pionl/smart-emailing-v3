@@ -22,12 +22,12 @@ class EshopOrdersTest extends ApiStubTestCase
     /**
      * Tests if the endpoint/options is passed to request
      */
-    public function testEndpoint()
+    public function testEndpoint(): void
     {
         $this->createEndpointTest($this->orders, 'orders', 'POST', $this->arrayHasKey('json'));
     }
 
-    public function testAddOrder()
+    public function testAddOrder(): void
     {
         $this->assertCount(1, $this->orders->addOrder(
             new Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz')
@@ -36,12 +36,13 @@ class EshopOrdersTest extends ApiStubTestCase
         $this->assertCount(1, $orders->orders());
 
         $order = $orders->order();
+        $this->assertNotNull($order);
         $this->assertSame('eshop_name2', $order->eshopName);
         $this->assertSame('eshop_code2', $order->eshopCode);
         $this->assertSame('jan.novak2@smartemailing.cz', $order->emailAddress);
     }
 
-    public function testNewOrder()
+    public function testNewOrder(): void
     {
         $this->orders->newOrder('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
         $this->assertCount(1, $this->orders->orders());
@@ -50,7 +51,7 @@ class EshopOrdersTest extends ApiStubTestCase
     /**
      * Mocks the request and checks if request is returned via send method
      */
-    public function testSend()
+    public function testSend(): void
     {
         $this->createSendResponse($this->orders, '{
         "status": "ok",

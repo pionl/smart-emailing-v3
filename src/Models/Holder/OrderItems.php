@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace SmartEmailing\v3\Models\Holder;
 
 use SmartEmailing\v3\Models\AbstractMapHolder;
+use SmartEmailing\v3\Models\Model;
 use SmartEmailing\v3\Models\OrderItem;
 use SmartEmailing\v3\Models\Price;
 
+/**
+ * @extends AbstractMapHolder<OrderItem>
+ */
 class OrderItems extends AbstractMapHolder
 {
     /**
@@ -23,16 +27,16 @@ class OrderItems extends AbstractMapHolder
 
     /**
      * Creates OrderItem entry and inserts it to the array
-     *
-     * @param int $id
-     * @param string $name
-     * @param int $quantity
-     * @param string $url
      */
-    public function create($id, $name, $quantity, Price $price, $url): OrderItem
+    public function create(int $id, string $name, int $quantity, Price $price, string $url): OrderItem
     {
         $list = new OrderItem($id, $name, $quantity, $price, $url);
         $this->add($list);
         return $list;
+    }
+
+    protected function entryKey(Model $entry): ?string
+    {
+        return $entry->id;
     }
 }

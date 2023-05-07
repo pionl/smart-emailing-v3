@@ -17,20 +17,20 @@ class ReplaceTest extends TestCase
         $this->model = new Replace();
     }
 
-    public function testShouldThrowExceptionWhenMissingAllData()
+    public function testShouldThrowExceptionWhenMissingAllData(): void
     {
         $this->expectException(PropertyRequiredException::class);
         $this->model->toArray();
     }
 
-    public function testShouldThrowExceptionWhenMissingPartialData()
+    public function testShouldThrowExceptionWhenMissingPartialData(): void
     {
         $this->model->setContent('data');
         $this->expectException(PropertyRequiredException::class);
         $this->model->toArray();
     }
 
-    public function testShouldReturnArrayWithData()
+    public function testShouldReturnArrayWithData(): void
     {
         $this->model->setKey('key');
         $this->model->setContent('value');
@@ -43,7 +43,7 @@ class ReplaceTest extends TestCase
         ], $data);
     }
 
-    public function testShouldReturnSameDataFromSerializer()
+    public function testShouldReturnSameDataFromSerializer(): void
     {
         $this->model->setKey('key');
         $this->model->setContent('value');
@@ -51,7 +51,7 @@ class ReplaceTest extends TestCase
         self::assertSame($this->model->toArray(), $this->model->jsonSerialize());
     }
 
-    public function testShouldSetSettersAndReadGetters()
+    public function testShouldSetSettersAndReadGetters(): void
     {
         $this->model->setKey('key');
         self::assertSame('key', $this->model->getKey());

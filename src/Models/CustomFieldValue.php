@@ -10,35 +10,26 @@ namespace SmartEmailing\v3\Models;
  */
 class CustomFieldValue extends Model
 {
-    /**
-     * @var int|null
-     */
-    public $id = null;
+    public ?int $id = null;
 
     /**
      * Array of Customfields options IDs matching with selected Custom-field. Required for composite custom-fields
-     *
-     * @var array
      */
-    public $options = [];
+    public array $options = [];
 
     /**
      * String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields. Value size is limited to
      * 64KB. Required for simple custom-fields
-     *
-     * @var string|null
      */
-    public $value = null;
+    public ?string $value = null;
 
     /**
-     * CustomField constructor.
-     *
      * @param int|numeric-string|null    $id
      * @param string|null $value String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields.
      * Value size is limited to
      * 64KB. Required for simple custom-fields
      */
-    public function __construct($id, $value = null)
+    public function __construct($id, ?string $value = null)
     {
         $this->setId($id);
 
@@ -49,21 +40,17 @@ class CustomFieldValue extends Model
 
     /**
      * @param int|numeric-string|null $id
-     *
-     * @return CustomFieldValue
      */
-    public function setId($id)
+    public function setId($id): self
     {
-        $this->id = $id;
+        $this->id = $id !== null ? (int) $id : null;
         return $this;
     }
 
     /**
      * Array of Customfields options IDs matching with selected Customfield. Required for composite customfields
-     *
-     * @return CustomFieldValue
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): self
     {
         $this->options = $options;
         return $this;
@@ -72,11 +59,9 @@ class CustomFieldValue extends Model
     /**
      * Adds a CustomField id for composite custom-fields
      *
-     * @param int $customFiledId
-     *
      * @return $this
      */
-    public function addOption($customFiledId)
+    public function addOption(int $customFiledId)
     {
         $this->options[] = (int) $customFiledId;
         return $this;
@@ -85,23 +70,17 @@ class CustomFieldValue extends Model
     /**
      * String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields. Value size is limited to
      * 64KB. Required for simple custom-fields
-     *
-     * @param null|string $value
-     *
-     * @return CustomFieldValue
      */
-    public function setValue($value)
+    public function setValue(?string $value): self
     {
         $this->value = $value;
         return $this;
     }
 
     /**
-     * Converts data to array
-     *
-     * @return array
+     * @return array{id: int|null, options: mixed[], value: string|null}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,

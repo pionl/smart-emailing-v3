@@ -17,6 +17,8 @@ class EshopOrdersBulkRequest extends AbstractEshopOrdersRequest
 {
     /**
      * The maximum orders per single request
+     *
+     * @var int<1, 500>
      */
     public int $chunkLimit = 500;
 
@@ -30,13 +32,17 @@ class EshopOrdersBulkRequest extends AbstractEshopOrdersRequest
             return parent::send();
         }
 
-        return $this->sendInChunkMode();
+        $response = $this->sendInChunkMode();
+        if ($response instanceof StatusResponse === false) {
+            throw new \Exception('Response is null');
+        }
+        return $response;
     }
 
     /**
      * Sends contact list in chunk mode
      */
-    protected function sendInChunkMode(): StatusResponse
+    protected function sendInChunkMode(): ?StatusResponse
     {
         // Store the original contact list
         $originalFullOrdersList = $this->orders;

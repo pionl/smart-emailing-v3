@@ -24,12 +24,12 @@ class BulkCustomEmailsTest extends ApiStubTestCase
         $this->bulkCustomEmails = new BulkCustomEmailsRequest($api);
     }
 
-    public function testShouldReturnSameDataFromSerializer()
+    public function testShouldReturnSameDataFromSerializer(): void
     {
         self::assertSame($this->bulkCustomEmails->toArray(), $this->bulkCustomEmails->jsonSerialize());
     }
 
-    public function testShouldSeeAllKeysInOutputArray()
+    public function testShouldSeeAllKeysInOutputArray(): void
     {
         $data = $this->bulkCustomEmails->toArray();
         self::assertArrayHasKey('sender_credentials', $data);
@@ -39,7 +39,7 @@ class BulkCustomEmailsTest extends ApiStubTestCase
         self::assertArrayHasKey('tasks', $data);
     }
 
-    public function testShouldSetSettersAndReadGetters()
+    public function testShouldSetSettersAndReadGetters(): void
     {
         $this->bulkCustomEmails->setTag('tag');
         self::assertSame('tag', $this->bulkCustomEmails->getTag());
@@ -54,7 +54,7 @@ class BulkCustomEmailsTest extends ApiStubTestCase
         self::assertCount(1, $this->bulkCustomEmails->getTasks());
     }
 
-    public function testCompleteValid()
+    public function testCompleteValid(): void
     {
         $credentials = new SenderCredentials();
         $credentials->setFrom('from@example.com');

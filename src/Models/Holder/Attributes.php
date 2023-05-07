@@ -6,7 +6,11 @@ namespace SmartEmailing\v3\Models\Holder;
 
 use SmartEmailing\v3\Models\AbstractMapHolder;
 use SmartEmailing\v3\Models\Attribute;
+use SmartEmailing\v3\Models\Model;
 
+/**
+ * @extends AbstractMapHolder<Attribute>
+ */
 class Attributes extends AbstractMapHolder
 {
     /**
@@ -21,7 +25,7 @@ class Attributes extends AbstractMapHolder
     /**
      * Creates Attribute entry and inserts it to the array
      */
-    public function create($name, $value): Attribute
+    public function create(?string $name, ?string $value): Attribute
     {
         $list = new Attribute($name, $value);
         $this->add($list);
@@ -29,11 +33,9 @@ class Attributes extends AbstractMapHolder
     }
 
     /**
-     * Adds an entry model into items list. Only unique items are added (represented by the id property)
-     *
-     * @return boolean if the entry was added (first time added)
+     * @param Attribute $entry
      */
-    protected function insertEntry($entry): bool
+    protected function insertEntry(Model $entry): bool
     {
         // Allow only unique values
         if (isset($this->idMap[$entry->name])) {
@@ -44,5 +46,10 @@ class Attributes extends AbstractMapHolder
         $this->idMap[$entry->name] = $entry;
 
         return true;
+    }
+
+    protected function entryKey(Model $entry): ?string
+    {
+        return $entry->name;
     }
 }

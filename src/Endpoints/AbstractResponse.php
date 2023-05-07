@@ -12,30 +12,15 @@ abstract class AbstractResponse
     public const SUCCESS = 'ok';
     public const CREATED = 'created';
 
-    /**
-     * @var string|null
-     */
-    protected $message = null;
+    protected ?string $message = null;
 
-    /**
-     * @var string
-     */
-    protected $status = self::ERROR;
+    protected string $status = self::ERROR;
 
-    /**
-     * @var \stdClass|null
-     */
-    protected $json = null;
+    protected ?\stdClass $json = null;
 
-    /**
-     * @var ResponseInterface|null
-     */
-    private $response;
+    private ?ResponseInterface $response;
 
-    /**
-     * @param ResponseInterface|null $response
-     */
-    public function __construct($response)
+    public function __construct(?ResponseInterface $response)
     {
         $this->response = $response;
 
@@ -47,7 +32,7 @@ abstract class AbstractResponse
             $json = json_decode((string) $response->getBody(), null, 512, JSON_THROW_ON_ERROR);
 
             // If we have valid json, lets get the data
-            if (is_object($json) && property_exists($json, 'status')) {
+            if ($json instanceof \stdClass && property_exists($json, 'status')) {
                 $this->json = $json;
 
                 // Fill the data
@@ -55,65 +40,51 @@ abstract class AbstractResponse
             }
         } catch (\JsonException $jsonException) {
             $this->json = null;
+            $this->status = self::ERROR;
         }
     }
 
-    //region Getters
-
     /**
      * Response message
-     *
-     * @return string|null
      */
-    public function message()
+    public function message(): ?string
     {
         return $this->message;
     }
 
     /**
      * An error/success status
-     *
-     * @return string
      */
-    public function status()
+    public function status(): string
     {
         return $this->status;
     }
 
-    /**
-     * @return ResponseInterface|null
-     */
-    public function response()
+    public function response(): ?ResponseInterface
     {
         return $this->response;
     }
 
     /**
      * Fully decoded json if avail.
-     *
-     * @return array|mixed|null
      */
-    public function json()
+    public function json(): ?\stdClass
     {
         return $this->json;
     }
 
     /**
      * Checks if status is success
-     *
-     * @return bool
      */
-    public function isSuccess()
+    public function isSuccess(): bool
     {
         return $this->status === self::SUCCESS || $this->status === self::CREATED;
     }
 
     /**
      * Returns the status code from guzzle response
-     *
-     * @return int
      */
-    public function statusCode()
+    public function statusCode(): int
     {
         if ($this->response() === null) {
             return 500;
@@ -134,45 +105,40 @@ abstract class AbstractResponse
             ->set('message');
     }
 
-    //endregion
-
-    //region Helpers
     /**
      * Sets the property by given key with a value from current json (using the same key). If not found uses the current
      * property value.
      *
      * @param string      $key the key in array and a propertyName if not provided
-     * @param string|null $propertyName
      *
      * @return $this
      */
-    protected function set($key, $propertyName = null)
+    protected function set(string $key, ?string $propertyName = null)
     {
         if ($propertyName === null) {
             $propertyName = $key;
         }
 
-        $this->{$propertyName} = $this->value($this->json, $key, $this->{$propertyName});
+        $this->{$propertyName} = $this->value($this->json, $key, $this->{$propertyName} ?? null);
         return $this;
     }
 
     /**
      * Tries to get data from given array
      *
-     * @param \stdClass   $object
-     * @param string     $key
      * @param mixed|null $default
      *
      * @return mixed|null
      */
-    protected function value($object, $key, $default = null)
+    protected function value(?\stdClass $object, string $key, $default = null)
     {
+        if ($object === null) {
+            return $default;
+        }
         if (property_exists($object, $key)) {
             return $object->{$key};
         }
 
         return $default;
     }
-
-    //endregion
 }

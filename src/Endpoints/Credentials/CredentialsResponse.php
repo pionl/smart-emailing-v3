@@ -5,21 +5,20 @@ declare(strict_types=1);
 namespace SmartEmailing\v3\Endpoints\Credentials;
 
 use SmartEmailing\v3\Endpoints\AbstractResponse;
+use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 
 class CredentialsResponse extends AbstractResponse
 {
-    /**
-     * @var int
-     */
-    protected $accountId;
+    protected ?int $accountId = null;
 
     /**
      * Current account id
-     *
-     * @return int|null
      */
-    public function accountId()
+    public function accountId(): int
     {
+        if ($this->accountId === null) {
+            throw new PropertyRequiredException('accountId');
+        }
         return $this->accountId;
     }
 

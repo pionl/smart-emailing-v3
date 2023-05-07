@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Endpoints\Credentials;
 
+use GuzzleHttp\Psr7\Utils;
 use SmartEmailing\v3\Endpoints\Credentials\Credentials;
 use SmartEmailing\v3\Endpoints\Credentials\CredentialsRequest;
 use SmartEmailing\v3\Endpoints\Credentials\CredentialsResponse;
@@ -11,10 +12,7 @@ use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class CredentialsTestCase extends ApiStubTestCase
 {
-    /**
-     * @var CredentialsRequest
-     */
-    protected $credentials;
+    protected CredentialsRequest $credentials;
 
     /**
      * Builds the ping instance on every test
@@ -28,15 +26,22 @@ class CredentialsTestCase extends ApiStubTestCase
     /**
      * Tests the endpoint and options in the Credentials class
      */
-    public function testEndpointAndOptions()
+    public function testEndpointAndOptions(): void
     {
+        $this->defaultReturnResponse = Utils::streamFor('{
+            "status": "ok",
+            "meta": [
+            ],
+            "message": "Hi there! Your credentials are valid!",
+            "account_id": 2
+        }');
         $this->createEndpointTest($this->credentials, 'check-credentials');
     }
 
     /**
      * Mocks the request and checks if request is returned via send method
      */
-    public function testSend()
+    public function testSend(): void
     {
         /** @var CredentialsResponse $response */
         $response = $this->createSendResponse($this->credentials, '{

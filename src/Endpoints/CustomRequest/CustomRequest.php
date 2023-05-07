@@ -36,7 +36,7 @@ class CustomRequest extends AbstractRequest
         return $this->method;
     }
 
-    protected function endpoint()
+    protected function endpoint(): string
     {
         return $this->action;
     }

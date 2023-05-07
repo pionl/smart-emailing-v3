@@ -16,25 +16,14 @@ class ContactListStatus extends Model
     public const REMOVED = 'removed';
     public const UNSUBSCRIBED = 'unsubscribed';
 
-    /**
-     * @var int|null
-     */
-    public $id;
+    public ?int $id = null;
 
     /**
      * Contact's status in Contactlist. Allowed values: "confirmed", "unsubscribed", "removed"
-     *
-     * @var string Default value: confirmed
      */
-    public $status = self::CONFIRMED;
+    public string $status = self::CONFIRMED;
 
-    /**
-     * ContactList constructor.
-     *
-     * @param int    $id
-     * @param string $status Default value: confirmed
-     */
-    public function __construct($id, $status = null)
+    public function __construct(int $id, ?string $status = self::CONFIRMED)
     {
         $this->setId($id);
 
@@ -43,12 +32,7 @@ class ContactListStatus extends Model
         }
     }
 
-    /**
-     * @param int $id
-     *
-     * @return ContactListStatus
-     */
-    public function setId($id)
+    public function setId(int $id): self
     {
         $this->id = (int) $id;
         return $this;
@@ -57,11 +41,9 @@ class ContactListStatus extends Model
     /**
      * Contact's status in Contact-list. Allowed values: "confirmed", "unsubscribed", "removed"
      *
-     * @param string $status
-     *
      * @return $this
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         InvalidFormatException::checkInArray($status, [self::CONFIRMED, self::UNSUBSCRIBED, self::REMOVED]);
         $this->status = $status;
@@ -69,11 +51,9 @@ class ContactListStatus extends Model
     }
 
     /**
-     * Converts data to array
-     *
-     * @return array
+     * @return array{id: int|null, status: string}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,

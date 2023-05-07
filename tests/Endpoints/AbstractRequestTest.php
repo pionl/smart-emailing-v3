@@ -28,12 +28,12 @@ class AbstractRequestTestCase extends ApiStubTestCase
     /**
      * Test the arguments that are passed to request
      */
-    public function testEndpointAndOptions()
+    public function testEndpointAndOptions(): void
     {
         $this->createEndpointTest($this->request, 'endpoint', 'GET', ['test']);
     }
 
-    public function testResponse()
+    public function testResponse(): void
     {
         $this->createSendResponse($this->request, '{
                "status": "ok",
@@ -46,7 +46,7 @@ class AbstractRequestTestCase extends ApiStubTestCase
     /**
      * Tests the fatal error - status code 500 with custom message in json
      */
-    public function testResponseStatusCodeWithResponseError()
+    public function testResponseStatusCodeWithResponseError(): void
     {
         $exception = $this->createSendErrorResponse($this->request, '{
                "status": "error",
@@ -71,7 +71,7 @@ class AbstractRequestTestCase extends ApiStubTestCase
     /**
      * Tests the fatal error - status code 200 with custom message in json
      */
-    public function testResponse200StatusCodeWithResponseError()
+    public function testResponse200StatusCodeWithResponseError(): void
     {
         $exception = $this->createSendErrorResponse($this->request, '{
                "status": "error",
@@ -93,7 +93,7 @@ class AbstractRequestTestCase extends ApiStubTestCase
     /**
      * Tests the fatal error - status code 500 with custom message in json
      */
-    public function testResponseStatusCode()
+    public function testResponseStatusCode(): void
     {
         $exception = $this->createSendErrorResponse(
             $this->request,
@@ -117,7 +117,7 @@ class AbstractRequestTestCase extends ApiStubTestCase
     /**
      * Tests the fatal error - status code 500 with custom message in json
      */
-    public function testResponseStatusCodeWithJson()
+    public function testResponseStatusCodeWithJson(): void
     {
         $exception = $this->createSendErrorResponse(
             $this->request,

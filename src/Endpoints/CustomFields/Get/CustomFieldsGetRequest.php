@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Endpoints\CustomFields\Get;
 
+use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Endpoints\AbstractRequest;
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
@@ -14,14 +15,14 @@ use SmartEmailing\v3\Models\CustomFieldDefinition;
  */
 class CustomFieldsGetRequest extends AbstractRequest
 {
-    protected $fieldId;
+    protected int $fieldId;
 
     /**
      * @var string[]
      */
     private array $select = CustomFieldDefinition::SELECT_FIELDS;
 
-    public function __construct(Api $api, $fieldId)
+    public function __construct(Api $api, int $fieldId)
     {
         parent::__construct($api);
         $this->fieldId = $fieldId;
@@ -34,6 +35,9 @@ class CustomFieldsGetRequest extends AbstractRequest
         return $this;
     }
 
+    /**
+     * @return array{select: string}
+     */
     public function toArray(): array
     {
         return [
@@ -46,7 +50,7 @@ class CustomFieldsGetRequest extends AbstractRequest
         return 'customfield/' . $this->fieldId;
     }
 
-    protected function createResponse($response)
+    protected function createResponse(?ResponseInterface $response): CustomFieldsGetResponse
     {
         return new CustomFieldsGetResponse($response);
     }

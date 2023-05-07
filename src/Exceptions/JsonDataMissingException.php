@@ -6,20 +6,22 @@ namespace SmartEmailing\v3\Exceptions;
 
 class JsonDataMissingException extends \Exception
 {
-    public function __construct($key, $code = 500, \Exception $previous = null)
+    public function __construct(?string $key = null, ?int $code = 500, \Exception $previous = null)
     {
-        parent::__construct(sprintf("The JSON response is missing '%s' value", $key), $code, $previous);
+        parent::__construct('The JSON response is missing' . ($key ? sprintf(
+            " '%s' value",
+            $key
+        ) : ''), $code ?? 500, $previous);
     }
 
     /**
      * Throws an exception if the key is not in the array
      *
      * @param array|\stdClass $arrayOrObject
-     * @param string          $key
      *
      * @return mixed the value
      */
-    public static function throwIfSet($arrayOrObject, $key)
+    public static function throwIfSet($arrayOrObject, string $key)
     {
         if (is_array($arrayOrObject)) {
             if (array_key_exists($key, $arrayOrObject) === false) {

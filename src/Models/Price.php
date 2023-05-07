@@ -11,42 +11,36 @@ namespace SmartEmailing\v3\Models;
 class Price extends Model
 {
     /**
-     * @var number required
+     * @var float required
      */
-    public $withoutVat;
+    public float $withoutVat;
 
     /**
-     * @var number required
+     * @var float required
      */
-    public $withVat;
+    public float $withVat;
 
     /**
      * item price currency code (ISO-4217 three-letter ("Alpha-3")) i.e.: CZK, EUR
      *
      * @var string required
      */
-    protected $currency;
+    protected string $currency;
 
-    public function __construct($withoutVat, $withVat, $currency)
+    public function __construct(float $withoutVat, float $withVat, string $currency)
     {
         $this->withoutVat = $withoutVat;
         $this->withVat = $withVat;
         $this->currency = $currency;
     }
 
-    /**
-     * @param number $withoutVat
-     */
-    public function setWithoutVat($withoutVat): self
+    public function setWithoutVat(float $withoutVat): self
     {
         $this->withoutVat = $withoutVat;
         return $this;
     }
 
-    /**
-     * @param number $withVat
-     */
-    public function setWithVat($withVat): self
+    public function setWithVat(float $withVat): self
     {
         $this->withVat = $withVat;
         return $this;
@@ -62,7 +56,7 @@ class Price extends Model
     }
 
     /**
-     * Converts data to array
+     * @return array{without_vat: int|float, with_vat: int|float, currency: string}
      */
     public function toArray(): array
     {

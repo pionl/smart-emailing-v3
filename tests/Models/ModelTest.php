@@ -10,10 +10,7 @@ use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class ModelTest extends BaseTestCase
 {
-    /**
-     * @var Model
-     */
-    protected $model;
+    protected Model $model;
 
     protected function setUp(): void
     {
@@ -21,12 +18,12 @@ class ModelTest extends BaseTestCase
         $this->model = new ModelMock();
     }
 
-    public function testJsonSerializeCount()
+    public function testJsonSerializeCount(): void
     {
         $this->assertCount(4, $this->model->jsonSerialize());
     }
 
-    public function testJsonSerializeEquals()
+    public function testJsonSerializeEquals(): void
     {
         $array = $this->model->jsonSerialize();
         $this->assertArrayHasKey('boolean', $array);
@@ -35,7 +32,7 @@ class ModelTest extends BaseTestCase
         $this->assertArrayHasKey('holder', $array);
     }
 
-    public function testFromJSON()
+    public function testFromJSON(): void
     {
         /** @var ModelMock $model */
         $model = ModelMock::fromJSON((object) [
@@ -58,7 +55,7 @@ class ModelTest extends BaseTestCase
     /**
      * Test that event null values are parsed
      */
-    public function testFromJSONParseNull()
+    public function testFromJSONParseNull(): void
     {
         /** @var ModelMock $model */
         $model = ModelMock::fromJSON((object) [

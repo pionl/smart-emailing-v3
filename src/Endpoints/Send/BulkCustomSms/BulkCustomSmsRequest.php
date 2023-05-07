@@ -7,6 +7,7 @@ namespace SmartEmailing\v3\Endpoints\Send\BulkCustomSms;
 use SmartEmailing\v3\Endpoints\Send\AbstractSendRequest;
 use SmartEmailing\v3\Endpoints\StatusResponse;
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
+use SmartEmailing\v3\Models\Task;
 
 /**
  * @link https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_bulk_custom_SMS
@@ -17,14 +18,11 @@ class BulkCustomSmsRequest extends AbstractSendRequest
      * The maximum tasks per single request Single request is restricted to contain 500 SMS at most. Multiple
      * simultaneous calls is allowed.
      *
-     * @var int
+     * @var int<1, 500>
      */
-    protected $chunkLimit = 500;
+    protected int $chunkLimit = 500;
 
-    /**
-     * @var int|null
-     */
-    protected $smsId;
+    protected ?int $smsId = null;
 
     /**
      * Will send multiple requests because of the 500 count limit
@@ -36,7 +34,11 @@ class BulkCustomSmsRequest extends AbstractSendRequest
             return parent::send();
         }
 
-        return $this->sendInChunkMode();
+        $response = $this->sendInChunkMode();
+        if ($response instanceof StatusResponse === false) {
+            throw new \Exception('Response is null');
+        }
+        return $response;
     }
 
     public function getSmsId(): ?int
@@ -44,13 +46,15 @@ class BulkCustomSmsRequest extends AbstractSendRequest
         return $this->smsId;
     }
 
-    public function setSmsId(int $smsId)
+    public function setSmsId(int $smsId): void
     {
         $this->smsId = $smsId;
     }
 
     /**
      * Converts data to array
+     *
+     * @return array{tag: string|null, sms_id: int|null, tasks: Task[]}
      */
     public function toArray(): array
     {
@@ -72,14 +76,13 @@ class BulkCustomSmsRequest extends AbstractSendRequest
     /**
      * Sends tasks in chunk mode
      */
-    protected function sendInChunkMode(): StatusResponse
+    protected function sendInChunkMode(): ?StatusResponse
     {
         $originalFullTaskList = $this->getTasks();
         $lastResponse = null;
 
         foreach (array_chunk($this->getTasks(), $this->chunkLimit) as $tasks) {
             $this->tasks = $tasks;
-
             $lastResponse = parent::send();
         }
 

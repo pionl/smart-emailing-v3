@@ -6,6 +6,7 @@ namespace SmartEmailing\v3\Tests\Endpoints\Credentials;
 
 use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Endpoints\Credentials\CredentialsResponse;
+use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Exceptions\RequestException;
 use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
@@ -14,12 +15,10 @@ class CredentialsLiveTest extends BaseTestCase
     /**
      * Mocks the request and checks if request is returned via send method
      */
-    public function testSend()
+    public function testSend(): void
     {
-        if (! $this->canDoLiveTest) {
-            // Always proof test - ignores the no test phpunit warning
-            $this->assertTrue(true);
-            return;
+        if ($this->canDoLiveTest === false) {
+            $this->markTestSkipped();
         }
 
         $response = $this->createApi()
@@ -34,7 +33,7 @@ class CredentialsLiveTest extends BaseTestCase
     /**
      * Mocks the request and checks if request is returned via send method
      */
-    public function testSend401()
+    public function testSend401(): void
     {
         try {
             (new Api('test', 'password'))->credentials();
@@ -47,7 +46,8 @@ class CredentialsLiveTest extends BaseTestCase
             $this->assertInstanceOf(CredentialsResponse::class, $response);
             $this->assertEquals(CredentialsResponse::ERROR, $response->status());
             $this->assertEquals('Authentication Failed', $response->message());
-            $this->assertNull($response->accountId(), 'Default value of accountId should be null');
+            $this->expectException(PropertyRequiredException::class);
+            $response->accountId();
         }
     }
 }

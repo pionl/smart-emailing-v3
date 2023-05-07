@@ -13,16 +13,16 @@ parameters:
         - src
         - tests
 
-    level: 5
+    level: 8
 
     checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
 
     ignoreErrors:
       -
-         message: '#^Unreachable statement - code above always terminates\.#'
-         path: '*/tests/*'
-      -
-         message: '#.* deprecated .*#'
+         messages:
+           - '#^Unreachable statement - code above always terminates\.#'
+           - '#.* deprecated .*#'
          path: '*/tests/*'
       -
          message: '#^Class SmartEmailing\\v3\\Endpoints\\Eshops\\.* extends deprecated class SmartEmailing\\v3\\Endpoints\\Eshops\\AbstractEshopOrdersRequest.*#'

@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Models;
 
+use SmartEmailing\v3\Exceptions\InvalidFormatException;
+
 abstract class Model implements \JsonSerializable
 {
     /**
      * Copies the data from the JSON
-     *
-     * @param \stdClass $json
-     *
-     * @return static
      */
-    public static function fromJSON($json)
+    public static function fromJSON(\stdClass $json): static
     {
         $item = new static(); /** @phpstan-ignore-line */
 
@@ -30,10 +28,8 @@ abstract class Model implements \JsonSerializable
 
     /**
      * Returns the full representation of the model data (even empty values)
-     *
-     * @return array
      */
-    abstract public function toArray();
+    abstract public function toArray(): array;
 
     public function jsonSerialize(): array
     {
@@ -45,7 +41,7 @@ abstract class Model implements \JsonSerializable
      */
     protected function removeEmptyValues(array $data): array
     {
-        return array_filter($data, static function ($val) {
+        return array_filter($data, static function ($val): bool {
             // Don`t show empty array
             if (is_array($val)) {
                 return $val !== [];
@@ -56,4 +52,19 @@ abstract class Model implements \JsonSerializable
             return $val !== null;
         });
     }
+
+  protected function convertDate(?string $date, bool $convert): ?string
+  {
+      if ($convert === false || $date === null) {
+          return $date;
+      }
+
+      $time = strtotime($date);
+
+      if ($time === false) {
+          throw new InvalidFormatException(sprintf('Invalid date format: %s', $date));
+      }
+
+      return date('Y-m-d H:i:s', $time);
+  }
 }

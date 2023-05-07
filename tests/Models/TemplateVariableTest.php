@@ -16,7 +16,7 @@ class TemplateVariableTest extends TestCase
         $this->model = new TemplateVariable();
     }
 
-    public function testShouldReturnSameDataFromSerializer()
+    public function testShouldReturnSameDataFromSerializer(): void
     {
         $this->model->setCustomData([
             'foo' => 'bar',
@@ -25,7 +25,7 @@ class TemplateVariableTest extends TestCase
         self::assertSame($this->model->toArray(), $this->model->jsonSerialize());
     }
 
-    public function testShouldSetSettersAndReadGetters()
+    public function testShouldSetSettersAndReadGetters(): void
     {
         $this->model->setCustomData([
             'foo' => 'bar',

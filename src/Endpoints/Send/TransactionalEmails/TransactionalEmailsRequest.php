@@ -6,6 +6,8 @@ namespace SmartEmailing\v3\Endpoints\Send\TransactionalEmails;
 
 use SmartEmailing\v3\Endpoints\Send\AbstractSendRequest;
 use SmartEmailing\v3\Models\MessageContents;
+use SmartEmailing\v3\Models\SenderCredentials;
+use SmartEmailing\v3\Models\Task;
 
 /**
  * @link https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_campaigns-Send_transactional_emails
@@ -24,6 +26,9 @@ class TransactionalEmailsRequest extends AbstractSendRequest
         $this->messageContents = $messageContents;
     }
 
+    /**
+     * @return array{sender_credentials: (SenderCredentials | null), tag: (string | null), email_id: (int | null), message_contents: (MessageContents | null), tasks: Task[]}
+     */
     public function toArray(): array
     {
         return [

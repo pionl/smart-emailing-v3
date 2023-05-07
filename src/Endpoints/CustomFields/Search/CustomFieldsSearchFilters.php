@@ -11,63 +11,42 @@ class CustomFieldsSearchFilters
 {
     /**
      * Filters the results by the name
-     *
-     * @var string|null
      */
-    public $name = null;
+    public ?string $name = null;
 
     /**
      * Filters the results by the id
-     *
-     * @var int|null
      */
-    public $id = null;
+    public ?int $id = null;
 
     /**
      * Filters the results by the type
-     *
-     * @var string|null
      */
-    public $type = null;
+    public ?string $type = null;
 
-    /**
-     * @var CustomFieldsSearchRequest
-     */
-    protected $request;
+    protected CustomFieldsSearchRequest $request;
 
     public function __construct(CustomFieldsSearchRequest $request)
     {
         $this->request = $request;
     }
 
-    /**
-     * @param null|string $byName
-     *
-     * @return CustomFieldsSearchFilters
-     */
-    public function byName($byName)
+    public function byName(?string $byName): self
     {
         $this->name = $byName;
         return $this;
     }
 
     /**
-     * @param null|int $byId
-     *
-     * @return CustomFieldsSearchFilters
+     * @param int|numeric-string $byId
      */
-    public function byId($byId)
+    public function byId($byId): self
     {
-        $this->id = $byId;
+        $this->id = (int) $byId;
         return $this;
     }
 
-    /**
-     * @param null|string $byType
-     *
-     * @return CustomFieldsSearchFilters
-     */
-    public function byType($byType)
+    public function byType(?string $byType): self
     {
         InvalidFormatException::checkInArray($byType, CustomFieldDefinition::types());
         $this->type = $byType;

@@ -12,10 +12,7 @@ use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class RequestTestCase extends ApiStubTestCase
 {
-    /**
-     * @var CustomFieldsCreateRequest
-     */
-    protected $request;
+    protected CustomFieldsCreateRequest $request;
 
     protected function setUp(): void
     {
@@ -33,7 +30,7 @@ class RequestTestCase extends ApiStubTestCase
         }');
     }
 
-    public function testEndpointAndResponse()
+    public function testEndpointAndResponse(): void
     {
         $this->request->setCustomField(new CustomFieldDefinition('Fruit', CustomFieldDefinition::TEXT));
 
@@ -68,7 +65,7 @@ class RequestTestCase extends ApiStubTestCase
         $this->assertEquals('Fruit', $customField->name);
     }
 
-    public function testConstructCustomField()
+    public function testConstructCustomField(): void
     {
         $request = new CustomFieldsCreateRequest($this->apiStub, new CustomFieldDefinition('test'));
         $this->assertNotNull($request->customField());

@@ -14,36 +14,42 @@ class Attachment extends Model
 
     private ?string $dataBase64 = null;
 
-    public function getFileName(): ?String
+    public function getFileName(): ?string
     {
         return $this->fileName;
     }
 
-    public function setFileName(String $fileName): void
+    public function setFileName(String $fileName): self
     {
         $this->fileName = $fileName;
+        return $this;
     }
 
-    public function getContentType(): ?String
+    public function getContentType(): ?string
     {
         return $this->contentType;
     }
 
-    public function setContentType(String $contentType): void
+    public function setContentType(String $contentType): self
     {
         $this->contentType = $contentType;
+        return $this;
     }
 
-    public function getDataBase64(): ?String
+    public function getDataBase64(): ?string
     {
         return $this->dataBase64;
     }
 
-    public function setDataBase64(String $dataBase64): void
+    public function setDataBase64(String $dataBase64): self
     {
         $this->dataBase64 = $dataBase64;
+        return $this;
     }
 
+    /**
+     * @return array{file_name: string|null, content_type: string|null, data_base64: string|null}
+     */
     public function toArray(): array
     {
         PropertyRequiredException::throwIf(

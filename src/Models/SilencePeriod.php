@@ -9,44 +9,28 @@ namespace SmartEmailing\v3\Models;
  */
 class SilencePeriod extends Model
 {
-    //region Properties
     /**
      * Period unit
-     *
-     * Default value: days
      */
     private string $unit = 'days';
 
     /**
      * Period value, must be integer
-     *
-     * Default value: 1
      */
     private int $value = 1;
 
-    //endregion
-
-    //region Setters
-    /**
-     * SilencePeriod constructor.
-     *
-     * @param string        $unit
-     * @param int           $value
-     */
-    public function __construct($unit, $value)
+    public function __construct(string $unit, int $value)
     {
         $this->unit = $unit;
         $this->value = $value;
     }
 
-    //endregion
-
     /**
      * Converts the settings to array
      *
-     * @return array
+     * @return array{unit: string, value: int}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'unit' => $this->unit,

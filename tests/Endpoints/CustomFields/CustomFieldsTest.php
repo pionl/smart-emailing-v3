@@ -15,10 +15,7 @@ use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class CustomFieldsTest extends ApiStubTestCase
 {
-    /**
-     * @var CustomFieldsEndpoint
-     */
-    protected $fields;
+    protected CustomFieldsEndpoint $fields;
 
     protected function setUp(): void
     {
@@ -26,7 +23,7 @@ class CustomFieldsTest extends ApiStubTestCase
         $this->fields = new CustomFieldsEndpoint($this->apiStub);
     }
 
-    public function testCreateRequest()
+    public function testCreateRequest(): void
     {
         $request = $this->fields->createRequest();
 
@@ -34,7 +31,7 @@ class CustomFieldsTest extends ApiStubTestCase
         $this->assertNull($request->customField());
     }
 
-    public function testCreateRequestCustomField()
+    public function testCreateRequestCustomField(): void
     {
         $request = $this->fields->createRequest(new CustomFieldDefinition('test'));
 
@@ -42,7 +39,7 @@ class CustomFieldsTest extends ApiStubTestCase
         $this->assertNotNull($request->customField());
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $this->defaultReturnResponse = Utils::streamFor('{
             "status": "ok",
@@ -61,7 +58,7 @@ class CustomFieldsTest extends ApiStubTestCase
         $this->assertInstanceOf(CustomFieldDefinition::class, $response);
     }
 
-    public function testSearchRequest()
+    public function testSearchRequest(): void
     {
         $request = $this->fields->searchRequest(1, 10);
 
@@ -70,7 +67,7 @@ class CustomFieldsTest extends ApiStubTestCase
         $this->assertEquals(10, $request->limit);
     }
 
-    public function testSearchFailOnData()
+    public function testSearchFailOnData(): void
     {
         // The exact endpoint test are in specific tests for the request
         // Checks if request is called in the send method
@@ -85,7 +82,7 @@ class CustomFieldsTest extends ApiStubTestCase
         }
     }
 
-    public function testGetByName()
+    public function testGetByName(): void
     {
         // The exact endpoint test are in specific tests for the request
         // Checks if request is called in the send method

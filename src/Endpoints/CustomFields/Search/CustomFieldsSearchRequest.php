@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Endpoints\CustomFields\Search;
 
+use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Endpoints\AbstractRequest;
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
@@ -13,62 +14,43 @@ use SmartEmailing\v3\Exceptions\InvalidFormatException;
  */
 class CustomFieldsSearchRequest extends AbstractRequest
 {
-    //region Properties
-    /**
-     * @var int
-     */
-    public $page;
+    public int $page;
 
-    /**
-     * @var int
-     */
-    public $limit;
+    public int $limit;
 
     /**
      * Comma separated list of properties to select. eg. "?select=id,name" If not provided, all fields are selected.
      *
      * Allowed values: "id", "name", "type"
-     *
-     * @var string|null
      */
-    public $select = null;
+    public ?string $select = null;
 
     /**
      * Using this parameter, "customfield_options_url" property will be replaced by "customfield_options" contianing
      * expanded data. See examples below For more information see "/customfield-options" endpoint.
      *
      * Allowed values: "customfield_options"
-     *
-     * @var string
      */
-    public $expand = null;
+    public ?string $expand = null;
 
     /**
      * Comma separated list of sorting keys from left side. Prepend "-" to any key for desc direction, eg.
      * "?sort=type,-name"
      *
      * Allowed values: "id", "name", "type"
-     *
-     * @var string|null
      */
-    public $sort = null;
+    public ?string $sort = null;
 
     /**
      * Filters holder object
-     *
-     * @var CustomFieldsSearchFilters
      */
-    protected $filters;
-
-    //endregion
+    protected CustomFieldsSearchFilters $filters;
 
     /**
-     * SearchRequest constructor.
-     *
      * @param int|null $page  desired page
      * @param int|null $limit Number of records on page. Maximum (default) allowed value is 500
      */
-    public function __construct(Api $api, $page = null, $limit = null)
+    public function __construct(Api $api, ?int $page = null, ?int $limit = null)
     {
         parent::__construct($api);
 
@@ -79,26 +61,19 @@ class CustomFieldsSearchRequest extends AbstractRequest
 
     /**
      * Current filters
-     *
-     * @return CustomFieldsSearchFilters
      */
-    public function filter()
+    public function filter(): CustomFieldsSearchFilters
     {
         return $this->filters;
     }
 
-    //region Setters
     /**
      * Using this parameter, "customfield_options_url" property will be replaced by "customfield_options" contianing
      * expanded data. See examples below For more information see "/customfield-options" endpoint.
      *
      * Allowed values: "customfield_options"
-     *
-     * @param string $expand
-     *
-     * @return CustomFieldsSearchRequest
      */
-    public function expandBy($expand)
+    public function expandBy(string $expand): self
     {
         InvalidFormatException::checkInArray($expand, ['customfield_options']);
         $this->expand = $expand;
@@ -109,12 +84,8 @@ class CustomFieldsSearchRequest extends AbstractRequest
      * Comma separated list of properties to select. eg. "?select=id,name" If not provided, all fields are selected.
      *
      * Allowed values: "id", "name", "type"
-     *
-     * @param null|string $select
-     *
-     * @return CustomFieldsSearchRequest
      */
-    public function select($select)
+    public function select(?string $select): self
     {
         $this->select = $select;
         return $this;
@@ -125,58 +96,37 @@ class CustomFieldsSearchRequest extends AbstractRequest
      * "?sort=type,-name"
      *
      * Allowed values: "id", "name", "type"
-     *
-     * @param null|string $sort
-     *
-     * @return CustomFieldsSearchRequest
      */
-    public function sortBy($sort)
+    public function sortBy(?string $sort): self
     {
         $this->sort = $sort;
         return $this;
     }
 
-    /**
-     * @param int $page
-     *
-     * @return CustomFieldsSearchRequest
-     */
-    public function setPage($page)
+    public function setPage(int $page): self
     {
         $this->page = $page;
         return $this;
     }
 
-    /**
-     * @param int $limit
-     *
-     * @return CustomFieldsSearchRequest
-     */
-    public function limit($limit)
+    public function limit(int $limit): self
     {
         $this->limit = $limit;
         return $this;
     }
 
-
-    //endregion
-
     /**
      * Converts the limit and page into sql offset
-     *
-     * @return int
      */
-    public function offset()
+    public function offset(): int
     {
         return ($this->page - 1) * $this->limit;
     }
 
     /**
      * Builds a GET query
-     *
-     * @return array
      */
-    public function query()
+    public function query(): array
     {
         $query = [
             'limit' => $this->limit,
@@ -204,6 +154,9 @@ class CustomFieldsSearchRequest extends AbstractRequest
         return 'customfields';
     }
 
+    /**
+     * @return array{query: mixed[]}
+     */
     protected function options(): array
     {
         return [
@@ -211,7 +164,7 @@ class CustomFieldsSearchRequest extends AbstractRequest
         ];
     }
 
-    protected function createResponse($response): CustomFieldsSearchResponse
+    protected function createResponse(?ResponseInterface $response): CustomFieldsSearchResponse
     {
         return new CustomFieldsSearchResponse($response);
     }
@@ -219,12 +172,11 @@ class CustomFieldsSearchRequest extends AbstractRequest
     /**
      * Sets the value into array if not valid
      *
-     * @param string $key
      * @param mixed $value
      *
      * @return $this
      */
-    protected function setIfNotNull(array &$array, $key, $value)
+    protected function setIfNotNull(array &$array, string $key, $value)
     {
         if ($value === null) {
             return $this;

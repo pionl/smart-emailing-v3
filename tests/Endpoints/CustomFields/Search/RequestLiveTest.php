@@ -12,10 +12,7 @@ use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class RequestLiveTestCase extends BaseTestCase
 {
-    /**
-     * @var CustomFieldsSearchRequest
-     */
-    protected $request;
+    protected CustomFieldsSearchRequest $request;
 
     protected function setUp(): void
     {
@@ -25,12 +22,12 @@ class RequestLiveTestCase extends BaseTestCase
             ->searchRequest();
     }
 
-    public function testInstance()
+    public function testInstance(): void
     {
         $this->assertInstanceOf(CustomFieldsSearchRequest::class, $this->request);
     }
 
-    public function testSend()
+    public function testSend(): void
     {
         $this->assertEquals(1, $this->request->page);
         //$this->request->filter()->byName('Source');

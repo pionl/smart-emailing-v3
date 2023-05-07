@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SmartEmailing\v3\Models;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
-use function SmartEmailing\v3\Helpers\convertDate;
 use SmartEmailing\v3\Models\Holder\Attributes;
 use SmartEmailing\v3\Models\Holder\FeedItems;
 use SmartEmailing\v3\Models\Holder\OrderItems;
@@ -22,64 +21,46 @@ class Order extends Model
     public const STATUS_CANCELED = 'canceled';
     public const STATUS_UNKNOWN = 'unknown';
 
-    //region Properties
     /**
      * E-mail address of imported order. This is the only required field.
      *
      * @var string|null required
      */
-    public $emailAddress = null;
+    public ?string $emailAddress = null;
 
     /**
      * @var  string|null required
      */
-    public $eshopName = null;
+    public ?string $eshopName = null;
 
     /**
      * @var string|null required
      */
-    public $eshopCode = null;
+    public ?string $eshopCode = null;
 
     /**
      * Format YYYY-MM-DD HH:MM:SS
-     *
-     * @var string|null
      */
-    protected $createdAt = null;
+    protected ?string $createdAt = null;
 
     /**
      * Format YYYY-MM-DD HH:MM:SS
-     *
-     * @var null|string
      */
-    protected $paidAt = null;
+    protected ?string $paidAt = null;
 
     /**
      * Status of order (defaults to placed when not specified). Available values are placed, processing, shipped,
      * cancelled, unknown.
-     *
-     * @var string
      */
-    protected $status = self::STATUS_PLACED;
+    protected string $status = self::STATUS_PLACED;
 
-    /**
-     * @var Attributes
-     */
-    protected $attributes;
+    protected Attributes $attributes;
 
-    /**
-     * @var OrderItems
-     */
-    protected $orderItems;
+    protected OrderItems $orderItems;
 
-    /**
-     * @var FeedItems
-     */
-    protected $feedItems;
+    protected FeedItems $feedItems;
 
-    //endregion
-
-    public function __construct($eshopName, $eshopCode, $emailAddress)
+    public function __construct(?string $eshopName, ?string $eshopCode, ?string $emailAddress)
     {
         $this->eshopName = $eshopName;
         $this->eshopCode = $eshopCode;
@@ -89,52 +70,39 @@ class Order extends Model
         $this->feedItems = new FeedItems();
     }
 
-    //region Setters
-
-    /**
-     * @param null|string $emailAddress
-     */
-    public function setEmailAddress($emailAddress): self
+    public function setEmailAddress(?string $emailAddress): self
     {
         $this->emailAddress = $emailAddress;
         return $this;
     }
 
-    /**
-     * @param mixed $eshopName
-     */
-    public function setEshopName($eshopName): self
+    public function setEshopName(?string $eshopName): self
     {
         $this->eshopName = $eshopName;
         return $this;
     }
 
-    /**
-     * @param mixed $eshopCode
-     */
-    public function setEshopCode($eshopCode): self
+    public function setEshopCode(?string $eshopCode): self
     {
         $this->eshopCode = $eshopCode;
         return $this;
     }
 
     /**
-     * @param string $createdAt
      * @param bool $convertToValidFormat converts the value to valid format
      */
-    public function setCreatedAt($createdAt, $convertToValidFormat = true): self
+    public function setCreatedAt(?string $createdAt, bool $convertToValidFormat = true): self
     {
-        $this->createdAt = convertDate($createdAt, $convertToValidFormat);
+        $this->createdAt = $this->convertDate($createdAt, $convertToValidFormat);
         return $this;
     }
 
     /**
-     * @param string $paidAt
      * @param bool $convertToValidFormat converts the value to valid format
      */
-    public function setPaidAt($paidAt, $convertToValidFormat = true): self
+    public function setPaidAt(?string $paidAt, bool $convertToValidFormat = true): self
     {
-        $this->paidAt = convertDate($paidAt, $convertToValidFormat);
+        $this->paidAt = $this->convertDate($paidAt, $convertToValidFormat);
         return $this;
     }
 
@@ -166,10 +134,8 @@ class Order extends Model
         return $this->feedItems;
     }
 
-    //endregion
-
     /**
-     * Converts data to array
+     * @return array{emailaddress: string|null, eshop_name: string|null, eshop_code: string|null, status: string, paid_at: string|null, created_at: string|null, attributes: Attributes, items: OrderItems, item_feeds: FeedItems}
      */
     public function toArray(): array
     {

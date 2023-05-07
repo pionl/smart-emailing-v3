@@ -9,55 +9,38 @@ namespace SmartEmailing\v3\Models;
  */
 class Campaign extends Model
 {
-    //region Properties
     /**
      * ID of E-mail containing {{confirmlink}}.
-     *
-     * @var int
      */
-    private $emailId = null;
+    private int $emailId;
 
     private ?SenderCredentials $senderCredentials = null;
 
     /**
      * URL of thank-you page where contact will be redirected after clicking at confirmation link. If not provided,
      * contact will be redirected to default page
-     *
-     * Default value: null
-     *
-     * @var string|null
      */
-    private $confirmationThankYouPageUrl = null;
+    private ?string $confirmationThankYouPageUrl = null;
 
     /**
      * Date and time in YYYY-MM-DD HH:MM:SS format, when double opt-in e-mail will be expired.
-     *
-     * @var string
      */
-    private $validTo = null;
+    private ?string $validTo = null;
 
     /**
      * @var Replace[]
      */
     private array $replace = [];
 
-    //endregion
-
-    //region Setters
     /**
-     * Campaign constructor.
-     *
-     * @param int               $emailId
-     * @param string|null       $confirmationThankYouPageUrl
-     * @param string|null       $validTo
      * @param Replace[]         $replace
      */
     public function __construct(
-        $emailId,
+        int $emailId,
         SenderCredentials $senderCredentials,
-        $confirmationThankYouPageUrl = null,
-        $validTo = null,
-        $replace = []
+        ?string $confirmationThankYouPageUrl = null,
+        ?string $validTo = null,
+        array $replace = []
     ) {
         $this->emailId = $emailId;
         $this->senderCredentials = $senderCredentials;
@@ -69,12 +52,8 @@ class Campaign extends Model
     /**
      * URL of thank-you page where contact will be redirected after clicking at confirmation link. If not provided,
      * contact will be redirected to default page
-     *
-     * @param string $confirmationThankYouPageUrl
-     *
-     * @return Campaign
      */
-    public function setConfirmationThankYouPageUrl($confirmationThankYouPageUrl)
+    public function setConfirmationThankYouPageUrl(string $confirmationThankYouPageUrl): self
     {
         $this->confirmationThankYouPageUrl = $confirmationThankYouPageUrl;
         return $this;
@@ -82,12 +61,8 @@ class Campaign extends Model
 
     /**
      * Date and time in YYYY-MM-DD HH:MM:SS format, when double opt-in e-mail will be expired.
-     *
-     * @param string $validTo
-     *
-     * @return Campaign
      */
-    public function setValidTo($validTo)
+    public function setValidTo(string $validTo): self
     {
         $this->validTo = $validTo;
         return $this;
@@ -105,19 +80,18 @@ class Campaign extends Model
      * Dynamic content used to preprocess template before rendering it. This can be used to modify template structure
      * and may contain HTML, dynamic fields and template scripts.
      */
-    public function addReplace(Replace $replace): void
+    public function addReplace(Replace $replace): self
     {
         $this->replace[] = $replace;
+        return $this;
     }
-
-    //endregion
 
     /**
      * Converts the settings to array
      *
-     * @return array
+     * @return array{email_id: int, sender_credentials: SenderCredentials|null, confirmation_thank_you_page_url: string|null, valid_to: string|null, replace: Replace[]}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'email_id' => $this->emailId,

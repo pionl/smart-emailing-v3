@@ -11,19 +11,16 @@ use SmartEmailing\v3\Api;
 
 abstract class BaseTestCase extends TestCase
 {
-    protected $username;
+    protected string $username;
 
-    protected $apiKey;
+    protected string $apiKey;
 
-    protected $canDoLiveTest = false;
+    protected bool $canDoLiveTest = false;
 
     /**
      * Constructs a test case with the given name. Setups default api-key/username
-     *
-     * @param string $name
-     * @param string $dataName
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
 
@@ -44,12 +41,11 @@ abstract class BaseTestCase extends TestCase
     /**
      * Gets the value of an environment variable.
      *
-     * @param  string $key
      * @param  mixed  $default
      *
      * @return mixed
      */
-    public function env($key, $default = null)
+    public function env(string $key, $default = null)
     {
         $value = getenv($key);
 
@@ -77,12 +73,8 @@ abstract class BaseTestCase extends TestCase
 
     /**
      * Creates new API
-     *
-     * @param string|null $apiUrl
-     *
-     * @return Api
      */
-    protected function createApi($apiUrl = null)
+    protected function createApi(?string $apiUrl = null): Api
     {
         return new Api($this->username, $this->apiKey, $apiUrl);
     }

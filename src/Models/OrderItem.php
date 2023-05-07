@@ -15,52 +15,38 @@ class OrderItem extends Model
     /**
      * @var string|null required
      */
-    public $id;
+    public ?string $id = null;
 
     /**
      * @var string|null required
      */
-    public $name;
+    public ?string $name = null;
 
-    /**
-     * @var string|null
-     */
-    public $description;
+    public ?string $description = null;
 
     /**
      * @var Price required
      */
-    public $price;
+    public Price $price;
 
     /**
      * @var int required
      */
-    public $quantity = 0;
+    public int $quantity = 0;
 
     /**
      * @var string required
      */
-    public $url = '';
+    public string $url = '';
+
+    public ?string $image_url = null;
+
+    protected Attributes $attributes;
 
     /**
-     * @var string|null
-     */
-    public $image_url;
-
-    /**
-     * @var Attributes
-     */
-    protected $attributes;
-
-    /**
-     * OrderItem constructor.
-     *
      * @param int|string $id
-     * @param string $name
-     * @param int $quantity
-     * @param string $url
      */
-    public function __construct($id, $name, $quantity, Price $price, $url)
+    public function __construct($id, string $name, int $quantity, Price $price, string $url)
     {
         $this->setId($id);
         $this->setName($name);
@@ -121,7 +107,7 @@ class OrderItem extends Model
     }
 
     /**
-     * Converts data to array
+     * @return array{id: string|null, name: string|null, description: string|null, price: Price, quantity: int, url: string, image_url: string|null, attributes: Attributes}
      */
     public function toArray(): array
     {

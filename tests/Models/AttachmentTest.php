@@ -17,20 +17,20 @@ class AttachmentTest extends TestCase
         $this->model = new Attachment();
     }
 
-    public function testShouldThrowExceptionWhenMissingAllData()
+    public function testShouldThrowExceptionWhenMissingAllData(): void
     {
         $this->expectException(PropertyRequiredException::class);
         $this->model->toArray();
     }
 
-    public function testShouldThrowExceptionWhenMissingPartialData()
+    public function testShouldThrowExceptionWhenMissingPartialData(): void
     {
         $this->model->setFileName('car.png');
         $this->expectException(PropertyRequiredException::class);
         $this->model->toArray();
     }
 
-    public function testShouldReturnArrayWithData()
+    public function testShouldReturnArrayWithData(): void
     {
         $this->model->setFileName('car.png');
         $this->model->setContentType('image/png');
@@ -45,7 +45,7 @@ class AttachmentTest extends TestCase
         ], $data);
     }
 
-    public function testShouldReturnSameDataFromSerializer()
+    public function testShouldReturnSameDataFromSerializer(): void
     {
         $this->model->setFileName('car.png');
         $this->model->setContentType('image/png');
@@ -54,7 +54,7 @@ class AttachmentTest extends TestCase
         self::assertSame($this->model->toArray(), $this->model->jsonSerialize());
     }
 
-    public function testShouldSetSettersAndReadGetters()
+    public function testShouldSetSettersAndReadGetters(): void
     {
         $this->model->setFileName('car.png');
         self::assertSame('car.png', $this->model->getFileName());

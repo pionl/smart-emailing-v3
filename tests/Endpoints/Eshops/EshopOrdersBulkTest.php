@@ -26,12 +26,12 @@ class EshopOrdersBulkTest extends ApiStubTestCase
     /**
      * Tests if the endpoint/options is passed to request
      */
-    public function testEndpoint()
+    public function testEndpoint(): void
     {
         $this->createEndpointTest($this->orders, 'orders-bulk', 'POST', $this->arrayHasKey('json'));
     }
 
-    public function testAddOrder()
+    public function testAddOrder(): void
     {
         $this->assertCount(1, $this->orders->addOrder(
             new Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz')
@@ -44,13 +44,13 @@ class EshopOrdersBulkTest extends ApiStubTestCase
         )->orders());
     }
 
-    public function testNewOrder()
+    public function testNewOrder(): void
     {
         $this->orders->newOrder('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
         $this->assertCount(1, $this->orders->orders());
     }
 
-    public function testChunkMode()
+    public function testChunkMode(): void
     {
         // Build a contact list 2,5 larger then chunk limit
         for ($i = 1; $i <= 1250; ++$i) {
@@ -105,7 +105,7 @@ class EshopOrdersBulkTest extends ApiStubTestCase
         $this->orders->send();
     }
 
-    public function testChunkModeError()
+    public function testChunkModeError(): void
     {
         // Build a contact list 2,5 larger then chunk limit
         for ($i = 1; $i <= 1250; ++$i) {

@@ -11,42 +11,39 @@ use TypeError;
 
 class CustomFieldTest extends BaseTestCase
 {
-    /**
-     * @var CustomFieldValue
-     */
-    protected $field;
+    protected CustomFieldValue $field;
 
     protected function setUp(): void
     {
         $this->field = new CustomFieldValue(12);
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertEquals(12, $this->field->id);
     }
 
-    public function testConstructNumeric()
+    public function testConstructNumeric(): void
     {
         $this->assertEquals(13, (new CustomFieldValue('13'))->id);
     }
 
-    public function testSetIdNumeric()
+    public function testSetIdNumeric(): void
     {
         $this->assertEquals(13, $this->field->setId('13')->id);
     }
 
-    public function testSetValue()
+    public function testSetValue(): void
     {
         $this->assertEquals('test', $this->field->setValue('test')->value);
     }
 
-    public function testSetOptions()
+    public function testSetOptions(): void
     {
         $this->assertEquals([1, 2], $this->field->setOptions([1, 2])->options);
     }
 
-    public function testNonArray()
+    public function testNonArray(): void
     {
         try {
             $this->field->setOptions('test'); /** @phpstan-ignore-line */
@@ -56,7 +53,7 @@ class CustomFieldTest extends BaseTestCase
         }
     }
 
-    public function testAddOption()
+    public function testAddOption(): void
     {
         $this->field->addOption(1);
         $this->field->addOption(2);

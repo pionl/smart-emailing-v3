@@ -9,10 +9,7 @@ use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class RequestLiveTestCase extends BaseTestCase
 {
-    /**
-     * @var CustomfieldsGetRequest
-     */
-    protected $request;
+    protected CustomfieldsGetRequest $request;
 
     protected function setUp(): void
     {
@@ -20,12 +17,12 @@ class RequestLiveTestCase extends BaseTestCase
         $this->request = new CustomfieldsGetRequest($this->createApi(), 1);
     }
 
-    public function testInstance()
+    public function testInstance(): void
     {
         $this->assertInstanceOf(CustomfieldsGetRequest::class, $this->request);
     }
 
-    public function testSend()
+    public function testSend(): void
     {
         // Change this if you want to try live
         $fieldId = 1;

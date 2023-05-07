@@ -21,65 +21,62 @@ class Contactlist extends Model
         'segment_id',
     ];
 
-    /**
-     * @var int|null
-     */
-    public $id = null;
+    public ?int $id = null;
 
     /**
      * @var string|null Contactlist name.
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * @var string|null Contactlist public name that will be displayed in unsubscribe pages.
      */
-    public $publicName;
+    public ?string $publicName = null;
 
     /**
      * @var string|null Name of contactlist owner.
      */
-    public $senderName;
+    public ?string $senderName = null;
 
     /**
      * @var int|null Email address for list reply-to.
      */
-    public $replyTo;
+    public ?int $replyTo = null;
 
     /**
      * @var float|null Percentage of link-clicking contacts in list or null if there are is no data.
      */
-    public $clickRate;
+    public ?float $clickRate = null;
 
     /**
      * @var float|null Percentage of email-opening contacts in list or null if there are is no data.
      */
-    public $openRate;
+    public ?float $openRate = null;
 
     /**
      * @var int|null Total count of contacts in list.
      */
-    public $alertOut;
+    public ?int $alertOut = null;
 
     /**
      * @var int|null ID of supervising Segment. null if there is none.
      */
-    public $segmentId;
+    public ?int $segmentId = null;
 
     /**
      * @var string|null Sender signature. This can be used as customfield in your e-mails.
      */
-    public $signature;
+    public ?string $signature = null;
 
     /**
      * @var string|null Custom contactlist notes.
      */
-    public $notes;
+    public ?string $notes = null;
 
     /**
      * @var string|null Date and time of contactlist creation in YYYY-MM-DD HH:MM:SS format.
      */
-    public $created;
+    public ?string $created = null;
 
     /**
      * @param int|numeric-string|null $id
@@ -91,70 +88,82 @@ class Contactlist extends Model
 
     /**
      * @param int|numeric-string|null $id
-     *
-     * @return self
      */
-    public function setId($id)
+    public function setId($id): self
     {
-        $this->id = $id;
+        $this->id = $id !== null ? (int) $id : null;
         return $this;
     }
 
-public function setName(?string $name): void
-{
-    $this->name = $name;
-}
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
 
-    public function setPublicName(?string $publicName): void
+    public function setPublicName(?string $publicName): self
     {
         $this->publicName = $publicName;
+        return $this;
     }
 
-    public function setSenderName(?string $senderName): void
+    public function setSenderName(?string $senderName): self
     {
         $this->senderName = $senderName;
+        return $this;
     }
 
-    public function setReplyTo(?int $replyTo): void
+    public function setReplyTo(?int $replyTo): self
     {
         $this->replyTo = $replyTo;
+        return $this;
     }
 
-    public function setClickRate(?float $clickRate): void
+    public function setClickRate(?float $clickRate): self
     {
         $this->clickRate = $clickRate;
+        return $this;
     }
 
-    public function setOpenRate(?float $openRate): void
+    public function setOpenRate(?float $openRate): self
     {
         $this->openRate = $openRate;
+        return $this;
     }
 
-    public function setAlertOut(?int $alertOut): void
+    public function setAlertOut(?int $alertOut): self
     {
         $this->alertOut = $alertOut;
+        return $this;
     }
 
-    public function setSegmentId(?int $segmentId): void
+    public function setSegmentId(?int $segmentId): self
     {
         $this->segmentId = $segmentId;
+        return $this;
     }
 
-    public function setSignature(?string $signature): void
+    public function setSignature(?string $signature): self
     {
         $this->signature = $signature;
+        return $this;
     }
 
-    public function setNotes(?string $notes): void
+    public function setNotes(?string $notes): self
     {
         $this->notes = $notes;
+        return $this;
     }
 
-    public function setCreated(?string $created): void
+    public function setCreated(?string $created): self
     {
         $this->created = $created;
+        return $this;
     }
 
+    /**
+     * @return array{id: int|null}
+     */
     public function toArray(): array
     {
         return [

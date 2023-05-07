@@ -12,7 +12,7 @@ use SmartEmailing\v3\Models\Model;
  */
 abstract class AbstractItemResponse extends AbstractDataResponse
 {
-    protected function setupData()
+    protected function setupData(): self
     {
         parent::setupData();
 
@@ -24,5 +24,8 @@ abstract class AbstractItemResponse extends AbstractDataResponse
         return $this;
     }
 
-    abstract protected function createDataItem($data): Model;
+    /**
+     * @return TData
+     */
+    abstract protected function createDataItem(\stdClass $data): Model;
 }

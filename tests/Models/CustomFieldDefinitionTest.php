@@ -12,10 +12,7 @@ use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class CustomFieldDefinitionTest extends BaseTestCase
 {
-    /**
-     * @var CustomFieldDefinition
-     */
-    protected $field;
+    protected CustomFieldDefinition $field;
 
     protected function setUp(): void
     {
@@ -23,7 +20,7 @@ class CustomFieldDefinitionTest extends BaseTestCase
         $this->field = new CustomFieldDefinition();
     }
 
-    public function testEmptyConstruct()
+    public function testEmptyConstruct(): void
     {
         $this->assertNull($this->field->name);
         $this->assertNull($this->field->type);
@@ -32,7 +29,7 @@ class CustomFieldDefinitionTest extends BaseTestCase
         $this->assertEmpty($this->field->options);
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $field = new CustomFieldDefinition('Test', CustomFieldDefinition::CHECKBOX);
 
@@ -42,7 +39,7 @@ class CustomFieldDefinitionTest extends BaseTestCase
         $this->assertEmpty($field->options);
     }
 
-    public function testConstructInvalidType()
+    public function testConstructInvalidType(): void
     {
         try {
             new CustomFieldDefinition('Test', 'test');
@@ -56,7 +53,7 @@ class CustomFieldDefinitionTest extends BaseTestCase
         }
     }
 
-    public function testSetType()
+    public function testSetType(): void
     {
         // Test if set
         $this->assertEquals(
@@ -70,12 +67,12 @@ class CustomFieldDefinitionTest extends BaseTestCase
         $this->field->setType(CustomFieldDefinition::SELECT);
     }
 
-    public function testJsonSerializeFilterEmpty()
+    public function testJsonSerializeFilterEmpty(): void
     {
         $this->assertEmpty($this->field->jsonSerialize());
     }
 
-    public function testJsonSerializeFilter()
+    public function testJsonSerializeFilter(): void
     {
         $this->field->setName('test');
         $array = $this->field->jsonSerialize();
@@ -83,7 +80,7 @@ class CustomFieldDefinitionTest extends BaseTestCase
         $this->assertCount(1, $array);
     }
 
-    public function testJsonSerializeFilterArray()
+    public function testJsonSerializeFilterArray(): void
     {
         $this->field->setName('test')
             ->addOption(1);
@@ -93,7 +90,7 @@ class CustomFieldDefinitionTest extends BaseTestCase
         $this->assertCount(2, $array);
     }
 
-    public function testCreateValueFail()
+    public function testCreateValueFail(): void
     {
         // Test non saved custom field - without id
         try {
@@ -106,7 +103,7 @@ class CustomFieldDefinitionTest extends BaseTestCase
         }
     }
 
-    public function testCreateValue()
+    public function testCreateValue(): void
     {
         $importField = $this->field->setId(10)
             ->createValue('Test');
@@ -116,7 +113,7 @@ class CustomFieldDefinitionTest extends BaseTestCase
         $this->assertEquals('Test', $importField->value);
     }
 
-    public function testCreateValueEmpty()
+    public function testCreateValueEmpty(): void
     {
         $importField = $this->field->setId(11)
             ->createValue();

@@ -25,9 +25,10 @@ class Task extends Model
         return $this->recipient;
     }
 
-    public function setRecipient(Recipient $recipient): void
+    public function setRecipient(Recipient $recipient): self
     {
         $this->recipient = $recipient;
+        return $this;
     }
 
     /**
@@ -38,9 +39,10 @@ class Task extends Model
         return $this->replace;
     }
 
-    public function addReplace(Replace $replace): void
+    public function addReplace(Replace $replace): self
     {
         $this->replace[] = $replace;
+        return $this;
     }
 
     public function getTemplateVariables(): ?TemplateVariable
@@ -48,9 +50,10 @@ class Task extends Model
         return $this->templateVariables;
     }
 
-    public function setTemplateVariables(TemplateVariable $templateVariables): void
+    public function setTemplateVariables(TemplateVariable $templateVariables): self
     {
         $this->templateVariables = $templateVariables;
+        return $this;
     }
 
     /**
@@ -61,11 +64,15 @@ class Task extends Model
         return $this->attachments;
     }
 
-    public function addAttachment(Attachment $attachment): void
+    public function addAttachment(Attachment $attachment): self
     {
         $this->attachments[] = $attachment;
+        return $this;
     }
 
+    /**
+     * @return array{recipient: (Recipient | null), replace: Replace[], template_variables: (TemplateVariable | null), attachments: Attachment[]}
+     */
     public function toArray(): array
     {
         return [

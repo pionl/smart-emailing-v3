@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Endpoints;
 
+use SmartEmailing\v3\Exceptions\JsonDataMissingException;
 use SmartEmailing\v3\Models\Model;
 
 /**
@@ -19,10 +20,13 @@ class AbstractDataResponse extends AbstractResponse
     /**
      * Response data
      *
-     * @return TData|null
+     * @return TData
      */
     public function data()
     {
+        if ($this->data === null) {
+            throw new JsonDataMissingException('data');
+        }
         return $this->data;
     }
 }

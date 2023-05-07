@@ -4,36 +4,46 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Models;
 
+/**
+ * @template TEntry of Model
+ */
 abstract class AbstractHolder implements \JsonSerializable
 {
     /**
      * A list of items
      *
-     * @var array
+     * @var TEntry[]
      */
-    protected $items = [];
+    protected array $items = [];
 
     /**
-     * @return mixed
+     * @param int|string $index
+     * @return TEntry
      */
-    public function get($index)
+    public function get($index): Model
     {
+        if (isset($this->items[$index]) === false) {
+            throw new \InvalidArgumentException(sprintf('Index %s does not exist', $index));
+        }
         return $this->items[$index];
     }
 
-    /**
-     * @return bool
-     */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return $this->items === [];
     }
 
+    /**
+     * @return TEntry[]
+     */
     public function toArray(): array
     {
         return $this->items;
     }
 
+    /**
+     * @return TEntry[]
+     */
     public function jsonSerialize(): array
     {
         return $this->toArray();
