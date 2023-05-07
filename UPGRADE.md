@@ -6,6 +6,7 @@
 - Rename `SmartEmailing\v3\Request\CustomFields\CustomField` to `SmartEmailing\v3\Models\CustomFieldDefinition`
 - Rename `SmartEmailing\v3\Request\Import\CustomField` to `SmartEmailing\v3\Models\CustomFieldValue`
 - Rename `SmartEmailing\v3\Request\Import\Contactlist` to `SmartEmailing\v3\Models\ContactlistStatus`
+- Rename `SmartEmailing\v3\Request\Import\Settings` to `SmartEmailing\v3\Models\ImportContactsSettings`
 - Endpoints `/api/v3/orders` (`$api->eshopOrders()`) and `/api/v3/orders-bulk` (`$api->eshopOrdersBulk()`) are deprecated because SmartEmailing deprecated them in favour of `/api/v3/import-orders`
 
 - `CustomRequest` now returns `CustomResponse` with parsed data using `->data()`

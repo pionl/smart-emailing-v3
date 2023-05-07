@@ -11,14 +11,14 @@ class InvalidFormatException extends \LogicException
      *
      * @param mixed $value
      */
-    public static function checkInArray($value, array $allowed)
+    public static function checkInArray($value, array $allowed): void
     {
         if (in_array($value, $allowed, true) === false) {
             throw new self(sprintf("Value '%s' not allowed: ", $value) . implode(', ', $allowed));
         }
     }
 
-    public static function checkAllowedValues(array $values, array $allowed)
+    public static function checkAllowedValues(array $values, array $allowed): void
     {
         $invalidFields = array_diff($values, $allowed);
 

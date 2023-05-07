@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Mock;
 
+use SmartEmailing\v3\Models\Contact;
 use SmartEmailing\v3\Models\Model;
 
 class ModelMock extends Model
 {
-    public $boolean = true;
+    public bool $boolean = true;
 
-    public $null = null;
+    public ?bool $null = null;
 
-    public $array = [];
+    public ?array $array = [];
 
-    public function toArray()
+    /**
+     * @return array{null: mixed, boolean: mixed, string: string, empty: mixed, array: string[], holder: mixed, holder_empty: HolderMock}
+     */
+    public function toArray(): array
     {
         return [
             'null' => $this->null,
@@ -22,7 +26,7 @@ class ModelMock extends Model
             'string' => 'hello',
             'empty' => $this->array,
             'array' => ['hello'],
-            'holder' => (new HolderMock())->add('hello'),
+            'holder' => (new HolderMock())->add(new Contact('test@test.cz')),
             'holder_empty' => new HolderMock(),
         ];
     }

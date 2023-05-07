@@ -22,21 +22,15 @@ class CustomFieldDefinition extends Model
      */
     public const SELECT_FIELDS = ['id', 'name', 'type'];
 
-    public $id = null;
+    public ?int $id = null;
 
-    public $name = null;
+    public ?string $name = null;
 
-    public $type = null;
+    public ?string $type = null;
 
-    public $options = [];
+    public ?array $options = [];
 
-    /**
-     * CustomField constructor.
-     *
-     * @param string|null $name
-     * @param string|null $type
-     */
-    public function __construct($name = null, $type = null)
+    public function __construct(?string $name = null, ?string $type = null)
     {
         if ($name !== null) {
             $this->setName($name);
@@ -49,55 +43,39 @@ class CustomFieldDefinition extends Model
 
     /**
      * Returns a list of supported types
-     *
-     * @return array
      */
-    public static function types()
+    public static function types(): array
     {
         return [self::TEXT, self::TEXT_AREA, self::DATE, self::CHECKBOX, self::RADIO, self::SELECT];
     }
 
     /**
      * @param int|numeric-string|null $id
-     *
-     * @return CustomFieldDefinition
      */
-    public function setId($id)
+    public function setId($id): self
     {
-        $this->id = $id;
+        $this->id = $id !== null ? (int) $id : null;
         return $this;
     }
 
     /**
      * Adds an option id
      *
-     * @param int $id
-     *
      * @return $this
      */
-    public function addOption($id)
+    public function addOption(int $id)
     {
         $this->options[] = $id;
         return $this;
     }
 
-    /**
-     * @param mixed $name
-     *
-     * @return CustomFieldDefinition
-     */
-    public function setName($name)
+    public function setName(?string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return CustomFieldDefinition
-     */
-    public function setType($type)
+    public function setType(string $type): self
     {
         // Check if valid
         InvalidFormatException::checkInArray($type, static::types());
@@ -111,10 +89,8 @@ class CustomFieldDefinition extends Model
      * @param string|null $value String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields.
      * Value size is limited to
      * 64KB. Required for simple custom-fields
-     *
-     * @return ImportCustomField
      */
-    public function createValue($value = null)
+    public function createValue(?string $value = null): ImportCustomField
     {
         PropertyRequiredException::throwIf(
             'id',
@@ -127,9 +103,9 @@ class CustomFieldDefinition extends Model
     /**
      * Returns the array representation
      *
-     * @return array
+     * @return array{id: mixed, name: mixed, type: mixed, options: mixed}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,

@@ -16,29 +16,17 @@ use SmartEmailing\v3\Models\Task;
  */
 abstract class AbstractSendRequest extends AbstractRequest
 {
-    /**
-     * @var SenderCredentials
-     */
-    protected $senderCredentials;
+    protected ?SenderCredentials $senderCredentials = null;
 
-    /**
-     * @var int
-     */
-    protected $emailId;
+    protected ?int $emailId = null;
 
-    /**
-     * @var string
-     */
-    protected $tag;
+    protected ?string $tag = null;
 
     /**
      * @var Task[]
      */
-    protected $tasks = [];
+    protected array $tasks = [];
 
-    /**
-     * @return int
-     */
     public function getEmailId(): ?int
     {
         return $this->emailId;
@@ -49,10 +37,7 @@ abstract class AbstractSendRequest extends AbstractRequest
         $this->emailId = $emailId;
     }
 
-    /**
-     * @return string
-     */
-    public function getTag(): ?String
+    public function getTag(): ?string
     {
         return $this->tag;
     }
@@ -62,9 +47,6 @@ abstract class AbstractSendRequest extends AbstractRequest
         $this->tag = $tag;
     }
 
-    /**
-     * @return SenderCredentials
-     */
     public function getSenderCredentials(): ?SenderCredentials
     {
         return $this->senderCredentials;

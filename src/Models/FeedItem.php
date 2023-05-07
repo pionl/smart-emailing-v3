@@ -13,19 +13,19 @@ class FeedItem extends Model
     /**
      * @var string required
      */
-    public $id;
+    public string $id;
 
     /**
      * @var string required
      */
-    public $feedName;
+    public string $feedName;
 
     /**
      * @var int required
      */
-    public $quantity = 0;
+    public int $quantity = 0;
 
-    public function __construct($id, $feedName, $quantity)
+    public function __construct(string $id, string $feedName, int $quantity)
     {
         $this->id = $id;
         $this->feedName = $feedName;
@@ -51,7 +51,7 @@ class FeedItem extends Model
     }
 
     /**
-     * Converts data to array
+     * @return array{item_id: string, feed_name: string, quantity: int}
      */
     public function toArray(): array
     {

@@ -12,35 +12,24 @@ use SmartEmailing\v3\Exceptions\InvalidFormatException;
  */
 class Purpose extends Model
 {
-    /**
-     * @var int|null
-     */
-    public $id;
+    public ?int $id = null;
 
     /**
      * Date and time since processing purpose is valid in YYYY-MM-DD HH:MM:SS format. If empty, current date and time
      * will be used.
-     *
-     * @var string Default value: null
      */
-    public $valid_from = null;
+    public ?string $valid_from = null;
 
     /**
      * Date and time of processing purpose validity end in YYYY-MM-DD HH:MM:SS format. If empty, it will be calculated
      * as valid_from + default duration of particular purpose.
-     *
-     * @var string Default value: null
      */
-    public $valid_to = null;
+    public ?string $valid_to = null;
 
     /**
-     * Purpose constructor.
-     *
      * @param int|numeric-string  $id
-     * @param string|null         $valid_from Default value: null
-     * @param string|null         $valid_to Default value: null
      */
-    public function __construct($id, $valid_from = null, $valid_to = null)
+    public function __construct($id, ?string $valid_from = null, ?string $valid_to = null)
     {
         $this->setId($id);
 
@@ -55,9 +44,8 @@ class Purpose extends Model
 
     /**
      * @param int|numeric-string $id
-     * @return Purpose
      */
-    public function setId($id)
+    public function setId($id): self
     {
         $this->id = (int) $id;
         return $this;
@@ -65,12 +53,8 @@ class Purpose extends Model
 
     /**
      * Date and time since processing purpose is valid. Allowed format: YYYY-MM-DD HH:MM:SS.
-     *
-     * @param string $valid_from
-     *
-     * @return Purpose
      */
-    public function setValidFrom($valid_from)
+    public function setValidFrom(string $valid_from): self
     {
         if (preg_match('(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})', $valid_from) !== 1) {
             throw new InvalidFormatException(sprintf(
@@ -85,12 +69,8 @@ class Purpose extends Model
 
     /**
      * Date and time of processing purpose validity end. Allowed format: YYYY-MM-DD HH:MM:SS.
-     *
-     * @param string $valid_to
-     *
-     * @return Purpose
      */
-    public function setValidTo($valid_to)
+    public function setValidTo(string $valid_to): self
     {
         if (preg_match('(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})', $valid_to) !== 1) {
             throw new InvalidFormatException(sprintf(
@@ -104,11 +84,9 @@ class Purpose extends Model
     }
 
     /**
-     * Converts data to array
-     *
-     * @return array
+     * @return array{id: int|null, valid_from: string|null, valid_to: string|null}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,

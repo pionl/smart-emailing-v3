@@ -14,36 +14,42 @@ class SenderCredentials extends Model
 
     private ?string $senderName = null;
 
-    public function getFrom(): ?String
+    public function getFrom(): ?string
     {
         return $this->from;
     }
 
-    public function setFrom(String $from): void
+    public function setFrom(String $from): self
     {
         $this->from = $from;
+        return $this;
     }
 
-    public function getReplyTo(): ?String
+    public function getReplyTo(): ?string
     {
         return $this->replyTo;
     }
 
-    public function setReplyTo(String $replyTo): void
+    public function setReplyTo(String $replyTo): self
     {
         $this->replyTo = $replyTo;
+        return $this;
     }
 
-    public function getSenderName(): ?String
+    public function getSenderName(): ?string
     {
         return $this->senderName;
     }
 
-    public function setSenderName(String $senderName): void
+    public function setSenderName(String $senderName): self
     {
         $this->senderName = $senderName;
+        return $this;
     }
 
+    /**
+     * @return array{from: string|null, reply_to: string|null, sender_name: string|null}
+     */
     public function toArray(): array
     {
         PropertyRequiredException::throwIf(

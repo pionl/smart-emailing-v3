@@ -13,9 +13,10 @@ class TemplateVariable extends Model
         return $this->customData;
     }
 
-    public function setCustomData(array $customData): void
+    public function setCustomData(array $customData): self
     {
         $this->customData = $customData;
+        return $this;
     }
 
     public function toArray(): array

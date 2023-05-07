@@ -17,10 +17,7 @@ use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class BulkCustomSmsTest extends ApiStubTestCase
 {
-    /**
-     * @var BulkCustomSmsRequest
-     */
-    protected $bulkCustomSms;
+    protected BulkCustomSmsRequest $bulkCustomSms;
 
     protected function setUp(): void
     {
@@ -29,12 +26,12 @@ class BulkCustomSmsTest extends ApiStubTestCase
         $this->bulkCustomSms = new BulkCustomSmsRequest($this->apiStub);
     }
 
-    public function testShouldReturnSameDataFromSerializer()
+    public function testShouldReturnSameDataFromSerializer(): void
     {
         self::assertSame($this->bulkCustomSms->toArray(), $this->bulkCustomSms->jsonSerialize());
     }
 
-    public function testShouldSeeAllKeysInOutputArray()
+    public function testShouldSeeAllKeysInOutputArray(): void
     {
         $data = $this->bulkCustomSms->toArray();
         self::assertArrayHasKey('tag', $data);
@@ -43,7 +40,7 @@ class BulkCustomSmsTest extends ApiStubTestCase
         self::assertArrayHasKey('tasks', $data);
     }
 
-    public function testShouldSetSettersAndReadGetters()
+    public function testShouldSetSettersAndReadGetters(): void
     {
         $this->bulkCustomSms->setTag('tag');
         self::assertSame('tag', $this->bulkCustomSms->getTag());
@@ -58,7 +55,7 @@ class BulkCustomSmsTest extends ApiStubTestCase
         self::assertCount(1, $this->bulkCustomSms->getTasks());
     }
 
-    public function testCompleteValid()
+    public function testCompleteValid(): void
     {
         $recipient = new Recipient();
         $recipient->setEmailAddress('kirk@example.com');
@@ -84,7 +81,7 @@ class BulkCustomSmsTest extends ApiStubTestCase
         $this->assertIsArray($this->bulkCustomSms->jsonSerialize());
     }
 
-    public function testRecipientNotValid()
+    public function testRecipientNotValid(): void
     {
         $this->expectExceptionCode(500);
         $this->expectException(PropertyRequiredException::class);
@@ -102,7 +99,7 @@ class BulkCustomSmsTest extends ApiStubTestCase
         $this->bulkCustomSms->toArray();
     }
 
-    public function testChunkMode()
+    public function testChunkMode(): void
     {
         // Build a contact list 2,5 larger then chunk limit
         for ($i = 1; $i <= 1250; ++$i) {
@@ -170,7 +167,7 @@ class BulkCustomSmsTest extends ApiStubTestCase
         $this->bulkCustomSms->send();
     }
 
-    public function testChunkModeError()
+    public function testChunkModeError(): void
     {
         // Build a contact list 2,5 larger then chunk limit
         for ($i = 1; $i <= 1250; ++$i) {

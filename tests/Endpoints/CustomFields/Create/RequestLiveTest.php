@@ -11,10 +11,7 @@ use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class RequestLiveTestCase extends BaseTestCase
 {
-    /**
-     * @var CustomFieldsCreateRequest
-     */
-    protected $request;
+    protected CustomFieldsCreateRequest $request;
 
     protected function setUp(): void
     {
@@ -24,12 +21,12 @@ class RequestLiveTestCase extends BaseTestCase
             ->createRequest();
     }
 
-    public function testInstance()
+    public function testInstance(): void
     {
         $this->assertInstanceOf(CustomFieldsCreateRequest::class, $this->request);
     }
 
-    public function testSend()
+    public function testSend(): void
     {
         $this->request->setCustomField(new CustomFieldDefinition('test', CustomFieldDefinition::TEXT));
         $this->assertNotNull($this->request->customField());

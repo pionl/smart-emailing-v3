@@ -10,10 +10,7 @@ use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class PingTestCase extends ApiStubTestCase
 {
-    /**
-     * @var PingRequest
-     */
-    protected $ping;
+    protected PingRequest $ping;
 
     /**
      * Builds the ping instance on every test
@@ -27,7 +24,7 @@ class PingTestCase extends ApiStubTestCase
     /**
      * Tests if the endpoint/options is passed to request
      */
-    public function testEndpointAndOptions()
+    public function testEndpointAndOptions(): void
     {
         $this->createEndpointTest($this->ping, 'ping');
     }
@@ -35,7 +32,7 @@ class PingTestCase extends ApiStubTestCase
     /**
      * Mocks the request and checks if request is returned via send method
      */
-    public function testSend()
+    public function testSend(): void
     {
         $this->createSendResponse($this->ping, '{
                "status": "ok",

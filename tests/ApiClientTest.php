@@ -11,7 +11,7 @@ class ApiClientTest extends BaseTestCase
     /**
      * Tests the client creation
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertNotNull($this->createApi()->client(), 'The api client must be created');
     }

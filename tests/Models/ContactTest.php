@@ -13,17 +13,14 @@ use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class ContactTest extends BaseTestCase
 {
-    /**
-     * @var Contact
-     */
-    protected $contact;
+    protected Contact $contact;
 
     protected function setUp(): void
     {
         $this->contact = new Contact('email@gmail.com');
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $this->assertNotCount(1, $this->contact->toArray(), "toArray shouldn't have filtered values");
     }
@@ -31,7 +28,7 @@ class ContactTest extends BaseTestCase
     /**
      * Test that only email will be returned - array filter works
      */
-    public function testToJSONSingleItem()
+    public function testToJSONSingleItem(): void
     {
         $haystack = $this->contact->jsonSerialize();
         $this->assertCount(1, $haystack, 'The array should be filtered from null or empty array values');
@@ -40,20 +37,20 @@ class ContactTest extends BaseTestCase
     /**
      * Tests if the notes are set and toArray returns 2 items
      */
-    public function testToJSONMultiple()
+    public function testToJSONMultiple(): void
     {
         $this->contact->setNotes('test');
         $haystack = $this->contact->jsonSerialize();
         $this->assertCount(2, $haystack, 'There should be 2 values - email and note');
     }
 
-    public function testSetGender()
+    public function testSetGender(): void
     {
         $this->contact->setGender('M');
         $this->assertEquals('M', $this->contact->gender);
     }
 
-    public function testSetGenderNull()
+    public function testSetGenderNull(): void
     {
         $this->contact->setGender(null);
         $this->assertNull($this->contact->gender);
@@ -62,7 +59,7 @@ class ContactTest extends BaseTestCase
     /**
      * Test that gender will raise exception if invalid format is passed
      */
-    public function testSetGenderInvalid()
+    public function testSetGenderInvalid(): void
     {
         try {
             $this->contact->setGender('G');
@@ -76,7 +73,7 @@ class ContactTest extends BaseTestCase
         }
     }
 
-    public function testSetBlacklisted()
+    public function testSetBlacklisted(): void
     {
         $this->assertEquals(
             1,
@@ -93,7 +90,7 @@ class ContactTest extends BaseTestCase
         $this->assertEquals(1, $this->contact->setBlacklisted(1)->blacklisted);
     }
 
-    public function testSetNameDay()
+    public function testSetNameDay(): void
     {
         $this->assertEquals(
             '2010-12-13 00:00:00',
@@ -117,12 +114,12 @@ class ContactTest extends BaseTestCase
         $this->assertCount(2, $this->contact->jsonSerialize(), 'There should be 2 values - email and date');
     }
 
-    public function testJsonSerialize()
+    public function testJsonSerialize(): void
     {
         $this->assertCount(1, $this->contact->jsonSerialize(), 'There should be 1 value - email');
     }
 
-    public function testAddField()
+    public function testAddField(): void
     {
         $this->contact->customFields()
             ->add(new CustomFieldValue(1));
@@ -130,7 +127,7 @@ class ContactTest extends BaseTestCase
         $this->assertEquals(1, $this->contact->customFields()->get(0)->id);
     }
 
-    public function testAddFieldUnique()
+    public function testAddFieldUnique(): void
     {
         $this->contact->customFields()
             ->add(new CustomFieldValue(1));
@@ -142,7 +139,7 @@ class ContactTest extends BaseTestCase
         $this->assertEquals(1, $this->contact->customFields()->get(0)->id);
     }
 
-    public function testCreateField()
+    public function testCreateField(): void
     {
         $this->contact->customFields()
             ->create(1, 'test2', [1]);
@@ -156,7 +153,7 @@ class ContactTest extends BaseTestCase
         $this->assertEquals([1], $field->options);
     }
 
-    public function testAddList()
+    public function testAddList(): void
     {
         $this->contact->contactList()
             ->add(new ContactListStatus(1));
@@ -164,7 +161,7 @@ class ContactTest extends BaseTestCase
         $this->assertEquals(1, $this->contact->contactList()->get(0)->id);
     }
 
-    public function testCreateList()
+    public function testCreateList(): void
     {
         $this->contact->contactList()
             ->create(1, ContactListStatus::REMOVED);
@@ -177,7 +174,7 @@ class ContactTest extends BaseTestCase
         $this->assertEquals(ContactListStatus::REMOVED, $list->status);
     }
 
-    public function testCreateListUnique()
+    public function testCreateListUnique(): void
     {
         // This will be stored first
         $this->contact->contactList()
@@ -196,7 +193,7 @@ class ContactTest extends BaseTestCase
         $this->assertEquals(ContactListStatus::REMOVED, $list->status);
     }
 
-    public function testAddPurpose()
+    public function testAddPurpose(): void
     {
         // This will be stored first
         $this->contact->purposes()
@@ -220,7 +217,7 @@ class ContactTest extends BaseTestCase
         $this->assertEquals('1998-02-22 05:45:00', $list->valid_to);
     }
 
-    public function testJson()
+    public function testJson(): void
     {
         $this->contact->customFields()
             ->create(1, 'test2', [1]);

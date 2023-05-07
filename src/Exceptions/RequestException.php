@@ -13,38 +13,25 @@ class RequestException extends \RuntimeException
 
     private AbstractResponse $response;
 
-    /**
-     * RequestException constructor.
-     *
-     * @param string|null           $message
-     * @param int                   $code
-     * @param \Exception|null       $exception
-     */
     public function __construct(
         AbstractResponse $response,
         RequestInterface $request = null,
-        $message = null,
-        $code = 0,
-        $exception = null
+        ?string $message = null,
+        int $code = 0,
+        ?\Exception $exception = null
     ) {
         $this->response = $response;
         $this->request = $request;
 
-        parent::__construct($message, $code, $exception);
+        parent::__construct($message ?? 'RequestException', $code, $exception);
     }
 
-    /**
-     * @return AbstractResponse
-     */
-    public function response()
+    public function response(): AbstractResponse
     {
         return $this->response;
     }
 
-    /**
-     * @return null|RequestInterface
-     */
-    public function request()
+    public function request(): ?RequestInterface
     {
         return $this->request;
     }

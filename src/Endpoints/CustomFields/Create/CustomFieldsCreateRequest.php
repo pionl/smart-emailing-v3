@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Endpoints\CustomFields\Create;
 
+use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Endpoints\AbstractRequest;
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
@@ -14,10 +15,7 @@ use SmartEmailing\v3\Models\CustomFieldDefinition;
  */
 class CustomFieldsCreateRequest extends AbstractRequest
 {
-    /**
-     * @var CustomFieldDefinition
-     */
-    protected $customField;
+    protected ?CustomFieldDefinition $customField;
 
     public function __construct(Api $api, CustomFieldDefinition $customField = null)
     {
@@ -36,17 +34,14 @@ class CustomFieldsCreateRequest extends AbstractRequest
         return $this;
     }
 
-    /**
-     * @return CustomFieldDefinition|null
-     */
-    public function customField()
+    public function customField(): ?CustomFieldDefinition
     {
         return $this->customField;
     }
 
     public function toArray(): array
     {
-        return $this->customField->jsonSerialize();
+        return $this->customField !== null ? $this->customField->jsonSerialize() : [];
     }
 
     protected function endpoint(): string
@@ -65,7 +60,7 @@ class CustomFieldsCreateRequest extends AbstractRequest
         return 'POST';
     }
 
-    protected function createResponse($response)
+    protected function createResponse(?ResponseInterface $response): CustomFieldsCreateResponse
     {
         return new CustomFieldsCreateResponse($response);
     }

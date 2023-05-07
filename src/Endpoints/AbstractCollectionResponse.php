@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SmartEmailing\v3\Endpoints;
 
 use SmartEmailing\v3\Exceptions\JsonDataInvalidException;
+use SmartEmailing\v3\Exceptions\JsonDataMissingException;
 use SmartEmailing\v3\Models\MetaDataInterface;
 use SmartEmailing\v3\Models\Model;
 
@@ -15,7 +16,7 @@ use SmartEmailing\v3\Models\Model;
 abstract class AbstractCollectionResponse extends AbstractDataResponse
 {
     /**
-     * @var \stdClass&MetaDataInterface
+     * @var null|(\stdClass&MetaDataInterface)
      */
     protected ?\stdClass $meta = null;
 
@@ -26,32 +27,39 @@ abstract class AbstractCollectionResponse extends AbstractDataResponse
      */
     public function meta(): \stdClass
     {
+        if ($this->meta === null) {
+            throw new \RuntimeException('Meta is not set');
+        }
         return $this->meta;
     }
 
     public function totalCount(): int
     {
-        return $this->meta->total_count;
+        return $this->meta->total_count ?? 0;
     }
 
     public function displayedCount(): int
     {
-        return $this->meta->displayed_count;
+        return $this->meta->displayed_count ?? 0;
     }
 
     public function limit(): int
     {
-        return $this->meta->limit;
+        return $this->meta->limit ?? 0;
     }
 
     public function offset(): int
     {
-        return $this->meta->offset;
+        return $this->meta->offset ?? 0;
     }
 
-    protected function setupData()
+    protected function setupData(): self
     {
         parent::setupData();
+        if ($this->json instanceof \stdClass === false) {
+            throw new JsonDataMissingException();
+        }
+
         if ($this->json->meta instanceof \stdClass) {
             $this->set('meta');
         }
@@ -69,5 +77,8 @@ abstract class AbstractCollectionResponse extends AbstractDataResponse
         return $this;
     }
 
-    abstract protected function createDataItem($data): Model;
+    /**
+     * @return TData
+     */
+    abstract protected function createDataItem(\stdClass $data): Model;
 }

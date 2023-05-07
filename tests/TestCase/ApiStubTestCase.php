@@ -11,6 +11,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\Constraint\Callback;
+use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -24,10 +25,8 @@ abstract class ApiStubTestCase extends BaseTestCase
 {
     /**
      * Default response that will be rewritten on every setUp
-     *
-     * @var StreamInterface
      */
-    protected $defaultReturnResponse;
+    protected StreamInterface $defaultReturnResponse;
 
     /**
      * @var Api|MockObject
@@ -50,24 +49,17 @@ abstract class ApiStubTestCase extends BaseTestCase
     /**
      * Creates a response mock and runs the send method. Then checks for the response result.
      *
-     * @param AbstractRequest $request
-     * @param string          $responseText
-     * @param string|null     $responseMessage
-     * @param string          $responseStatus
-     * @param string          $responseClass
-     * @param int             $responseCode
-     *
-     * @return AbstractResponse
+     * @param class-string $responseClass
      */
     public function createSendResponse(
-        $request,
-        $responseText,
-        $responseMessage,
-        $responseStatus = AbstractResponse::SUCCESS,
+        AbstractRequest $request,
+        ?string $responseText,
+        ?string $responseMessage,
+        string $responseStatus = AbstractResponse::SUCCESS,
         array $meta = [],
-        $responseClass = AbstractResponse::class,
-        $responseCode = 200
-    ) {
+        string $responseClass = AbstractResponse::class,
+        int $responseCode = 200
+    ): AbstractResponse {
         $this->createMockHandlerToApi($responseText, $responseCode);
 
         // Run the request
@@ -80,24 +72,17 @@ abstract class ApiStubTestCase extends BaseTestCase
     /**
      * Creates a response mock and runs the send method. Then checks for the response result.
      *
-     * @param AbstractRequest $request
-     * @param string|null     $responseText
-     * @param string|null     $responseMessage
-     * @param string          $responseStatus
-     * @param string          $responseClass
-     * @param int             $responseCode
-     *
-     * @return RequestException
+     * @param class-string $responseClass
      */
     public function createSendErrorResponse(
-        $request,
-        $responseText,
-        $responseMessage,
-        $responseStatus = AbstractResponse::SUCCESS,
-        $meta = null,
-        $responseClass = AbstractResponse::class,
-        $responseCode = 200
-    ) {
+        AbstractRequest $request,
+        ?string $responseText,
+        ?string $responseMessage,
+        string $responseStatus = AbstractResponse::SUCCESS,
+        ?array $meta = null,
+        string $responseClass = AbstractResponse::class,
+        int $responseCode = 200
+    ): RequestException {
         $this->createMockHandlerToApi($responseText, $responseCode);
 
         try {
@@ -121,15 +106,16 @@ abstract class ApiStubTestCase extends BaseTestCase
     /**
      * Creates a tests for send request that will check if correct parameters are send to clients request method
      *
-     * @param AbstractRequest   $request
      * @param string|null|mixed $endpointName
      * @param string|null|mixed $httpMethod
      * @param string|null|mixed $options
-     *
-     * @return AbstractResponse
      */
-    protected function createEndpointTest($request, $endpointName, $httpMethod = 'GET', $options = [])
-    {
+    protected function createEndpointTest(
+        AbstractRequest $request,
+        $endpointName,
+        $httpMethod = 'GET',
+        $options = []
+    ): AbstractResponse {
         $this->stubClientResponse($endpointName, $httpMethod, $options);
         return $request->send();
     }
@@ -141,7 +127,7 @@ abstract class ApiStubTestCase extends BaseTestCase
      * @param string|null|mixed $httpMethod
      * @param array|callback|null        $options
      */
-    protected function stubClientResponse($endpointName, $httpMethod = 'GET', $options = [])
+    protected function stubClientResponse($endpointName, $httpMethod = 'GET', $options = []): void
     {
         // Build the client that will mock the client->request method
         $client = $this->createMock(Client::class);
@@ -172,13 +158,13 @@ abstract class ApiStubTestCase extends BaseTestCase
     /**
      * Builds the correct constraint value based on input value
      *
-     * @param string|null|mixed $desiredValue
+     * @param string|null|array|callback|Constraint $desiredValue
      */
-    protected function valueConstraint($desiredValue)
+    protected function valueConstraint($desiredValue): Constraint
     {
         if ($desiredValue === null) {
             return $this->anything();
-        } elseif (is_object($desiredValue)) {
+        } elseif ($desiredValue instanceof Constraint) {
             return $desiredValue;
         }
 
@@ -187,13 +173,8 @@ abstract class ApiStubTestCase extends BaseTestCase
 
     /**
      * Creates a MockHandler with a response and mocks the client in mocked api
-     *
-     * @param string $responseText
-     * @param int    $responseCode
-     *
-     * @return Client
      */
-    protected function createMockHandlerToApi($responseText, $responseCode)
+    protected function createMockHandlerToApi(?string $responseText, int $responseCode): Client
     {
         $responseQueue = [];
         if ($responseCode > 300) {
@@ -221,13 +202,15 @@ abstract class ApiStubTestCase extends BaseTestCase
     }
 
     /**
-     * @param AbstractResponse $response
-     * @param string           $responseClass
-     * @param string           $responseStatus
-     * @param string           $responseMessage
+     * @param class-string $responseClass
      */
-    protected function assertResponse($response, $responseClass, $responseStatus, $responseMessage, $meta = [])
-    {
+    protected function assertResponse(
+        AbstractResponse $response,
+        string $responseClass,
+        string $responseStatus,
+        ?string $responseMessage,
+        ?array $meta = []
+    ): void {
         // Check the response
         $this->assertInstanceOf($responseClass, $response);
         $this->assertEquals($responseStatus, $response->status());

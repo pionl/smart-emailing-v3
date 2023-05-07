@@ -10,15 +10,12 @@ use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Endpoints\Import\Contacts\ImportContactsRequest;
 use SmartEmailing\v3\Exceptions\RequestException;
 use SmartEmailing\v3\Models\Contact;
-use SmartEmailing\v3\Models\Settings;
+use SmartEmailing\v3\Models\ImportContactsSettings;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class ImportTestCase extends ApiStubTestCase
 {
-    /**
-     * @var ImportContactsRequest
-     */
-    protected $import;
+    protected ImportContactsRequest $import;
 
     protected function setUp(): void
     {
@@ -30,31 +27,31 @@ class ImportTestCase extends ApiStubTestCase
     /**
      * Tests if the endpoint/options is passed to request
      */
-    public function testEndpoint()
+    public function testEndpoint(): void
     {
         $this->createEndpointTest($this->import, 'import', 'POST', $this->arrayHasKey('json'));
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
-        $this->assertInstanceOf(Settings::class, $this->import->settings());
+        $this->assertInstanceOf(ImportContactsSettings::class, $this->import->settings());
         $this->assertCount(0, $this->import->contacts());
     }
 
-    public function testAddContact()
+    public function testAddContact(): void
     {
         $this->assertCount(1, $this->import->addContact(new Contact('test@test.cz'))->contacts());
         $this->assertCount(2, $this->import->addContact(new Contact('test2@test.cz'))->contacts());
         $this->assertCount(3, $this->import->addContact(new Contact('test@test.cz'))->contacts());
     }
 
-    public function testNewContact()
+    public function testNewContact(): void
     {
         $this->import->newContact('test@test.cz');
         $this->assertCount(1, $this->import->contacts());
     }
 
-    public function testChunkMode()
+    public function testChunkMode(): void
     {
         // Build a contact list 2,5 larger then chunk limit
         for ($i = 1; $i <= 1250; ++$i) {
@@ -109,7 +106,7 @@ class ImportTestCase extends ApiStubTestCase
         $this->import->send();
     }
 
-    public function testChunkModeError()
+    public function testChunkModeError(): void
     {
         // Build a contact list 2,5 larger then chunk limit
         for ($i = 1; $i <= 1250; ++$i) {

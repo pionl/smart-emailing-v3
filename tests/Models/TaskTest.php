@@ -20,7 +20,7 @@ class TaskTest extends TestCase
         $this->model = new Task();
     }
 
-    public function testShouldReturnSameDataFromSerializer()
+    public function testShouldReturnSameDataFromSerializer(): void
     {
         $recipient = new Recipient();
         $recipient->setEmailAddress('kirk@example.com');

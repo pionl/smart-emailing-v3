@@ -8,9 +8,6 @@ use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 
 class Recipient extends Model
 {
-    /**
-     * @var string
-     */
     private ?string $emailAddress = null;
 
     private string $cellphone = '';
@@ -20,9 +17,10 @@ class Recipient extends Model
         return $this->emailAddress;
     }
 
-    public function setEmailAddress(string $emailAddress): void
+    public function setEmailAddress(string $emailAddress): self
     {
         $this->emailAddress = $emailAddress;
+        return $this;
     }
 
     public function getCellphone(): string
@@ -30,11 +28,15 @@ class Recipient extends Model
         return $this->cellphone;
     }
 
-    public function setCellphone(string $cellphone): void
+    public function setCellphone(string $cellphone): self
     {
         $this->cellphone = $cellphone;
+        return $this;
     }
 
+    /**
+     * @return array{emailaddress: string|null, cellphone?: string}
+     */
     public function toArray(): array
     {
         PropertyRequiredException::throwIf(

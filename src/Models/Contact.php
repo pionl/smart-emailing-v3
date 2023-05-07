@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SmartEmailing\v3\Models;
 
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
-use function SmartEmailing\v3\Helpers\convertDate;
 use SmartEmailing\v3\Models\Holder\ContactLists;
 use SmartEmailing\v3\Models\Holder\CustomFieldValues;
 use SmartEmailing\v3\Models\Holder\Purposes;
@@ -16,153 +15,93 @@ use SmartEmailing\v3\Models\Holder\Purposes;
  */
 class Contact extends Model
 {
-    //region Properties
     /**
      * E-mail address of imported contact. This is the only required field.
      *
      * @var string|null required
      */
-    public $emailAddress = null;
+    public ?string $emailAddress = null;
 
     /**
      * First name
-     *
-     * @var string|null
      */
-    public $name = null;
+    public ?string $name = null;
 
-    /**
-     * @var string|null
-     */
-    public $surname = null;
+    public ?string $surname = null;
 
     /**
      * Titles before name
-     *
-     * @var string|null
      */
-    public $titlesBefore = null;
+    public ?string $titlesBefore = null;
 
     /**
      * Titles after name
-     *
-     * @var string|null
      */
-    public $titlesAfter = null;
+    public ?string $titlesAfter = null;
 
-    /**
-     * @var string|null
-     */
-    public $salutation = null;
+    public ?string $salutation = null;
 
-    /**
-     * @var string|null
-     */
-    public $company = null;
+    public ?string $company = null;
 
-    /**
-     * @var string|null
-     */
-    public $street = null;
+    public ?string $street = null;
 
-    /**
-     * @var string|null
-     */
-    public $town = null;
+    public ?string $town = null;
 
-    /**
-     * @var string|null
-     */
-    public $postalCode = null;
+    public ?string $postalCode = null;
 
-    /**
-     * @var string|null
-     */
-    public $country = null;
+    public ?string $country = null;
 
-    /**
-     * @var string|null
-     */
-    public $cellphone = null;
+    public ?string $cellphone = null;
 
-    /**
-     * @var string|null
-     */
-    public $phone = null;
+    public ?string $phone = null;
 
-    /**
-     * @var string|null
-     */
-    public $language = null;
+    public ?string $language = null;
 
     /**
      * Custom notes
-     *
-     * @var string|null
      */
-    public $notes = null;
+    public ?string $notes = null;
 
     /**
      * Allowed values: "M,F,NULL"
-     *
-     * @var string|null
      */
-    public $gender = null;
+    public ?string $gender = null;
 
     /**
      * 0 if Contact is OK, 1 if Contact does not want to receive any of your e-mails anymore. This flag will stop
      * further campaigns. Be careful, setting this value to 1 will also un-subscribe contact from all lists. It is
      * recommended not to send this parameter at all if you do not know what you are doing.
-     *
-     * @var int
      */
-    public $blacklisted = null;
+    public ?int $blacklisted = null;
 
     /**
      * Date of Contact's nameday in YYYY-MM-DD 00:00:00 format
-     *
-     * @var string|null
      */
-    public $nameDay = null;
+    public ?string $nameDay = null;
 
     /**
      * Date of Contact's birthday in YYYY-MM-DD 00:00:00 format
-     *
-     * @var string|null
      */
-    public $birthday = null;
+    public ?string $birthday = null;
 
     /**
      * Contact lists presence of imported contacts. Any contact list presence unlisted in imported data will be
      * untouched. Unsubscribed contacts will stay unsubscribed if settings.preserve_unsubscribed=1
-     *
-     * @var ContactLists
      */
-    protected $contactLists;
+    protected ContactLists $contactLists;
 
     /**
      * Custom fields belonging to contact Custom fields unlisted in imported data will be untouched.
-     *
-     * @var CustomFieldValues
      */
-    protected $customFields;
+    protected CustomFieldValues $customFields;
 
     /**
      * Processing purposes assigned to contact. Every purpose may be assigned multiple times for different time
      * intervals. Exact duplicities will be silently skipped.
-     *
-     * @var Purposes
      */
-    protected $purposes;
+    protected Purposes $purposes;
 
-    //endregion
-
-    /**
-     * Contact constructor.
-     *
-     * @param null|string $emailAddress
-     */
-    public function __construct($emailAddress)
+    public function __construct(?string $emailAddress)
     {
         $this->emailAddress = $emailAddress;
         $this->customFields = new CustomFieldValues();
@@ -170,167 +109,91 @@ class Contact extends Model
         $this->purposes = new Purposes();
     }
 
-    //region Setters
-    /**
-     * @param null|string $emailAddress
-     *
-     * @return Contact
-     */
-    public function setEmailAddress($emailAddress)
+    public function setEmailAddress(?string $emailAddress): self
     {
         $this->emailAddress = $emailAddress;
         return $this;
     }
 
-    /**
-     * @param null|string $name
-     *
-     * @return Contact
-     */
-    public function setName($name)
+    public function setName(?string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
-    /**
-     * @param null|string $surname
-     *
-     * @return Contact
-     */
-    public function setSurname($surname)
+    public function setSurname(?string $surname): self
     {
         $this->surname = $surname;
         return $this;
     }
 
-    /**
-     * @param null|string $titlesBefore
-     *
-     * @return Contact
-     */
-    public function setTitlesBefore($titlesBefore)
+    public function setTitlesBefore(?string $titlesBefore): self
     {
         $this->titlesBefore = $titlesBefore;
         return $this;
     }
 
-    /**
-     * @param null|string $titlesAfter
-     *
-     * @return Contact
-     */
-    public function setTitlesAfter($titlesAfter)
+    public function setTitlesAfter(?string $titlesAfter): self
     {
         $this->titlesAfter = $titlesAfter;
         return $this;
     }
 
-    /**
-     * @param null|string $salutation
-     *
-     * @return Contact
-     */
-    public function setSalutation($salutation)
+    public function setSalutation(?string $salutation): self
     {
         $this->salutation = $salutation;
         return $this;
     }
 
-    /**
-     * @param null|string $company
-     *
-     * @return Contact
-     */
-    public function setCompany($company)
+    public function setCompany(?string $company): self
     {
         $this->company = $company;
         return $this;
     }
 
-    /**
-     * @param null|string $street
-     *
-     * @return Contact
-     */
-    public function setStreet($street)
+    public function setStreet(?string $street): self
     {
         $this->street = $street;
         return $this;
     }
 
-    /**
-     * @param null|string $town
-     *
-     * @return Contact
-     */
-    public function setTown($town)
+    public function setTown(?string $town): self
     {
         $this->town = $town;
         return $this;
     }
 
-    /**
-     * @param null|string $postalCode
-     *
-     * @return Contact
-     */
-    public function setPostalCode($postalCode)
+    public function setPostalCode(?string $postalCode): self
     {
         $this->postalCode = $postalCode;
         return $this;
     }
 
-    /**
-     * @param null|string $country
-     *
-     * @return Contact
-     */
-    public function setCountry($country)
+    public function setCountry(?string $country): self
     {
         $this->country = $country;
         return $this;
     }
 
-    /**
-     * @param null|string $cellphone
-     *
-     * @return Contact
-     */
-    public function setCellphone($cellphone)
+    public function setCellphone(?string $cellphone): self
     {
         $this->cellphone = $cellphone;
         return $this;
     }
 
-    /**
-     * @param null|string $phone
-     *
-     * @return Contact
-     */
-    public function setPhone($phone)
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
         return $this;
     }
 
-    /**
-     * @param null|string $language
-     *
-     * @return Contact
-     */
-    public function setLanguage($language)
+    public function setLanguage(?string $language): self
     {
         $this->language = $language;
         return $this;
     }
 
-    /**
-     * @param null|string $notes
-     *
-     * @return Contact
-     */
-    public function setNotes($notes)
+    public function setNotes(?string $notes): self
     {
         $this->notes = $notes;
         return $this;
@@ -338,12 +201,8 @@ class Contact extends Model
 
     /**
      * Allowed values: "M,F,NULL"
-     *
-     * @param null|string $gender
-     *
-     * @return Contact
      */
-    public function setGender($gender)
+    public function setGender(?string $gender): self
     {
         InvalidFormatException::checkInArray($gender, ['M', 'F', null]);
 
@@ -357,10 +216,8 @@ class Contact extends Model
      * It is recommended not to send this parameter at all if you do not know what you are doing.
      *
      * @param 0|1|boolean $blacklisted
-     *
-     * @return Contact
      */
-    public function setBlacklisted($blacklisted = true)
+    public function setBlacklisted($blacklisted = true): self
     {
         $this->blacklisted = (int) $blacklisted;
         return $this;
@@ -369,63 +226,44 @@ class Contact extends Model
     /**
      * Date of Contact's birthday in YYYY-MM-DD 00:00:00 or different format
      *
-     * @param null|string $nameDay
      * @param bool        $convertToValidFormat converts the value to valid format
-     *
-     * @return Contact
      */
-    public function setNameDay($nameDay, $convertToValidFormat = true)
+    public function setNameDay(?string $nameDay, bool $convertToValidFormat = true): self
     {
-        $this->nameDay = convertDate($nameDay, $convertToValidFormat);
+        $this->nameDay = $this->convertDate($nameDay, $convertToValidFormat);
         return $this;
     }
 
     /**
      * Date of Contact's birthday in YYYY-MM-DD 00:00:00 format  or different format
      *
-     * @param null|string $birthday
      * @param bool        $convertToValidFormat converts the value to valid format
-     *
-     * @return Contact
      */
-    public function setBirthday($birthday, $convertToValidFormat = true)
+    public function setBirthday(?string $birthday, bool $convertToValidFormat = true): self
     {
-        $this->birthday = convertDate($birthday, $convertToValidFormat);
+        $this->birthday = $this->convertDate($birthday, $convertToValidFormat);
         return $this;
     }
 
-    /**
-     * @return ContactLists
-     */
-    public function contactList()
+    public function contactList(): ContactLists
     {
         return $this->contactLists;
     }
 
-    /**
-     * @return CustomFieldValues
-     */
-    public function customFields()
+    public function customFields(): CustomFieldValues
     {
         return $this->customFields;
     }
 
-    /**
-     * @return Purposes
-     */
-    public function purposes()
+    public function purposes(): Purposes
     {
         return $this->purposes;
     }
 
-    //endregion
-
     /**
-     * Converts data to array
-     *
-     * @return array
+     * @return array{emailaddress: string|null, name: string|null, surname: string|null, titlesbefore: string|null, titlesafter: string|null, salution: string|null, company: string|null, street: string|null, town: string|null, postalcode: string|null, country: string|null, cellphone: string|null, phone: string|null, language: string|null, notes: string|null, gender: string|null, blacklisted: int|null, nameday: string|null, birthday: string|null, contactlists: ContactLists, customfields: CustomFieldValues, purposes: Purposes}
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'emailaddress' => $this->emailAddress,

@@ -52,6 +52,9 @@ class EmailCreateRequest extends AbstractRequest
         return $this;
     }
 
+    /**
+     * @return array{title: string, name: string, htmlbody?: string, textbody?: string}
+     */
     public function toArray(): array
     {
         $data = [

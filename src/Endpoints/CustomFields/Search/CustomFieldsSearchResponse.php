@@ -13,17 +13,17 @@ use SmartEmailing\v3\Models\Model;
  */
 class CustomFieldsSearchResponse extends AbstractCollectionResponse
 {
-    public function getByName($name): ?CustomFieldDefinition
+    public function getByName(string $name): ?CustomFieldDefinition
     {
         foreach ($this->data() as $item) {
-            if (trim($item->name) === $name) {
+            if ($item->name !== null && trim($item->name) === $name) {
                 return $item;
             }
         }
         return null;
     }
 
-    protected function createDataItem($dataItem): Model
+    protected function createDataItem(\stdClass $dataItem): Model
     {
         return CustomFieldDefinition::fromJSON($dataItem);
     }

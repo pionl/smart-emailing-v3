@@ -11,10 +11,7 @@ use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class PingLiveTest extends BaseTestCase
 {
-    /**
-     * @var PingRequest
-     */
-    protected $ping;
+    protected PingRequest $ping;
 
     /**
      * Builds the ping instance on every test
@@ -27,12 +24,10 @@ class PingLiveTest extends BaseTestCase
     /**
      * Mocks the request and checks if request is returned via send method
      */
-    public function testSend()
+    public function testSend(): void
     {
-        if (! $this->canDoLiveTest) {
-            // Always proof test - ignores the no test phpunit warning
-            $this->assertInstanceOf(PingRequest::class, $this->ping);
-            return;
+        if ($this->canDoLiveTest === false) {
+            $this->markTestSkipped();
         }
 
         $response = $this->createApi()

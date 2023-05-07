@@ -25,12 +25,12 @@ class TransactionEmailsTest extends ApiStubTestCase
         $this->transactionEmails = new TransactionalEmailsRequest($this->apiStub);
     }
 
-    public function testShouldReturnSameDataFromSerializer()
+    public function testShouldReturnSameDataFromSerializer(): void
     {
         self::assertSame($this->transactionEmails->toArray(), $this->transactionEmails->jsonSerialize());
     }
 
-    public function testEndpoint()
+    public function testEndpoint(): void
     {
         $this->createEndpointTest(
             $this->transactionEmails,
@@ -40,7 +40,7 @@ class TransactionEmailsTest extends ApiStubTestCase
         );
     }
 
-    public function testShouldSetSettersAndReadGetters()
+    public function testShouldSetSettersAndReadGetters(): void
     {
         $this->transactionEmails->setTag('tag');
         self::assertSame('tag', $this->transactionEmails->getTag());
@@ -59,7 +59,7 @@ class TransactionEmailsTest extends ApiStubTestCase
         self::assertCount(1, $this->transactionEmails->getTasks());
     }
 
-    public function testShouldSeeAllKeysInOutputArray()
+    public function testShouldSeeAllKeysInOutputArray(): void
     {
         $credentials = new SenderCredentials();
         $credentials->setFrom('from@example.com');

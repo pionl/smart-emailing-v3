@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Endpoints\Credentials;
 
+use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Endpoints\AbstractRequest;
 
 /**
@@ -21,7 +22,7 @@ class CredentialsRequest extends AbstractRequest
         return 'check-credentials';
     }
 
-    protected function createResponse($response)
+    protected function createResponse(?ResponseInterface $response): CredentialsResponse
     {
         return new CredentialsResponse($response);
     }

@@ -12,7 +12,7 @@ use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class RequestTest extends ApiStubTestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $this->defaultReturnResponse = Utils::streamFor('{
             "status": "ok",
@@ -33,7 +33,7 @@ class RequestTest extends ApiStubTestCase
         $this->assertEquals(2, $customField->id);
     }
 
-    public function testNotExists()
+    public function testNotExists(): void
     {
         $this->defaultReturnResponse = Utils::streamFor('{
             "status": "error",
@@ -47,7 +47,7 @@ class RequestTest extends ApiStubTestCase
             ->data();
     }
 
-    protected function request()
+    protected function request(): CustomFieldsGetRequest
     {
         $this->stubClientResponse('customfield/2', 'GET', $this->callback(function ($value): bool {
             $this->assertTrue(is_array($value), 'Options must return array');

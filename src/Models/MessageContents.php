@@ -14,36 +14,42 @@ class MessageContents extends Model
 
     private ?string $textBody = null;
 
-    public function getSubject(): ?String
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
 
-    public function setSubject(String $subject): void
+    public function setSubject(String $subject): self
     {
         $this->subject = $subject;
+        return $this;
     }
 
-    public function getHtmlBody(): ?String
+    public function getHtmlBody(): ?string
     {
         return $this->htmlBody;
     }
 
-    public function setHtmlBody(String $htmlBody): void
+    public function setHtmlBody(String $htmlBody): self
     {
         $this->htmlBody = $htmlBody;
+        return $this;
     }
 
-    public function getTextBody(): ?String
+    public function getTextBody(): ?string
     {
         return $this->textBody;
     }
 
-    public function setTextBody(String $textBody): void
+    public function setTextBody(String $textBody): self
     {
         $this->textBody = $textBody;
+        return $this;
     }
 
+    /**
+     * @return array{subject: string|null, html_body: string|null, text_body: string|null}
+     */
     public function toArray(): array
     {
         PropertyRequiredException::throwIf(

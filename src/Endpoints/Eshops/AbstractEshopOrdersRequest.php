@@ -23,7 +23,7 @@ abstract class AbstractEshopOrdersRequest extends AbstractRequest
     /**
      * Creates Returns the newly created order
      */
-    public function newOrder($eshopName, $eshopCode, $emailAddress): Order
+    public function newOrder(?string $eshopName, ?string $eshopCode, ?string $emailAddress): Order
     {
         $order = new Order($eshopName, $eshopCode, $emailAddress);
         $this->addOrder($order);

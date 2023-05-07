@@ -10,28 +10,25 @@ use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class ContactListTest extends BaseTestCase
 {
-    /**
-     * @var ContactListStatus
-     */
-    protected $list;
+    protected ContactListStatus $list;
 
     protected function setUp(): void
     {
         $this->list = new ContactListStatus(1);
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertEquals(1, $this->list->id);
     }
 
-    public function testSetStatus()
+    public function testSetStatus(): void
     {
         $this->assertEquals(ContactListStatus::CONFIRMED, $this->list->status);
         $this->assertEquals(ContactListStatus::REMOVED, $this->list->setStatus(ContactListStatus::REMOVED)->status);
     }
 
-    public function testSetInvalidStatus()
+    public function testSetInvalidStatus(): void
     {
         try {
             $this->list->setStatus('test');
@@ -40,7 +37,7 @@ class ContactListTest extends BaseTestCase
         }
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $this->assertEquals([
             'id' => 1,
@@ -48,7 +45,7 @@ class ContactListTest extends BaseTestCase
         ], $this->list->toArray());
     }
 
-    public function testJsonSerialize()
+    public function testJsonSerialize(): void
     {
         $this->assertEquals([
             'id' => 1,

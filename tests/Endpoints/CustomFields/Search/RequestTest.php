@@ -15,10 +15,7 @@ use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class RequestTest extends ApiStubTestCase
 {
-    /**
-     * @var CustomFieldsSearchRequest
-     */
-    protected $request;
+    protected CustomFieldsSearchRequest $request;
 
     protected function setUp(): void
     {
@@ -54,7 +51,7 @@ class RequestTest extends ApiStubTestCase
     }
 
     //region Test endpoint
-    public function testDefaultEndpoint()
+    public function testDefaultEndpoint(): void
     {
         $this->createEndpointTest($this->request, 'customfields', 'GET', $this->callback(function ($value): bool {
             $this->assertTrue(is_array($value), 'Options must return array');
@@ -72,7 +69,7 @@ class RequestTest extends ApiStubTestCase
         }));
     }
 
-    public function testFilteredEndpoint()
+    public function testFilteredEndpoint(): void
     {
         $this->request->setPage(2)
             ->select('name, type')
@@ -100,7 +97,7 @@ class RequestTest extends ApiStubTestCase
         }));
     }
 
-    public function testResponseEndpoint()
+    public function testResponseEndpoint(): void
     {
         /** @var CustomFieldsSearchResponse $response */
         $response = $this->createEndpointTest($this->request, null, null, null);
@@ -126,17 +123,17 @@ class RequestTest extends ApiStubTestCase
     //endregion
 
     //region Test query
-    public function testQuerySort()
+    public function testQuerySort(): void
     {
         $this->createQueryValue('sortBy', 'type', 'sort', 'sort');
     }
 
-    public function testQueryExpand()
+    public function testQueryExpand(): void
     {
         $this->createQueryValue('expandBy', 'customfield_options', 'expand', 'expand');
     }
 
-    public function testQueryExpandFail()
+    public function testQueryExpandFail(): void
     {
         try {
             $this->createQueryValue('expandBy', 'test', 'expand', 'expand');
@@ -146,27 +143,27 @@ class RequestTest extends ApiStubTestCase
         }
     }
 
-    public function testQuerySelect()
+    public function testQuerySelect(): void
     {
         $this->createQueryValue('select', 'name', 'select', 'select');
     }
 
-    public function testQueryFilterById()
+    public function testQueryFilterById(): void
     {
         $this->createQueryValue('byId', '10', 'id', 'id', $this->request->filter());
     }
 
-    public function testQueryFilterByName()
+    public function testQueryFilterByName(): void
     {
         $this->createQueryValue('byName', 'test', 'name', 'name', $this->request->filter());
     }
 
-    public function testQueryFilterByType()
+    public function testQueryFilterByType(): void
     {
         $this->createQueryValue('byType', CustomFieldDefinition::CHECKBOX, 'type', 'type', $this->request->filter());
     }
 
-    public function testQueryFilterByTypeFail()
+    public function testQueryFilterByTypeFail(): void
     {
         try {
             $this->createQueryValue('byType', 'test', 'type', 'type', $this->request->filter());
@@ -179,15 +176,17 @@ class RequestTest extends ApiStubTestCase
     /**
      * Tests the setter method + query result
      *
-     * @param string               $setMethod
      * @param mixed                $value
-     * @param string               $getProperty
-     * @param string               $queryKey
      * @param CustomFieldsSearchFilters|CustomFieldsSearchRequest|null $setAndGetObject object that will be used for setting/getting the value. Default is
      * Request
      */
-    protected function createQueryValue($setMethod, $value, $getProperty, $queryKey, $setAndGetObject = null)
-    {
+    protected function createQueryValue(
+        string $setMethod,
+        $value,
+        string $getProperty,
+        string $queryKey,
+        $setAndGetObject = null
+    ): void {
         if ($setAndGetObject === null) {
             $setAndGetObject = $this->request;
         }

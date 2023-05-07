@@ -13,7 +13,7 @@ use SmartEmailing\v3\Models\Model;
  */
 class ContactlistSearchResponse extends AbstractCollectionResponse
 {
-    protected function createDataItem($dataItem): Model
+    protected function createDataItem(\stdClass $dataItem): Model
     {
         return Contactlist::fromJSON($dataItem);
     }

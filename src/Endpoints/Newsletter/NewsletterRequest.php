@@ -27,6 +27,9 @@ class NewsletterRequest extends AbstractRequest
         $this->contactLists = $contactLists;
     }
 
+    /**
+     * @return array{email_id: int, contactlists: int[]}
+     */
     public function toArray(): array
     {
         return [

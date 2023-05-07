@@ -13,7 +13,7 @@ use SmartEmailing\v3\Models\Model;
  */
 class CustomFieldsCreateResponse extends AbstractItemResponse
 {
-    protected function createDataItem($dataItem): Model
+    protected function createDataItem(\stdClass $dataItem): Model
     {
         return CustomFieldDefinition::fromJSON($dataItem);
     }

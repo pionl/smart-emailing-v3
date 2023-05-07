@@ -12,26 +12,31 @@ class Replace extends Model
 
     private ?string $content = null;
 
-    public function getKey(): ?String
+    public function getKey(): ?string
     {
         return $this->key;
     }
 
-    public function setKey(String $key): void
+    public function setKey(String $key): self
     {
         $this->key = $key;
+        return $this;
     }
 
-    public function getContent(): ?String
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    public function setContent(String $content): void
+    public function setContent(String $content): self
     {
         $this->content = $content;
+        return $this;
     }
 
+    /**
+     * @return array{key: string|null, content: string|null}
+     */
     public function toArray(): array
     {
         PropertyRequiredException::throwIf(

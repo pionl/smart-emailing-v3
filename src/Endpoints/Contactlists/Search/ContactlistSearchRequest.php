@@ -26,6 +26,9 @@ class ContactlistSearchRequest extends AbstractRequest
         return $this;
     }
 
+    /**
+     * @return array{select: string}
+     */
     public function toArray(): array
     {
         return [

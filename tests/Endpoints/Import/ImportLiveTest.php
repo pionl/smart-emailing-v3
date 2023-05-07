@@ -11,10 +11,7 @@ use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
 class ImportLiveTest extends BaseTestCase
 {
-    /**
-     * @var ImportContactsRequest
-     */
-    protected $import;
+    protected ImportContactsRequest $import;
 
     protected function setUp(): void
     {
@@ -27,7 +24,7 @@ class ImportLiveTest extends BaseTestCase
     /**
      * Tests if the endpoint/options is passed to request
      */
-    public function testBasic()
+    public function testBasic(): void
     {
         $this->assertInstanceOf(ImportContactsRequest::class, $this->import);
     }
@@ -35,7 +32,7 @@ class ImportLiveTest extends BaseTestCase
     /**
      * Live test of sync
      */
-    public function testContactImport()
+    public function testContactImport(): void
     {
         // Comment if you want to try
         $this->markTestSkipped();

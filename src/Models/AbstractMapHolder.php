@@ -6,26 +6,39 @@ namespace SmartEmailing\v3\Models;
 
 /**
  * Supports map of ids to ensure only unique values
+ *
+ * @template TEntry of Model
+ * @extends AbstractHolder<TEntry>
  */
 abstract class AbstractMapHolder extends AbstractHolder
 {
-    protected $idMap = [];
+    /**
+     * @var array TEntry[]
+     */
+    protected array $idMap = [];
 
     /**
      * Adds an entry model into items list. Only unique items are added (represented by the id property)
      *
+     * @param TEntry $entry
      * @return boolean if the entry was added (first time added)
      */
-    protected function insertEntry($entry): bool
+    protected function insertEntry(Model $entry): bool
     {
         // Allow only unique values
-        if (isset($this->idMap[$entry->id])) {
+        if (isset($this->idMap[$this->entryKey($entry)])) {
             return false;
         }
 
         $this->items[] = $entry;
-        $this->idMap[$entry->id] = $entry;
+        $this->idMap[$this->entryKey($entry)] = $entry;
 
         return true;
     }
+
+    /**
+     * @param TEntry $entry
+     * @return int|string|null
+     */
+    abstract protected function entryKey(Model $entry);
 }

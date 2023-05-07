@@ -17,13 +17,13 @@ class RecipientTest extends TestCase
         $this->model = new Recipient();
     }
 
-    public function testShouldThrowExceptionWhenMissingAllData()
+    public function testShouldThrowExceptionWhenMissingAllData(): void
     {
         $this->expectException(PropertyRequiredException::class);
         $this->model->toArray();
     }
 
-    public function testShouldReturnArrayWithData()
+    public function testShouldReturnArrayWithData(): void
     {
         $this->model->setEmailAddress('email@example.com');
         $data = $this->model->toArray();
@@ -33,14 +33,14 @@ class RecipientTest extends TestCase
         ], $data);
     }
 
-    public function testShouldReturnSameDataFromSerializer()
+    public function testShouldReturnSameDataFromSerializer(): void
     {
         $this->model->setEmailAddress('email@example.com');
 
         self::assertSame($this->model->toArray(), $this->model->jsonSerialize());
     }
 
-    public function testShouldSetSettersAndReadGetters()
+    public function testShouldSetSettersAndReadGetters(): void
     {
         $this->model->setEmailAddress('email@example.com');
         self::assertSame('email@example.com', $this->model->getEmailAddress());

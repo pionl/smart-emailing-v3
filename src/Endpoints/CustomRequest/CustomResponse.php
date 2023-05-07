@@ -11,7 +11,7 @@ use SmartEmailing\v3\Endpoints\AbstractDataResponse;
  */
 class CustomResponse extends AbstractDataResponse
 {
-    protected function setupData()
+    protected function setupData(): self
     {
         parent::setupData();
         $this->data = $this->value($this->json, 'data');

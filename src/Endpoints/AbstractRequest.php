@@ -24,10 +24,7 @@ abstract class AbstractRequest implements \JsonSerializable
         $this->api = $api;
     }
 
-    /**
-     * @return Api
-     */
-    public function api()
+    public function api(): Api
     {
         return $this->api;
     }
@@ -67,20 +64,16 @@ abstract class AbstractRequest implements \JsonSerializable
 
     /**
      * Returns the request method
-     *
-     * @return string
      */
-    protected function method()
+    protected function method(): string
     {
         return 'GET';
     }
 
     /**
      * Returns the request uri endpoint
-     *
-     * @return string
      */
-    abstract protected function endpoint();
+    abstract protected function endpoint(): string;
 
     /**
      * Returns the request options that will be sent to the endpoint.
@@ -97,10 +90,8 @@ abstract class AbstractRequest implements \JsonSerializable
 
     /**
      * Converts the Guzzles RequestException into internal exception
-     *
-     * @return RequestException
      */
-    protected function convertGuzzleException(GuzzleRequestException $exception)
+    protected function convertGuzzleException(GuzzleRequestException $exception): RequestException
     {
         // Convert to internal exception
         $response = $this->createResponse($exception->getResponse());
@@ -125,7 +116,7 @@ abstract class AbstractRequest implements \JsonSerializable
     /**
      * If response has error status then creates an RequestException with the response message
      */
-    protected function handleErrorResponseStatus(AbstractResponse $response)
+    protected function handleErrorResponseStatus(AbstractResponse $response): void
     {
         // If there is error, lets throw an exception
         if ($response->status() === AbstractResponse::ERROR) {
@@ -140,12 +131,11 @@ abstract class AbstractRequest implements \JsonSerializable
     /**
      * Builds the internal response
      *
-     * @param ResponseInterface|null $response
-     *
      * @return TResponse
      */
-    protected function createResponse($response)
+    protected function createResponse(?ResponseInterface $response): AbstractResponse
     {
+        /** @var TResponse */
         return new StatusResponse($response);
     }
 }
