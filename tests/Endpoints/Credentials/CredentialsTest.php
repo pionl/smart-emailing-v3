@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Endpoints\Credentials;
 
-use GuzzleHttp\Psr7\Utils;
 use SmartEmailing\v3\Endpoints\Credentials\Credentials;
 use SmartEmailing\v3\Endpoints\Credentials\CredentialsRequest;
-use SmartEmailing\v3\Endpoints\Credentials\CredentialsResponse;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class CredentialsTestCase extends ApiStubTestCase
@@ -28,14 +26,15 @@ class CredentialsTestCase extends ApiStubTestCase
      */
     public function testEndpointAndOptions(): void
     {
-        $this->defaultReturnResponse = Utils::streamFor('{
+        $expectedResponse = $this->createClientResponse('{
             "status": "ok",
             "meta": [
             ],
             "message": "Hi there! Your credentials are valid!",
             "account_id": 2
         }');
-        $this->createEndpointTest($this->credentials, 'check-credentials');
+        $this->expectClientRequest('check-credentials', 'GET', null, $expectedResponse);
+        $this->credentials->send();
     }
 
     /**
@@ -43,15 +42,14 @@ class CredentialsTestCase extends ApiStubTestCase
      */
     public function testSend(): void
     {
-        /** @var CredentialsResponse $response */
-        $response = $this->createSendResponse($this->credentials, '{
+        $this->expectClientResponse('{
             "status": "ok",
-            "meta": [
-            ],
+            "meta": [],
             "message": "Hi there! Your credentials are valid!",
             "account_id": 2
-        }', 'Hi there! Your credentials are valid!');
-
+        }');
+        $response = $this->credentials->send();
+        $this->assertResponse($response, 'Hi there! Your credentials are valid!');
         $this->assertEquals(2, $response->accountId());
     }
 }

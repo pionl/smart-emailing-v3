@@ -26,7 +26,8 @@ class PingTestCase extends ApiStubTestCase
      */
     public function testEndpointAndOptions(): void
     {
-        $this->createEndpointTest($this->ping, 'ping');
+        $this->expectClientRequest('ping');
+        $this->ping->send();
     }
 
     /**
@@ -34,11 +35,12 @@ class PingTestCase extends ApiStubTestCase
      */
     public function testSend(): void
     {
-        $this->createSendResponse($this->ping, '{
-               "status": "ok",
-               "meta": [
-               ],
-               "message": "Hi there! API version 3 here!"
-           }', 'Hi there! API version 3 here!');
+        $this->expectClientResponse('{
+            "status": "ok",
+            "meta": [],
+            "message": "Hi there! API version 3 here!"
+        }');
+        $response = $this->ping->send();
+        $this->assertResponse($response, 'Hi there! API version 3 here!');
     }
 }

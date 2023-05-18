@@ -18,8 +18,13 @@ class RequestMock extends AbstractRequest
         return 'endpoint';
     }
 
+    /**
+     * @return array{json: string[]}
+     */
     protected function options(): array
     {
-        return ['test'];
+        return [
+            'json' => ['test'],
+        ];
     }
 }

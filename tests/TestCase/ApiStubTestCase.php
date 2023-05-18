@@ -9,10 +9,10 @@ use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use SmartEmailing\v3\Api;
@@ -33,126 +33,95 @@ abstract class ApiStubTestCase extends BaseTestCase
      */
     protected $apiStub;
 
+    private Client $client;
+
+    private MockHandler $clientHandler;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->apiStub = $this->createMock(Api::class);
+        $this->clientHandler = new MockHandler();
 
-        $this->defaultReturnResponse = Utils::streamFor('{
-               "status": "ok",
-               "meta": [],
-               "message": "Hi there! API version 3 here!"
-           }');
+        // Build the client
+        $this->client = new Client([
+            'handler' => $this->clientHandler,
+        ]);
+
+        $this->apiStub->method('client')
+            ->willReturn($this->client);
     }
 
-    /**
-     * Creates a response mock and runs the send method. Then checks for the response result.
-     *
-     * @param class-string $responseClass
-     */
-    public function createSendResponse(
-        AbstractRequest $request,
-        ?string $responseText,
-        ?string $responseMessage,
-        string $responseStatus = AbstractResponse::SUCCESS,
-        array $meta = [],
-        string $responseClass = AbstractResponse::class,
-        int $responseCode = 200
-    ): AbstractResponse {
-        $this->createMockHandlerToApi($responseText, $responseCode);
-
-        // Run the request
-        $response = $request->send();
-
-        $this->assertResponse($response, $responseClass, $responseStatus, $responseMessage, $meta);
-        return $response;
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->assertEquals(0, $this->clientHandler->count(), 'Not all expected requests were called.');
     }
 
-    /**
-     * Creates a response mock and runs the send method. Then checks for the response result.
-     *
-     * @param class-string $responseClass
-     */
-    public function createSendErrorResponse(
-        AbstractRequest $request,
-        ?string $responseText,
-        ?string $responseMessage,
-        string $responseStatus = AbstractResponse::SUCCESS,
-        ?array $meta = null,
-        string $responseClass = AbstractResponse::class,
-        int $responseCode = 200
-    ): RequestException {
-        $this->createMockHandlerToApi($responseText, $responseCode);
-
+    protected function assertThrowsRequestException(AbstractRequest $request): RequestException
+    {
         try {
             // Run the request
             $request->send();
-
             $this->fail('The send request should raise an exception when Guzzle raises RequestException ' .
               '(non 200 status code) or API returns 200 status code with error status in json');
         } catch (RequestException $requestException) {
-            $this->assertResponse(
-                $requestException->response(),
-                $responseClass,
-                $responseStatus,
-                $responseMessage,
-                $meta
-            );
             return $requestException;
         }
     }
 
     /**
-     * Creates a tests for send request that will check if correct parameters are send to clients request method
-     *
-     * @param string|null|mixed $endpointName
-     * @param string|null|mixed $httpMethod
-     * @param string|null|mixed $options
+     * @param array|callback|Constraint|null $expectedOptions
      */
-    protected function createEndpointTest(
-        AbstractRequest $request,
-        $endpointName,
-        $httpMethod = 'GET',
-        $options = []
-    ): AbstractResponse {
-        $this->stubClientResponse($endpointName, $httpMethod, $options);
-        return $request->send();
+    protected function expectClientRequest(
+        ?string $endpointName,
+        ?string $httpMethod = 'GET',
+        $expectedOptions = null,
+        ResponseInterface $clientResponse = null
+    ): void {
+        $this->clientHandler->append(function (RequestInterface $request, $actualOptions) use (
+            $endpointName,
+            $httpMethod,
+            $expectedOptions,
+            $clientResponse
+        ): ResponseInterface {
+            $this->assertThat($request->getMethod(), $this->valueConstraint($httpMethod));
+            $this->assertThat($request->getUri()->getPath(), $this->valueConstraint($endpointName));
+            $actualOptions = [];
+            $queryParams = [];
+            parse_str($request->getUri()->getQuery(), $queryParams);
+            if ($queryParams !== []) {
+                $actualOptions['query'] = $queryParams;
+            }
+            $body = $request->getBody()
+                ->getContents();
+            if ($body !== '' && $body !== '0') {
+                $actualOptions['json'] = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+            }
+            $this->assertThat($actualOptions, $this->valueConstraint($expectedOptions), print_r($actualOptions, true));
+            return $clientResponse ?? $this->createClientResponse();
+        });
     }
 
-    /**
-     * Builds the response/client mocks and setups for a clients request call
-     *
-     * @param string|null|mixed $endpointName
-     * @param string|null|mixed $httpMethod
-     * @param array|callback|null        $options
-     */
-    protected function stubClientResponse($endpointName, $httpMethod = 'GET', $options = []): void
+    protected function createClientResponse(?string $returnResponse = null, int $statusCode = 200): ResponseInterface
     {
-        // Build the client that will mock the client->request method
-        $client = $this->createMock(Client::class);
-        $response = $this->createMock(ResponseInterface::class);
+        $defaultResponse = '{
+           "status": "ok",
+           "meta": [],
+           "message": "Hi there! API version 3 here!"
+        }';
+        return new Response($statusCode, [], $returnResponse ?? $defaultResponse);
+    }
 
-        // Make a response that is valid and ok - prevent exception
-        $response->expects($this->once())
-            ->method('getBody')
-            ->willReturn($this->defaultReturnResponse);
-
-        $response->expects($this->any())
-            ->method('getStatusCode')
-            ->willReturn(200);
-
-        // The send method will trigger the request once with given properties (request methods)
-        $client->expects($this->once())
-            ->method('request')
-            ->with(
-                $this->valueConstraint($httpMethod),
-                $this->valueConstraint($endpointName),
-                $this->valueConstraint($options)
-            )->willReturn($response);
-
-        $this->apiStub->method('client')
-            ->willReturn($client);
+    protected function createClientErrorResponse(?string $message = null, int $statusCode = 422): ResponseInterface
+    {
+        $returnResponse = json_encode([
+            'status' => 'error',
+            'meta' => [],
+            'message' => $message,
+        ], JSON_THROW_ON_ERROR);
+        return $this->createClientResponse($returnResponse ?: '', $statusCode);
     }
 
     /**
@@ -174,31 +143,19 @@ abstract class ApiStubTestCase extends BaseTestCase
     /**
      * Creates a MockHandler with a response and mocks the client in mocked api
      */
-    protected function createMockHandlerToApi(?string $responseText, int $responseCode): Client
+    protected function expectClientResponse(?string $responseText, int $responseCode = 200): void
     {
-        $responseQueue = [];
         if ($responseCode > 300) {
-            $responseQueue[] = new BadResponseException(
+            $clientResponse = new BadResponseException(
                 'Client error',
                 new Request('GET', 'test'),
                 new Response($responseCode, [], $responseText)
             );
         } else {
-            $responseQueue[] = new Response($responseCode, [], $responseText);
+            $clientResponse = new Response($responseCode, [], $responseText);
         }
 
-        // Return own responses
-        $handler = new MockHandler($responseQueue);
-
-        // Build the client
-        $client = new Client([
-            'handler' => $handler,
-        ]);
-
-        // Replace the client
-        $this->apiStub->method('client')
-            ->willReturn($client);
-        return $client;
+        $this->clientHandler->append($clientResponse);
     }
 
     /**
@@ -206,9 +163,9 @@ abstract class ApiStubTestCase extends BaseTestCase
      */
     protected function assertResponse(
         AbstractResponse $response,
-        string $responseClass,
-        string $responseStatus,
-        ?string $responseMessage,
+        ?string $responseMessage = null,
+        string $responseStatus = AbstractResponse::SUCCESS,
+        string $responseClass = AbstractResponse::class,
         ?array $meta = []
     ): void {
         // Check the response
@@ -218,5 +175,13 @@ abstract class ApiStubTestCase extends BaseTestCase
         if ($response instanceof AbstractCollectionResponse) {
             $this->assertEquals($meta, $response->meta());
         }
+    }
+
+    protected function assertHasJsonData(array $value, string $key): array
+    {
+        $this->assertArrayHasKey('json', $value, 'Should contain json data');
+        $this->assertArrayHasKey($key, $value['json'], sprintf("JSON must have '%s' array", $key));
+        $this->assertIsArray($value['json'][$key], sprintf("JSON '%s' must be an array", $key));
+        return $value['json'][$key];
     }
 }

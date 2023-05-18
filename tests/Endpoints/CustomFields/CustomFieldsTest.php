@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Endpoints\CustomFields;
 
-use GuzzleHttp\Psr7\Utils;
 use SmartEmailing\v3\Endpoints\CustomFields\Create\CustomFieldsCreateRequest;
 use SmartEmailing\v3\Endpoints\CustomFields\CustomFieldsEndpoint;
 use SmartEmailing\v3\Endpoints\CustomFields\Search\CustomFieldsSearchRequest;
@@ -41,7 +40,7 @@ class CustomFieldsTest extends ApiStubTestCase
 
     public function testCreate(): void
     {
-        $this->defaultReturnResponse = Utils::streamFor('{
+        $this->expectClientResponse('{
             "status": "ok",
             "meta": [],
             "data": {
@@ -51,9 +50,6 @@ class CustomFieldsTest extends ApiStubTestCase
                 "type": "checkbox"
             }
         }');
-        // The exact endpoint test are in specific tests for the request
-        // Checks if request is called in the send method
-        $this->stubClientResponse(null, null, null);
         $response = $this->fields->create(new CustomFieldDefinition('test'));
         $this->assertInstanceOf(CustomFieldDefinition::class, $response);
     }
@@ -71,7 +67,7 @@ class CustomFieldsTest extends ApiStubTestCase
     {
         // The exact endpoint test are in specific tests for the request
         // Checks if request is called in the send method
-        $this->stubClientResponse(null, null, null);
+        $this->expectClientRequest(null, null, null);
 
         try {
             $response = $this->fields->searchRequest()
@@ -84,10 +80,7 @@ class CustomFieldsTest extends ApiStubTestCase
 
     public function testGetByName(): void
     {
-        // The exact endpoint test are in specific tests for the request
-        // Checks if request is called in the send method
-
-        $this->defaultReturnResponse = Utils::streamFor('{
+        $this->expectClientResponse('{
             "status": "ok",
             "meta": {
                 "total_count": 8,
@@ -104,7 +97,6 @@ class CustomFieldsTest extends ApiStubTestCase
                 }
             ]
         }');
-        $this->stubClientResponse(null, null, null);
 
         $customField = $this->fields->getByName('test');
 

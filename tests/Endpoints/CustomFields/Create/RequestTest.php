@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Endpoints\CustomFields\Create;
 
-use GuzzleHttp\Psr7\Utils;
 use SmartEmailing\v3\Endpoints\CustomFields\Create\CustomFieldsCreateRequest;
 use SmartEmailing\v3\Endpoints\CustomFields\Create\CustomFieldsCreateResponse;
 use SmartEmailing\v3\Models\CustomFieldDefinition;
@@ -18,7 +17,13 @@ class RequestTestCase extends ApiStubTestCase
     {
         parent::setUp();
         $this->request = new CustomFieldsCreateRequest($this->apiStub);
-        $this->defaultReturnResponse = Utils::streamFor('{
+    }
+
+    public function testEndpointAndResponse(): void
+    {
+        $this->request->setCustomField(new CustomFieldDefinition('Fruit', CustomFieldDefinition::TEXT));
+
+        $expectedResponse = $this->createClientResponse('{
             "status": "created",
             "meta": [],
             "data": {
@@ -28,29 +33,24 @@ class RequestTestCase extends ApiStubTestCase
                 "type": "text"
             }
         }');
-    }
 
-    public function testEndpointAndResponse(): void
-    {
-        $this->request->setCustomField(new CustomFieldDefinition('Fruit', CustomFieldDefinition::TEXT));
-
-        /** @var CustomFieldsCreateResponse $response */
-        $response = $this->createEndpointTest(
-            $this->request,
+        $this->expectClientRequest(
             'customfields',
             'POST',
-            $this->callback(function ($array): bool {
-                $this->assertTrue(is_array($array), 'Options must return an array');
-                $this->assertArrayHasKey('json', $array, 'Options must return an json value');
-                $this->assertTrue(is_array($array['json']), 'Json must be an array');
+            $this->callback(function ($options): bool {
+                $this->assertArrayHasKey('json', $options, 'Options must return an json value');
+                $this->assertTrue(is_array($options['json']), 'Json must be an array');
                 $this->assertEquals([
                     'name' => 'Fruit',
                     'type' => CustomFieldDefinition::TEXT,
-                ], $array['json']);
+                ], $options['json']);
 
                 return true;
-            })
+            }),
+            $expectedResponse
         );
+
+        $response = $this->request->send();
 
         $this->assertInstanceOf(
             CustomFieldsCreateResponse::class,
