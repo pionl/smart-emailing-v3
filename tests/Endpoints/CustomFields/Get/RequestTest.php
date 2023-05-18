@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Endpoints\CustomFields\Get;
 
-use GuzzleHttp\Psr7\Utils;
+use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Endpoints\CustomFields\Get\CustomFieldsGetRequest;
 use SmartEmailing\v3\Exceptions\RequestException;
 use SmartEmailing\v3\Models\CustomFieldDefinition;
@@ -14,7 +14,7 @@ class RequestTest extends ApiStubTestCase
 {
     public function testGet(): void
     {
-        $this->defaultReturnResponse = Utils::streamFor('{
+        $response = $this->createClientResponse('{
             "status": "ok",
             "meta": [],
             "data": {
@@ -24,7 +24,7 @@ class RequestTest extends ApiStubTestCase
                 "type": "checkbox"
             }
         }');
-        $customField = $this->request()
+        $customField = $this->request($response)
             ->send()
             ->data();
 
@@ -35,24 +35,24 @@ class RequestTest extends ApiStubTestCase
 
     public function testNotExists(): void
     {
-        $this->defaultReturnResponse = Utils::streamFor('{
+        $response = $this->createClientResponse('{
             "status": "error",
             "meta": [],
             "message": "error"
         }');
 
         $this->expectException(RequestException::class);
-        $this->request()
+        $this->request($response)
             ->send()
             ->data();
     }
 
-    protected function request(): CustomFieldsGetRequest
+    protected function request(ResponseInterface $response): CustomFieldsGetRequest
     {
-        $this->stubClientResponse('customfield/2', 'GET', $this->callback(function ($value): bool {
+        $this->expectClientRequest('customfield/2', 'GET', $this->callback(function ($value): bool {
             $this->assertTrue(is_array($value), 'Options must return array');
             return true;
-        }));
+        }), $response);
         return new CustomFieldsGetRequest($this->apiStub, 2);
     }
 }

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Endpoints\CustomFields\Search;
 
-use GuzzleHttp\Psr7\Utils;
-
+use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Endpoints\CustomFields\Search\CustomFieldsSearchFilters;
 use SmartEmailing\v3\Endpoints\CustomFields\Search\CustomFieldsSearchRequest;
 use SmartEmailing\v3\Endpoints\CustomFields\Search\CustomFieldsSearchResponse;
@@ -22,38 +21,12 @@ class RequestTest extends ApiStubTestCase
         parent::setUp();
 
         $this->request = new CustomFieldsSearchRequest($this->apiStub);
-
-        //region Default response setup
-        $this->defaultReturnResponse = Utils::streamFor('{
-            "status": "ok",
-            "meta": {
-                "total_count": 8,
-                "displayed_count": 2,
-                "offset": 0,
-                "limit": 2
-            },
-            "data": [
-                {
-                    "id": 1,
-                    "customfield_options_url": "http://app.stormspire.loc/api/v3/customfield-options?customfield_id=1",
-                    "name": "my select",
-                    "type": "select"
-                },
-                {
-                    "id": 2,
-                    "customfield_options_url": "http://app.stormspire.loc/api/v3/customfield-options?customfield_id=2",
-                    "name": "my checkbox",
-                    "type": "checkbox"
-                }
-            ]
-        }');
-        //endregion
     }
 
     //region Test endpoint
     public function testDefaultEndpoint(): void
     {
-        $this->createEndpointTest($this->request, 'customfields', 'GET', $this->callback(function ($value): bool {
+        $this->expectClientRequest('customfields', 'GET', $this->callback(function ($value): bool {
             $this->assertTrue(is_array($value), 'Options must return array');
             $this->assertArrayHasKey('query', $value);
 
@@ -66,7 +39,8 @@ class RequestTest extends ApiStubTestCase
             $this->assertCount(2, $query, 'Default query should have only limit and offset');
 
             return true;
-        }));
+        }), $this->createDefaultResponse());
+        $this->request->send();
     }
 
     public function testFilteredEndpoint(): void
@@ -79,7 +53,7 @@ class RequestTest extends ApiStubTestCase
         $this->request->filter()
             ->byType(CustomFieldDefinition::CHECKBOX);
 
-        $this->createEndpointTest($this->request, 'customfields', 'GET', $this->callback(function ($value): bool {
+        $this->expectClientRequest('customfields', 'GET', $this->callback(function ($value): bool {
             $this->assertTrue(is_array($value), 'Options must return array');
             $this->assertArrayHasKey('query', $value);
 
@@ -94,13 +68,17 @@ class RequestTest extends ApiStubTestCase
             $this->assertCount(4, $query, 'Default query should have only limit and offset');
 
             return true;
-        }));
+        }), $this->createDefaultResponse());
+
+        $this->request->send();
     }
 
     public function testResponseEndpoint(): void
     {
-        /** @var CustomFieldsSearchResponse $response */
-        $response = $this->createEndpointTest($this->request, null, null, null);
+        $this->expectClientRequest(null, null, null, $this->createDefaultResponse());
+
+        $response = $this->request->send();
+
         $this->assertInstanceOf(CustomFieldsSearchResponse::class, $response);
         $this->assertTrue(is_array($response->data()));
         $this->assertCount(2, $response->data());
@@ -206,6 +184,33 @@ class RequestTest extends ApiStubTestCase
         // Test override by public property
         $this->request->{$getProperty} = null;
         $this->assertNull($this->request->{$getProperty});
+    }
+
+    private function createDefaultResponse(): ResponseInterface
+    {
+        return $this->createClientResponse('{
+            "status": "ok",
+            "meta": {
+                "total_count": 8,
+                "displayed_count": 2,
+                "offset": 0,
+                "limit": 2
+            },
+            "data": [
+                {
+                    "id": 1,
+                    "customfield_options_url": "http://app.stormspire.loc/api/v3/customfield-options?customfield_id=1",
+                    "name": "my select",
+                    "type": "select"
+                },
+                {
+                    "id": 2,
+                    "customfield_options_url": "http://app.stormspire.loc/api/v3/customfield-options?customfield_id=2",
+                    "name": "my checkbox",
+                    "type": "checkbox"
+                }
+            ]
+        }');
     }
 
     //endregion

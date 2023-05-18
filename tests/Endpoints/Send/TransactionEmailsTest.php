@@ -32,12 +32,8 @@ class TransactionEmailsTest extends ApiStubTestCase
 
     public function testEndpoint(): void
     {
-        $this->createEndpointTest(
-            $this->transactionEmails,
-            'send/transactional-emails-bulk',
-            'POST',
-            self::arrayHasKey('json')
-        );
+        $this->expectClientRequest('send/transactional-emails-bulk', 'POST', self::arrayHasKey('json'));
+        $this->transactionEmails->send();
     }
 
     public function testShouldSetSettersAndReadGetters(): void

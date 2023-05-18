@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Endpoints\Send;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Utils;
-use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Endpoints\Send\BulkCustomSms\BulkCustomSmsRequest;
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Exceptions\RequestException;
@@ -111,59 +108,29 @@ class BulkCustomSmsTest extends ApiStubTestCase
             $this->bulkCustomSms->addTask($task);
         }
 
-        // Build the client that will mock the client->request method
-        $client = $this->createMock(Client::class);
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createClientResponse();
 
-        // The array will be chunked in 3 groups
-        $willBeCalled = $this->exactly(3);
+        $this->expectClientRequest('send/custom-sms-bulk', 'POST', $this->callback(function ($value): bool {
+            $data = $this->assertHasJsonData($value, 'tasks');
+            $this->assertCount(500, $data);
+            $this->assertEquals('kirk+1@example.com', $data[0]['recipient']['emailaddress']);
+            return true;
+        }), $response);
 
-        // Make a response that is valid and ok - prevent exception
-        $response->expects($this->atLeastOnce())
-            ->method('getBody')
-            ->willReturn($this->defaultReturnResponse);
-        $called = 0;
-        $client->expects($willBeCalled)
-            ->method('request')
-            ->with(
-                $this->valueConstraint('POST'),
-                $this->valueConstraint('send/custom-sms-bulk'),
-                $this->callback(function ($value) use (&$called): bool {
-                    $this->assertTrue(is_array($value), 'Options should be array');
-                    $this->assertArrayHasKey('json', $value, 'Options should contain json');
-                    $this->assertArrayHasKey('tasks', $value['json'], 'JSON must have data array');
-                    ++$called;
+        $this->expectClientRequest('send/custom-sms-bulk', 'POST', $this->callback(function ($value): bool {
+            $data = $this->assertHasJsonData($value, 'tasks');
+            $this->assertCount(500, $data);
+            $this->assertEquals('kirk+501@example.com', $data[0]['recipient']['emailaddress']);
+            return true;
+        }), $response);
 
-                    switch ($called) {
-                        case 1:
-                            $this->assertCount(500, $value['json']['tasks']);
-                            $this->assertEquals(
-                                'kirk+1@example.com',
-                                $value['json']['tasks'][0]->getRecipient()->getEmailAddress()
-                            );
-                            break;
-                        case 2:
-                            $this->assertCount(500, $value['json']['tasks']);
-                            $this->assertEquals(
-                                'kirk+501@example.com',
-                                $value['json']['tasks'][0]->getRecipient()->getEmailAddress()
-                            );
-                            break;
-                        case 3: // Last pack of contacts is smaller
-                            $this->assertCount(250, $value['json']['tasks']);
-                            $this->assertEquals(
-                                'kirk+1001@example.com',
-                                $value['json']['tasks'][0]->getRecipient()->getEmailAddress()
-                            );
-                            break;
-                    }
+        $this->expectClientRequest('send/custom-sms-bulk', 'POST', $this->callback(function ($value): bool {
+            $data = $this->assertHasJsonData($value, 'tasks');
+            $this->assertCount(250, $data);
+            $this->assertEquals('kirk+1001@example.com', $data[0]['recipient']['emailaddress']);
+            return true;
+        }), $response);
 
-                    return true;
-                })
-            )->willReturn($response);
-
-        $this->apiStub->method('client')
-            ->willReturn($client);
         $this->bulkCustomSms->send();
     }
 
@@ -179,43 +146,17 @@ class BulkCustomSmsTest extends ApiStubTestCase
             $this->bulkCustomSms->addTask($task);
         }
 
-        // Build the client that will mock the client->request method
-        $client = $this->createMock(Client::class);
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createClientErrorResponse(
+            'Problem at key tasks: Problem at key recipient: Problem at key emailaddress: Invalid emailaddress: invalid@email@gmail.com'
+        );
 
-        // Make a response that is valid and ok - prevent exception
-        $response->expects($this->atLeastOnce())
-            ->method('getBody')
-            ->willReturn(Utils::streamFor('{
-            "status": "error",
-            "meta": [],
-            "message": "Problem at key tasks: Problem at key recipient: Problem at key emailaddress: Invalid emailaddress: invalid@email@gmail.com"
-        }'));
-        $response->expects($this->once())
-            ->method('getStatusCode')
-            ->willReturn(422);
+        $this->expectClientRequest('send/custom-sms-bulk', 'POST', $this->callback(function ($value): bool {
+            $data = $this->assertHasJsonData($value, 'tasks');
+            $this->assertCount(500, $data);
+            $this->assertEquals('kirk+1@example.com', $data[0]['recipient']['emailaddress']);
+            return true;
+        }), $response);
 
-        $client->expects($this->once())
-            ->method('request')
-            ->with(
-                $this->valueConstraint('POST'),
-                $this->valueConstraint('send/custom-sms-bulk'),
-                $this->callback(function ($value): bool {
-                    $this->assertTrue(is_array($value), 'Options should be array');
-                    $this->assertArrayHasKey('json', $value, 'Options should contain json');
-                    $this->assertArrayHasKey('tasks', $value['json'], 'JSON must have data array');
-                    $this->assertCount(500, $value['json']['tasks']);
-                    $this->assertEquals(
-                        'kirk+1@example.com',
-                        $value['json']['tasks'][0]->getRecipient()->getEmailAddress()
-                    );
-
-                    return true;
-                })
-            )->willReturn($response);
-
-        $this->apiStub->method('client')
-            ->willReturn($client);
         $this->expectException(RequestException::class);
         $this->bulkCustomSms->send();
     }

@@ -30,17 +30,21 @@ class AbstractRequestTestCase extends ApiStubTestCase
      */
     public function testEndpointAndOptions(): void
     {
-        $this->createEndpointTest($this->request, 'endpoint', 'GET', ['test']);
+        $this->expectClientRequest('endpoint', 'GET', [
+            'json' => ['test'],
+        ]);
+        $this->request->send();
     }
 
     public function testResponse(): void
     {
-        $this->createSendResponse($this->request, '{
-               "status": "ok",
-               "meta": [
-               ],
-               "message": "Test"
-           }', 'Test');
+        $this->expectClientResponse('{
+            "status": "ok",
+            "meta": [],
+            "message": "Test"
+        }');
+        $response = $this->request->send();
+        $this->assertResponse($response, 'Test');
     }
 
     /**
@@ -48,12 +52,16 @@ class AbstractRequestTestCase extends ApiStubTestCase
      */
     public function testResponseStatusCodeWithResponseError(): void
     {
-        $exception = $this->createSendErrorResponse($this->request, '{
-               "status": "error",
-               "meta": [
-               ],
-               "message": "An error"
-           }', 'An error', AbstractResponse::ERROR, [], AbstractResponse::class, 500);
+        $this->expectClientResponse('{
+           "status": "error",
+           "meta": [
+           ],
+           "message": "An error"
+        }', 500);
+
+        $exception = $this->assertThrowsRequestException($this->request);
+
+        $this->assertResponse($exception->response(), 'An error', AbstractResponse::ERROR);
 
         $this->assertEquals(
             'Client error: An error',
@@ -73,12 +81,15 @@ class AbstractRequestTestCase extends ApiStubTestCase
      */
     public function testResponse200StatusCodeWithResponseError(): void
     {
-        $exception = $this->createSendErrorResponse($this->request, '{
-               "status": "error",
-               "meta": [
-               ],
-               "message": "An error"
-           }', 'An error', AbstractResponse::ERROR, [], AbstractResponse::class, 200);
+        $this->expectClientResponse('{
+            "status": "error",
+            "meta": [],
+            "message": "An error"
+        }');
+
+        $exception = $this->assertThrowsRequestException($this->request);
+
+        $this->assertResponse($exception->response(), 'An error', AbstractResponse::ERROR);
 
         $this->assertEquals(
             'Client error: An error',
@@ -95,15 +106,11 @@ class AbstractRequestTestCase extends ApiStubTestCase
      */
     public function testResponseStatusCode(): void
     {
-        $exception = $this->createSendErrorResponse(
-            $this->request,
-            null,
-            null,
-            AbstractResponse::ERROR,
-            null,
-            AbstractResponse::class,
-            500
-        );
+        $this->expectClientResponse(null, 500);
+
+        $exception = $this->assertThrowsRequestException($this->request);
+
+        $this->assertResponse($exception->response(), null, AbstractResponse::ERROR);
 
         $this->assertEquals('Client error', $exception->getMessage(), 'The exception should use the Guzzles message');
         $this->assertEquals(500, $exception->getCode(), 'Exception must have same code as status code');
@@ -119,20 +126,16 @@ class AbstractRequestTestCase extends ApiStubTestCase
      */
     public function testResponseStatusCodeWithJson(): void
     {
-        $exception = $this->createSendErrorResponse(
-            $this->request,
-            '{
-               "status": "error",
-               "meta": [
-               ],
-               "message": "An error"
-           }',
-            'An error',
-            AbstractResponse::ERROR,
-            [],
-            AbstractResponse::class,
-            500
-        );
+        $this->expectClientResponse('{
+           "status": "error",
+           "meta": [
+           ],
+           "message": "An error"
+        }', 500);
+
+        $exception = $this->assertThrowsRequestException($this->request);
+
+        $this->assertResponse($exception->response(), 'An error', AbstractResponse::ERROR);
 
         $this->assertEquals(
             'Client error: An error',

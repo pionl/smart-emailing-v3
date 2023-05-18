@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Endpoints\Eshops;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Utils;
-use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Endpoints\Eshops\EshopOrdersBulkRequest;
 use SmartEmailing\v3\Exceptions\RequestException;
 use SmartEmailing\v3\Models\Order;
@@ -28,7 +25,8 @@ class EshopOrdersBulkTest extends ApiStubTestCase
      */
     public function testEndpoint(): void
     {
-        $this->createEndpointTest($this->orders, 'orders-bulk', 'POST', $this->arrayHasKey('json'));
+        $this->expectClientRequest('orders-bulk', 'POST', $this->arrayHasKey('json'));
+        $this->orders->send();
     }
 
     public function testAddOrder(): void
@@ -59,49 +57,29 @@ class EshopOrdersBulkTest extends ApiStubTestCase
             );
         }
 
-        // Build the client that will mock the client->request method
-        $client = $this->createMock(Client::class);
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createClientResponse();
 
-        // The array will be chunked in 3 groups
-        $willBeCalled = $this->exactly(3);
+        $this->expectClientRequest('orders-bulk', 'POST', $this->callback(function ($value): bool {
+            $this->assertArrayHasKey('json', $value, 'Options should contain json');
+            $this->assertCount(500, $value['json']);
+            $this->assertEquals('jan.novak+1@test.cz', $value['json'][0]['emailaddress']);
+            return true;
+        }), $response);
 
-        // Make a response that is valid and ok - prevent exception
-        $response->expects($this->atLeastOnce())
-            ->method('getBody')
-            ->willReturn($this->defaultReturnResponse);
-        $called = 0;
-        $client->expects($willBeCalled)
-            ->method('request')
-            ->with(
-                $this->valueConstraint('POST'),
-                $this->valueConstraint('orders-bulk'),
-                $this->callback(function ($value) use (&$called): bool {
-                    $this->assertTrue(is_array($value), 'Options should be array');
-                    $this->assertArrayHasKey('json', $value, 'Options should contain json');
-                    ++$called;
+        $this->expectClientRequest('orders-bulk', 'POST', $this->callback(function ($value): bool {
+            $this->assertArrayHasKey('json', $value, 'Options should contain json');
+            $this->assertCount(500, $value['json']);
+            $this->assertEquals('jan.novak+501@test.cz', $value['json'][0]['emailaddress']);
+            return true;
+        }), $response);
 
-                    switch ($called) {
-                        case 1:
-                            $this->assertCount(500, $value['json']);
-                            $this->assertEquals('jan.novak+1@test.cz', $value['json'][0]->emailAddress);
-                            break;
-                        case 2:
-                            $this->assertCount(500, $value['json']);
-                            $this->assertEquals('jan.novak+501@test.cz', $value['json'][0]->emailAddress);
-                            break;
-                        case 3: // Last pack of contacts is smaller
-                            $this->assertCount(250, $value['json']);
-                            $this->assertEquals('jan.novak+1001@test.cz', $value['json'][0]->emailAddress);
-                            break;
-                    }
+        $this->expectClientRequest('orders-bulk', 'POST', $this->callback(function ($value): bool {
+            $this->assertArrayHasKey('json', $value, 'Options should contain json');
+            $this->assertCount(250, $value['json']);
+            $this->assertEquals('jan.novak+1001@test.cz', $value['json'][0]['emailaddress']);
+            return true;
+        }), $response);
 
-                    return true;
-                })
-            )->willReturn($response);
-
-        $this->apiStub->method('client')
-            ->willReturn($client);
         $this->orders->send();
     }
 
@@ -114,39 +92,17 @@ class EshopOrdersBulkTest extends ApiStubTestCase
             );
         }
 
-        // Build the client that will mock the client->request method
-        $client = $this->createMock(Client::class);
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createClientErrorResponse(
+            'Emailaddress invalid@email@gmail.com is not valid email address.'
+        );
 
-        // Make a response that is valid and ok - prevent exception
-        $response->expects($this->atLeastOnce())
-            ->method('getBody')
-            ->willReturn(Utils::streamFor('{
-            "status": "error",
-            "meta": [],
-            "message": "Emailaddress invalid@email@gmail.com is not valid email address."
-        }'));
-        $response->expects($this->once())
-            ->method('getStatusCode')
-            ->willReturn(422);
+        $this->expectClientRequest('orders-bulk', 'POST', $this->callback(function ($value): bool {
+            $this->assertArrayHasKey('json', $value, 'JSON must have data array');
+            $this->assertCount(500, $value['json']);
+            $this->assertEquals('jan.novak+1@test.cz', $value['json'][0]['emailaddress']);
+            return true;
+        }), $response);
 
-        $client->expects($this->once())
-            ->method('request')
-            ->with(
-                $this->valueConstraint('POST'),
-                $this->valueConstraint('orders-bulk'),
-                $this->callback(function ($value): bool {
-                    $this->assertTrue(is_array($value), 'Options should be array');
-                    $this->assertArrayHasKey('json', $value, 'JSON must have data array');
-                    $this->assertCount(500, $value['json']);
-                    $this->assertEquals('jan.novak+1@test.cz', $value['json'][0]->emailAddress);
-
-                    return true;
-                })
-            )->willReturn($response);
-
-        $this->apiStub->method('client')
-            ->willReturn($client);
         $this->expectException(RequestException::class);
         $this->orders->send();
     }
