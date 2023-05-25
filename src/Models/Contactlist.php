@@ -43,9 +43,9 @@ class Contactlist extends Model
     public ?string $senderEmail = null;
 
     /**
-     * @var int|null Email address for list reply-to.
+     * @var string|null Email address for list reply-to.
      */
-    public ?int $replyTo = null;
+    public ?string $replyTo = null;
 
     /**
      * @var float|null Percentage of link-clicking contacts in list or null if there are is no data.
@@ -85,7 +85,7 @@ class Contactlist extends Model
     /**
      * @param int|numeric-string|null $id
      */
-    public function __construct($id)
+    public function __construct($id = null)
     {
         $this->setId($id);
     }
@@ -123,7 +123,7 @@ class Contactlist extends Model
         return $this;
     }
 
-    public function setReplyTo(?int $replyTo): self
+    public function setReplyTo(?string $replyTo): self
     {
         $this->replyTo = $replyTo;
         return $this;

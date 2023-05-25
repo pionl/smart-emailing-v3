@@ -110,9 +110,13 @@ class AbstractRequestTestCase extends ApiStubTestCase
 
         $exception = $this->assertThrowsRequestException($this->request);
 
-        $this->assertResponse($exception->response(), null, AbstractResponse::ERROR);
+        $this->assertResponse($exception->response(), 'JSON: Syntax error', AbstractResponse::ERROR);
 
-        $this->assertEquals('Client error', $exception->getMessage(), 'The exception should use the Guzzles message');
+        $this->assertEquals(
+            'Client error: JSON: Syntax error',
+            $exception->getMessage(),
+            'The exception should use the Guzzles message'
+        );
         $this->assertEquals(500, $exception->getCode(), 'Exception must have same code as status code');
         $this->assertEquals(500, $exception->response()->statusCode());
         $this->assertNotNull(

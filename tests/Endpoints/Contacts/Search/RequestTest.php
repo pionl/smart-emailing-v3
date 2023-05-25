@@ -89,9 +89,12 @@ class RequestTest extends ApiStubTestCase
             $this->assertNotNull($contact->id);
         }
 
-        $this->assertEquals(Contact::MALE, $response->data()[0]->gender);
-        $this->assertEquals(1, $response->data()[0]->id);
-        $this->assertEquals('John', $response->data()[0]->name);
+        /** @var Contact $contact */
+        $contact = $response->data()[0];
+        $this->assertEquals(Contact::MALE, $contact->gender);
+        $this->assertEquals(1, $contact->id);
+        $this->assertEquals('John', $contact->name);
+        $this->assertEquals(30286, $contact->contactList()->toArray()[0]->id);
 
         $this->assertEquals(8, $response->meta()->total_count);
     }

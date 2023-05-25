@@ -41,6 +41,7 @@ abstract class AbstractResponse
         } catch (\JsonException $jsonException) {
             $this->json = null;
             $this->status = self::ERROR;
+            $this->message = 'JSON: ' . $jsonException->getMessage();
         }
     }
 
