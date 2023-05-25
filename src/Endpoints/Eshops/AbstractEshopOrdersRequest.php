@@ -6,7 +6,7 @@ namespace SmartEmailing\v3\Endpoints\Eshops;
 
 use SmartEmailing\v3\Endpoints\AbstractRequest;
 use SmartEmailing\v3\Endpoints\AbstractResponse;
-use SmartEmailing\v3\Models\Order;
+use SmartEmailing\v3\Models\OrderWithFeedItems;
 
 /**
  * @template TResponse of AbstractResponse
@@ -16,28 +16,28 @@ use SmartEmailing\v3\Models\Order;
 abstract class AbstractEshopOrdersRequest extends AbstractRequest
 {
     /**
-     * @var Order[]
+     * @var OrderWithFeedItems[]
      */
     protected array $orders = [];
 
     /**
      * Creates Returns the newly created order
      */
-    public function newOrder(?string $eshopName, ?string $eshopCode, ?string $emailAddress): Order
+    public function newOrder(?string $eshopName, ?string $eshopCode, ?string $emailAddress): OrderWithFeedItems
     {
-        $order = new Order($eshopName, $eshopCode, $emailAddress);
+        $order = new OrderWithFeedItems($eshopName, $eshopCode, $emailAddress);
         $this->addOrder($order);
         return $order;
     }
 
-    public function addOrder(Order $order): self
+    public function addOrder(OrderWithFeedItems $order): self
     {
         $this->orders[] = $order;
         return $this;
     }
 
     /**
-     * @return Order[]
+     * @return OrderWithFeedItems[]
      */
     public function orders(): array
     {

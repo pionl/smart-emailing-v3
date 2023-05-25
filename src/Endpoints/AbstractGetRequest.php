@@ -1,0 +1,51 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SmartEmailing\v3\Endpoints;
+
+use SmartEmailing\v3\Api;
+
+/**
+ * @template TResponse of AbstractItemResponse
+ * @extends AbstractRequest<TResponse>
+ */
+abstract class AbstractGetRequest extends AbstractRequest
+{
+    /**
+     * @var string[]|null
+     */
+    private ?array $select = null;
+
+    private int $itemId;
+
+    public function __construct(Api $api, int $itemId)
+    {
+        parent::__construct($api);
+        $this->itemId = $itemId;
+    }
+
+    public function getItemId(): int
+    {
+        return $this->itemId;
+    }
+
+    /**
+     * @return $this
+     */
+    public function select(array $select): self
+    {
+        $this->select = $select;
+        return $this;
+    }
+
+    /**
+     * @return array{select: string}
+     */
+    public function toArray(): array
+    {
+        return [
+            'select' => implode(',', $this->select),
+        ];
+    }
+}

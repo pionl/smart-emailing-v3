@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Endpoints\Ping;
 
-use SmartEmailing\v3\Endpoints\Ping\Ping;
 use SmartEmailing\v3\Endpoints\Ping\PingRequest;
 use SmartEmailing\v3\Endpoints\StatusResponse;
-use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\LiveTestCase;
 
-class PingLiveTest extends BaseTestCase
+class PingLiveTest extends LiveTestCase
 {
     protected PingRequest $ping;
 
@@ -18,6 +17,7 @@ class PingLiveTest extends BaseTestCase
      */
     protected function setUp(): void
     {
+        parent::setUp();
         $this->ping = new PingRequest($this->createApi());
     }
 
@@ -26,10 +26,6 @@ class PingLiveTest extends BaseTestCase
      */
     public function testSend(): void
     {
-        if ($this->canDoLiveTest === false) {
-            $this->markTestSkipped();
-        }
-
         $response = $this->createApi()
             ->ping();
         $this->assertInstanceOf(StatusResponse::class, $response);

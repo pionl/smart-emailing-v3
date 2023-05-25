@@ -80,30 +80,31 @@ try {
 
 ## Supports
 
-* [x] [Import](https://app.smartemailing.cz/docs/api/v3/index.html#api-Import-Import_contacts)`$api->import()` or `new Import($api)`
-* [x] [Ping](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Aliveness_test) `$api->ping()` or `new Ping($api)`
-* [x] [Credentials](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Login_test_with_GET) `$api->credentials()` or `new Credentials($api)`
-* [x] [Contactlist](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contactlists-Get_Contactlists) Retrieve list `$api->contactlist()->lists()` or detail `$api->contactlist()->get($id)` - wrapper for 2 Request objects
-* [x] CustomFields - exists: A quick way how to get custom field by it's name. `$api->customFields()->exists('name') : CustomField|bool`
-* [x] [Customfields - create](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) create request `$api->customFields()->createRequest()` or send create request `$api->customFields()->create(new CustomField('test', CustomField::TEXT))`
-* [x] [Customfields - search / list](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) search request `$api->customFields()->searchRequest($page = 1, $limit = 100)` or send search request `$api->customFields()->search($page = 1, $limit = 100)`
-* [ ] [Customfields - rest](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields) Similar concept as contact-list - already started
-* [ ] [Customfiels options](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfield_Options)
-* [ ] [Contacts](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts) Similar concept as contact-list
-* [ ] [Contacts in list](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts_in_lists) Similar concept as contact-list
+* [x] [Import contacts](https://app.smartemailing.cz/docs/api/v3/index.html#api-Import-Import_contacts)
+* [x] [Import orders](https://app.smartemailing.cz/docs/api/v3/index.html#api-Import-Import_orders)
+* [x] [Ping](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Aliveness_test)
+* [x] [Credentials](https://app.smartemailing.cz/docs/api/v3/index.html#api-Tests-Login_test_with_GET)
+* [x] [Contactlist](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contactlists-Get_Contactlists)
+* [ ] [Customfields](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields)
+  * [x] [Customfields - create](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields)
+  * [x] [Customfields - search / list](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields)
+  * [ ] [Customfields - rest](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfields)
+  * [ ] [Customfields - options](https://app.smartemailing.cz/docs/api/v3/index.html#api-Customfield_Options)
+* [x] [Contacts](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts)
+* [ ] [Contacts in list](https://app.smartemailing.cz/docs/api/v3/index.html#api-Contacts_in_lists)
 * [ ] [Custom emails](https://app.smartemailing.cz/docs/api/v3/index.html#api-Custom_emails)
 * [x] [Emails](https://app.smartemailing.cz/docs/api/v3/index.html#api-Emails)
 * [x] [Newsletter](https://app.smartemailing.cz/docs/api/v3/index.html#api-Newsletter)
 * [ ] [Webhooks](https://app.smartemailing.cz/docs/api/v3/index.html#api-Webhooks)
-* [x] [E shops](https://app.smartemailing.cz/docs/api/v3/index.html#api-E_shops) Notifies SmartEmailing about new order in e-shop.
+* [x] (DEPRECATED) [E-shops](https://app.smartemailing.cz/docs/api/v3/index.html#api-E_shops)
 
 ## Advanced docs
 
-## Import
+## Import contacts
 
 The import holds 2 main data points:
 1. Settings `$import->settings()->setUpdate(true)`
-2. Contacts `$import->newContact() : Contact`, `$import->contacts() : array` and `$import->addContact() : $this`
+2. Contacts `$import->newContact() : Contact`, `$import->contacts() : array` and `$import->addContact($contact) : self`
 
 Example of usage is above.
 
@@ -124,6 +125,14 @@ Uses a data holder with `create`/`add`/`get`/`isEmpty`/`toArray`/`jsonSerialize`
 $field = $contact->customFields()->create(12, 'test')
 $list = $contact->contactLists()->create(12, 'confirmed')
 ```
+
+## Import orders
+
+The import holds 2 main data points:
+1. Settings `$import->settings()->setSkipInvalidOrders(true)`
+2. Orders `$import->newOrder() : Order`, `$import->orders() : array` and `$import->addOrder($order) : self`
+
+Example of usage is above.
 
 ## CustomFields
 

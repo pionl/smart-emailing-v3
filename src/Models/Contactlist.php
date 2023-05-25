@@ -28,6 +28,8 @@ class Contactlist extends Model
      */
     public ?string $name = null;
 
+    public ?string $category = null;
+
     /**
      * @var string|null Contactlist public name that will be displayed in unsubscribe pages.
      */
@@ -37,6 +39,8 @@ class Contactlist extends Model
      * @var string|null Name of contactlist owner.
      */
     public ?string $senderName = null;
+
+    public ?string $senderEmail = null;
 
     /**
      * @var int|null Email address for list reply-to.
@@ -113,51 +117,15 @@ class Contactlist extends Model
         return $this;
     }
 
+    public function setSenderEmail(?string $senderEmail): self
+    {
+        $this->senderEmail = $senderEmail;
+        return $this;
+    }
+
     public function setReplyTo(?int $replyTo): self
     {
         $this->replyTo = $replyTo;
-        return $this;
-    }
-
-    public function setClickRate(?float $clickRate): self
-    {
-        $this->clickRate = $clickRate;
-        return $this;
-    }
-
-    public function setOpenRate(?float $openRate): self
-    {
-        $this->openRate = $openRate;
-        return $this;
-    }
-
-    public function setAlertOut(?int $alertOut): self
-    {
-        $this->alertOut = $alertOut;
-        return $this;
-    }
-
-    public function setSegmentId(?int $segmentId): self
-    {
-        $this->segmentId = $segmentId;
-        return $this;
-    }
-
-    public function setSignature(?string $signature): self
-    {
-        $this->signature = $signature;
-        return $this;
-    }
-
-    public function setNotes(?string $notes): self
-    {
-        $this->notes = $notes;
-        return $this;
-    }
-
-    public function setCreated(?string $created): self
-    {
-        $this->created = $created;
         return $this;
     }
 
@@ -168,6 +136,11 @@ class Contactlist extends Model
     {
         return [
             'id' => $this->id,
+            'name' => $this->name,
+            'publicname' => $this->publicName,
+            'sendername' => $this->senderName,
+            'senderemail' => $this->senderEmail,
+            'replyto' => $this->replyTo,
         ];
     }
 

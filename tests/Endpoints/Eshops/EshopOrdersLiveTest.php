@@ -6,10 +6,10 @@ namespace SmartEmailing\v3\Tests\Endpoints\Eshops;
 
 use SmartEmailing\v3\Endpoints\Eshops\EshopOrdersRequest;
 use SmartEmailing\v3\Endpoints\Response;
-use SmartEmailing\v3\Models\Order;
-use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
+use SmartEmailing\v3\Models\OrderWithFeedItems;
+use SmartEmailing\v3\Tests\TestCase\LiveTestCase;
 
-class EshopOrdersLiveTest extends BaseTestCase
+class EshopOrdersLiveTest extends LiveTestCase
 {
     protected EshopOrdersRequest $orders;
 
@@ -37,7 +37,7 @@ class EshopOrdersLiveTest extends BaseTestCase
         // Comment if you want to try
         $this->markTestSkipped();
 
-        $order = new Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
+        $order = new OrderWithFeedItems('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz');
 
         $this->orders->addOrder($order);
 

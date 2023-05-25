@@ -34,6 +34,8 @@ class OrderItem extends Model
      */
     public int $quantity = 0;
 
+    public ?string $unit = null;
+
     /**
      * @var string required
      */
@@ -83,9 +85,10 @@ class OrderItem extends Model
         return $this;
     }
 
-    public function setQuantity(int $quantity): self
+    public function setQuantity(int $quantity, string $unit = null): self
     {
         $this->quantity = $quantity;
+        $this->unit = $unit;
         return $this;
     }
 
@@ -107,7 +110,7 @@ class OrderItem extends Model
     }
 
     /**
-     * @return array{id: string|null, name: string|null, description: string|null, price: Price, quantity: int, url: string, image_url: string|null, attributes: Attributes}
+     * @return array{id: string|null, name: string|null, description: string|null, price: Price, quantity: int, unit: string, url: string, image_url: string|null, attributes: Attributes}
      */
     public function toArray(): array
     {
@@ -117,6 +120,7 @@ class OrderItem extends Model
             'description' => $this->description,
             'price' => $this->price,
             'quantity' => $this->quantity,
+            'unit' => $this->unit ?? 'pieces',
             'url' => $this->url,
             'image_url' => $this->image_url,
             'attributes' => $this->attributes,

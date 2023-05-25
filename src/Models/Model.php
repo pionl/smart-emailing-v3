@@ -10,16 +10,22 @@ abstract class Model implements \JsonSerializable
 {
     /**
      * Copies the data from the JSON
+     *
+     * @return static
      */
-    public static function fromJSON(\stdClass $json): static
+    public static function fromJSON(\stdClass $json): object
     {
         $item = new static(); /** @phpstan-ignore-line */
 
-        // Get all the data that is supported and try to
-        // get it from the json with same key
-        foreach (array_keys($item->toArray()) as $key) {
-            if (property_exists($json, $key)) {
-                $item->{$key} = $json->{$key};
+        $propertyMap = [];
+        foreach (array_keys(get_object_vars($item)) as $propertyName) {
+            $propertyMap[strtolower($propertyName)] = $propertyName;
+        }
+
+        foreach (get_object_vars($json) as $key => $value) {
+            $propertyName = $propertyMap[strtolower(str_replace('_', ' ', $key))] ?? null;
+            if ($propertyName && is_array($value) === false) {
+                $item->{$propertyName} = $value;
             }
         }
 

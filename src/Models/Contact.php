@@ -15,6 +15,36 @@ use SmartEmailing\v3\Models\Holder\Purposes;
  */
 class Contact extends Model
 {
+    public const SELECT_FIELDS = [
+        'id',
+        'language',
+        'blacklisted',
+        'emailaddress',
+        'name',
+        'surname',
+        'titlesbefore',
+        'titlesafter',
+        'birthday',
+        'nameday',
+        'salution',
+        'gender',
+        'company',
+        'street',
+        'town',
+        'country',
+        'postalcode',
+        'notes',
+        'phone',
+        'cellphone',
+        'realname',
+    ];
+    public const SORT_FIELDS = self::SELECT_FIELDS;
+    public const EXPAND_FIELDS = ['customfields'];
+    public const MALE = 'M';
+    public const FEMALE = 'F';
+
+    public ?int $id = null;
+
     /**
      * E-mail address of imported contact. This is the only required field.
      *
@@ -101,7 +131,7 @@ class Contact extends Model
      */
     protected Purposes $purposes;
 
-    public function __construct(?string $emailAddress)
+    public function __construct(?string $emailAddress = null)
     {
         $this->emailAddress = $emailAddress;
         $this->customFields = new CustomFieldValues();
@@ -204,7 +234,7 @@ class Contact extends Model
      */
     public function setGender(?string $gender): self
     {
-        InvalidFormatException::checkInArray($gender, ['M', 'F', null]);
+        InvalidFormatException::checkInArray($gender, [self::MALE, self::FEMALE, null]);
 
         $this->gender = $gender;
         return $this;
@@ -266,6 +296,7 @@ class Contact extends Model
     public function toArray(): array
     {
         return [
+            'id' => $this->id,
             'emailaddress' => $this->emailAddress,
             'name' => $this->name,
             'surname' => $this->surname,
@@ -294,5 +325,25 @@ class Contact extends Model
     public function jsonSerialize(): array
     {
         return $this->removeEmptyValues($this->toArray());
+    }
+
+    /**
+     * @return static
+     */
+    public static function fromJSON(\stdClass $json): object
+    {
+        $item = parent::fromJSON($json);
+
+        foreach ($json->contactlists as $value) {
+            $item->contactLists->add(ContactListStatus::fromJSON($value));
+        }
+
+        if (isset($json->customfields)) {
+            foreach ($json->customfields as $value) {
+                $item->customFields->add(CustomFieldValue::fromJSON($value));
+            }
+        }
+
+        return $item;
     }
 }

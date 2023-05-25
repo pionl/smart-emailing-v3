@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Models;
 
-use PHPUnit\Framework\TestCase;
 use SmartEmailing\v3\Models\TemplateVariable;
+use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
-class TemplateVariableTest extends TestCase
+class TemplateVariableTest extends BaseTestCase
 {
     private TemplateVariable $model;
 

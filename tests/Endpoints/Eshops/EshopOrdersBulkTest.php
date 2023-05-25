@@ -6,7 +6,7 @@ namespace SmartEmailing\v3\Tests\Endpoints\Eshops;
 
 use SmartEmailing\v3\Endpoints\Eshops\EshopOrdersBulkRequest;
 use SmartEmailing\v3\Exceptions\RequestException;
-use SmartEmailing\v3\Models\Order;
+use SmartEmailing\v3\Models\OrderWithFeedItems;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class EshopOrdersBulkTest extends ApiStubTestCase
@@ -32,13 +32,13 @@ class EshopOrdersBulkTest extends ApiStubTestCase
     public function testAddOrder(): void
     {
         $this->assertCount(1, $this->orders->addOrder(
-            new Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz')
+            new OrderWithFeedItems('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz')
         )->orders());
         $this->assertCount(2, $this->orders->addOrder(
-            new Order('my-eshop2', 'ORDER00012', 'jan.novak2@smartemailing.cz')
+            new OrderWithFeedItems('my-eshop2', 'ORDER00012', 'jan.novak2@smartemailing.cz')
         )->orders());
         $this->assertCount(3, $this->orders->addOrder(
-            new Order('my-eshop2', 'ORDER00013', 'jan.novak3@smartemailing.cz')
+            new OrderWithFeedItems('my-eshop2', 'ORDER00013', 'jan.novak3@smartemailing.cz')
         )->orders());
     }
 
@@ -53,7 +53,7 @@ class EshopOrdersBulkTest extends ApiStubTestCase
         // Build a contact list 2,5 larger then chunk limit
         for ($i = 1; $i <= 1250; ++$i) {
             $this->orders->addOrder(
-                new Order('my-eshop', sprintf('ORDER000%d', $i), sprintf('jan.novak+%d@test.cz', $i))
+                new OrderWithFeedItems('my-eshop', sprintf('ORDER000%d', $i), sprintf('jan.novak+%d@test.cz', $i))
             );
         }
 
@@ -88,7 +88,7 @@ class EshopOrdersBulkTest extends ApiStubTestCase
         // Build a contact list 2,5 larger then chunk limit
         for ($i = 1; $i <= 1250; ++$i) {
             $this->orders->addOrder(
-                new Order('my-eshop', sprintf('ORDER000%d', $i), sprintf('jan.novak+%d@test.cz', $i))
+                new OrderWithFeedItems('my-eshop', sprintf('ORDER000%d', $i), sprintf('jan.novak+%d@test.cz', $i))
             );
         }
 

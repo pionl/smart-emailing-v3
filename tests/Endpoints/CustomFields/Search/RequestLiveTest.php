@@ -6,11 +6,10 @@ namespace SmartEmailing\v3\Tests\Endpoints\CustomFields\Search;
 
 use SmartEmailing\v3\Endpoints\CustomFields\Search\CustomFieldsSearchRequest;
 use SmartEmailing\v3\Endpoints\CustomFields\Search\CustomFieldsSearchResponse;
-use SmartEmailing\v3\Endpoints\CustomFields\Search\Request;
 use SmartEmailing\v3\Models\CustomFieldDefinition;
-use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\LiveTestCase;
 
-class RequestLiveTestCase extends BaseTestCase
+class RequestLiveTestCase extends LiveTestCase
 {
     protected CustomFieldsSearchRequest $request;
 
@@ -29,9 +28,7 @@ class RequestLiveTestCase extends BaseTestCase
 
     public function testSend(): void
     {
-        $this->assertEquals(1, $this->request->page);
-        //$this->request->filter()->byName('Source');
-        return;
+        $this->assertEquals(1, $this->request->getPage());
 
         $response = $this->request->send();
 

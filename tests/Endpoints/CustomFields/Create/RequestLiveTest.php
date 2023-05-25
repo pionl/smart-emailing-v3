@@ -7,9 +7,9 @@ namespace SmartEmailing\v3\Tests\Endpoints\CustomFields\Create;
 use SmartEmailing\v3\Endpoints\CustomFields\Create\CustomFieldsCreateRequest;
 use SmartEmailing\v3\Endpoints\CustomFields\Create\CustomFieldsCreateResponse;
 use SmartEmailing\v3\Models\CustomFieldDefinition;
-use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\LiveTestCase;
 
-class RequestLiveTestCase extends BaseTestCase
+class RequestLiveTestCase extends LiveTestCase
 {
     protected CustomFieldsCreateRequest $request;
 
@@ -30,7 +30,9 @@ class RequestLiveTestCase extends BaseTestCase
     {
         $this->request->setCustomField(new CustomFieldDefinition('test', CustomFieldDefinition::TEXT));
         $this->assertNotNull($this->request->customField());
-        return;
+
+        // Comment if you want to send request
+        $this->markTestSkipped();
 
         $response = $this->request->send();
 

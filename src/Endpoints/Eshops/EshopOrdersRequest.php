@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Endpoints\Eshops;
 
-use SmartEmailing\v3\Models\Order;
+use SmartEmailing\v3\Models\OrderWithFeedItems;
 
 /**
  * @deprecated Use import-orders instead
  */
 class EshopOrdersRequest extends AbstractEshopOrdersRequest
 {
-    public function addOrder(Order $order): self
+    public function addOrder(OrderWithFeedItems $order): self
     {
         $this->orders = [];
         parent::addOrder($order);
         return $this;
     }
 
-    public function order(): ?Order
+    public function order(): ?OrderWithFeedItems
     {
         if ($this->orders !== []) {
             return current($this->orders);
