@@ -45,9 +45,8 @@ class RequestTest extends ApiStubTestCase
 
     public function testFilteredEndpoint(): void
     {
-        $this->request->setPage(2)
-            ->select('name, type')
-            ->limit(50);
+        $this->request->setPage(2, 50)
+            ->select(['name', 'type']);
 
         // Apply filters
         $this->request->filter()
@@ -64,7 +63,7 @@ class RequestTest extends ApiStubTestCase
             $this->assertEquals(50, $query['offset'], 'The second page should the limit value');
             $this->assertEquals(50, $query['limit'], 'The default limit should be 100');
             $this->assertEquals(CustomFieldDefinition::CHECKBOX, $query['type'], 'There should by type filter');
-            $this->assertEquals('name, type', $query['select']);
+            $this->assertEquals('name,type', $query['select']);
             $this->assertCount(4, $query, 'Default query should have only limit and offset');
 
             return true;
@@ -103,27 +102,27 @@ class RequestTest extends ApiStubTestCase
     //region Test query
     public function testQuerySort(): void
     {
-        $this->createQueryValue('sortBy', 'type', 'sort', 'sort');
+        $this->createQueryValue('sortBy', ['type'], 'sort', 'sort');
     }
 
     public function testQueryExpand(): void
     {
-        $this->createQueryValue('expandBy', 'customfield_options', 'expand', 'expand');
+        $this->createQueryValue('expandBy', ['customfield_options'], 'expand', 'expand');
     }
 
     public function testQueryExpandFail(): void
     {
         try {
-            $this->createQueryValue('expandBy', 'test', 'expand', 'expand');
+            $this->createQueryValue('expandBy', ['test'], 'expand', 'expand');
             $this->fail('The value is not valid. Should raise an exception');
         } catch (InvalidFormatException $invalidFormatException) {
-            $this->assertEquals("Value 'test' not allowed: customfield_options", $invalidFormatException->getMessage());
+            $this->assertEquals('These values are not allowed: test', $invalidFormatException->getMessage());
         }
     }
 
     public function testQuerySelect(): void
     {
-        $this->createQueryValue('select', 'name', 'select', 'select');
+        $this->createQueryValue('select', ['name'], 'select', 'select');
     }
 
     public function testQueryFilterById(): void
@@ -176,10 +175,12 @@ class RequestTest extends ApiStubTestCase
         $query = $this->request->query();
 
         // Check the value if it was set by the function
-        $this->assertEquals($value, $setAndGetObject->{$getProperty});
+        if (isset($setAndGetObject->{$getProperty})) {
+            $this->assertEquals($value, $setAndGetObject->{$getProperty});
+        }
 
         $this->assertCount(3, $query, sprintf('The query should have 3 items: limit, offset, %s', $queryKey));
-        $this->assertEquals($value, $query[$queryKey]);
+        $this->assertEquals(is_array($value) ? implode(',', $value) : $value, $query[$queryKey]);
 
         // Test override by public property
         $this->request->{$getProperty} = null;

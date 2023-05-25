@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Models;
 
-use PHPUnit\Framework\TestCase;
 use SmartEmailing\v3\Models\Attachment;
 use SmartEmailing\v3\Models\Recipient;
 use SmartEmailing\v3\Models\Replace;
 use SmartEmailing\v3\Models\Task;
 use SmartEmailing\v3\Models\TemplateVariable;
+use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
-class TaskTest extends TestCase
+class TaskTest extends BaseTestCase
 {
     private Task $model;
 

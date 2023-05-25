@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SmartEmailing\v3\Tests\Endpoints\Import;
+namespace SmartEmailing\v3\Tests\Endpoints\Import\Contacts;
 
 use SmartEmailing\v3\Endpoints\AbstractResponse;
 use SmartEmailing\v3\Endpoints\Import\Contacts\ImportContactsRequest;
 use SmartEmailing\v3\Models\Contact;
-use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\LiveTestCase;
 
-class ImportLiveTest extends BaseTestCase
+class ImportContactsLiveTest extends LiveTestCase
 {
     protected ImportContactsRequest $import;
 

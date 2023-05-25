@@ -26,4 +26,18 @@ class InvalidFormatException extends \LogicException
             throw new self('These values are not allowed: ' . implode(', ', $invalidFields));
         }
     }
+
+    /**
+     * @param string|string[] $values
+     */
+    public static function checkAllowedSortValues($values, array $allowed): void
+    {
+        if (is_array($values) === false) {
+            $values = [$values];
+        }
+        foreach ($allowed as $item) {
+            $allowed[] = '-' . $item;
+        }
+        self::checkAllowedValues($values, $allowed);
+    }
 }

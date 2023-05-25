@@ -59,8 +59,8 @@ class CustomFieldsTest extends ApiStubTestCase
         $request = $this->fields->searchRequest(1, 10);
 
         $this->assertInstanceOf(CustomFieldsSearchRequest::class, $request);
-        $this->assertEquals(1, $request->page);
-        $this->assertEquals(10, $request->limit);
+        $this->assertEquals(1, $request->getPage());
+        $this->assertEquals(10, $request->getLimit());
     }
 
     public function testSearchFailOnData(): void

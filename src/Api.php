@@ -6,6 +6,7 @@ namespace SmartEmailing\v3;
 
 use GuzzleHttp\Client;
 use SmartEmailing\v3\Endpoints\Contactlists\ContactlistEndpoint;
+use SmartEmailing\v3\Endpoints\Contacts\ContactsEndpoint;
 use SmartEmailing\v3\Endpoints\Credentials\CredentialsRequest;
 use SmartEmailing\v3\Endpoints\Credentials\CredentialsResponse;
 use SmartEmailing\v3\Endpoints\CustomFields\CustomFieldsEndpoint;
@@ -15,6 +16,7 @@ use SmartEmailing\v3\Endpoints\Eshops\EshopOrdersBulkRequest;
 use SmartEmailing\v3\Endpoints\Eshops\EshopOrdersRequest;
 use SmartEmailing\v3\Endpoints\IdentifierResponse;
 use SmartEmailing\v3\Endpoints\Import\Contacts\ImportContactsRequest;
+use SmartEmailing\v3\Endpoints\Import\Orders\ImportOrdersRequest;
 use SmartEmailing\v3\Endpoints\Newsletter\NewsletterRequest;
 use SmartEmailing\v3\Endpoints\Ping\PingRequest;
 use SmartEmailing\v3\Endpoints\Send\BulkCustomEmails\BulkCustomEmailsRequest;
@@ -60,11 +62,27 @@ class Api
     }
 
     /**
+     * Creates new import orders request
+     */
+    public function importOrdersRequest(): ImportOrdersRequest
+    {
+        return new ImportOrdersRequest($this);
+    }
+
+    /**
      * Creates new contactlists proxy
      */
     public function contactlist(): ContactlistEndpoint
     {
         return new ContactlistEndpoint($this);
+    }
+
+    /**
+     * Creates new contacts proxy
+     */
+    public function contacts(): ContactsEndpoint
+    {
+        return new ContactsEndpoint($this);
     }
 
     /**

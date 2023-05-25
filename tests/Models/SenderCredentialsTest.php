@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Tests\Models;
 
-use PHPUnit\Framework\TestCase;
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Models\SenderCredentials;
+use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
 
-class SenderCredentialsTest extends TestCase
+class SenderCredentialsTest extends BaseTestCase
 {
     private SenderCredentials $model;
 

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SmartEmailing\v3\Tests\Endpoints\CustomFields\Get;
 
 use SmartEmailing\v3\Endpoints\CustomFields\Get\CustomFieldsGetRequest;
-use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\LiveTestCase;
 
-class RequestLiveTestCase extends BaseTestCase
+class RequestLiveTestCase extends LiveTestCase
 {
     protected CustomfieldsGetRequest $request;
 

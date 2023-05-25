@@ -22,6 +22,16 @@ class CustomFieldDefinition extends Model
      */
     public const SELECT_FIELDS = ['id', 'name', 'type'];
 
+    /**
+     * Options allowed in sort parameter of query
+     */
+    public const SORT_FIELDS = self::SELECT_FIELDS;
+
+    /**
+     * Options allowed in select parameter of query
+     */
+    public const EXPAND_FIELDS = ['customfield_options'];
+
     public ?int $id = null;
 
     public ?string $name = null;

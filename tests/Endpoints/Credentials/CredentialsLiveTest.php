@@ -8,19 +8,15 @@ use SmartEmailing\v3\Api;
 use SmartEmailing\v3\Endpoints\Credentials\CredentialsResponse;
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Exceptions\RequestException;
-use SmartEmailing\v3\Tests\TestCase\BaseTestCase;
+use SmartEmailing\v3\Tests\TestCase\LiveTestCase;
 
-class CredentialsLiveTest extends BaseTestCase
+class CredentialsLiveTest extends LiveTestCase
 {
     /**
      * Mocks the request and checks if request is returned via send method
      */
     public function testSend(): void
     {
-        if ($this->canDoLiveTest === false) {
-            $this->markTestSkipped();
-        }
-
         $response = $this->createApi()
             ->credentials();
 

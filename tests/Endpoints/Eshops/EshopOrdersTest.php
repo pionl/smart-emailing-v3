@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SmartEmailing\v3\Tests\Endpoints\Eshops;
 
 use SmartEmailing\v3\Endpoints\Eshops\EshopOrdersRequest;
-use SmartEmailing\v3\Models\Order;
+use SmartEmailing\v3\Models\OrderWithFeedItems;
 use SmartEmailing\v3\Tests\TestCase\ApiStubTestCase;
 
 class EshopOrdersTest extends ApiStubTestCase
@@ -31,9 +31,11 @@ class EshopOrdersTest extends ApiStubTestCase
     public function testAddOrder(): void
     {
         $this->assertCount(1, $this->orders->addOrder(
-            new Order('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz')
+            new OrderWithFeedItems('my-eshop', 'ORDER0001', 'jan.novak@smartemailing.cz')
         )->orders());
-        $orders = $this->orders->addOrder(new Order('eshop_name2', 'eshop_code2', 'jan.novak2@smartemailing.cz'));
+        $orders = $this->orders->addOrder(
+            new OrderWithFeedItems('eshop_name2', 'eshop_code2', 'jan.novak2@smartemailing.cz')
+        );
         $this->assertCount(1, $orders->orders());
 
         $order = $orders->order();
