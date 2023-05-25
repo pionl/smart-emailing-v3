@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SmartEmailing\v3\Endpoints\Contactlists\Search;
 
+use Psr\Http\Message\ResponseInterface;
 use SmartEmailing\v3\Endpoints\AbstractBasicSearchRequest;
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use SmartEmailing\v3\Models\Contactlist;
@@ -22,5 +23,10 @@ class ContactlistSearchRequest extends AbstractBasicSearchRequest
     protected function endpoint(): string
     {
         return 'contactlists';
+    }
+
+    protected function createResponse(?ResponseInterface $response): ContactlistSearchResponse
+    {
+        return new ContactlistSearchResponse($response);
     }
 }
