@@ -35,17 +35,32 @@ abstract class AbstractGetRequest extends AbstractRequest
      */
     public function select(array $select): self
     {
-        $this->select = $select;
+        $this->select = array_unique(array_merge($this->select ?? [], $select));
         return $this;
     }
 
     /**
-     * @return array{select: string}
+     * Builds a GET query
      */
+    public function query(): array
+    {
+        $query = parent::query();
+        $this->setQuery($query, 'select', $this->select);
+        return $query;
+    }
+
     public function toArray(): array
     {
+        return [];
+    }
+
+    /**
+     * @return array{query: mixed[]}
+     */
+    protected function options(): array
+    {
         return [
-            'select' => implode(',', $this->select),
+            'query' => $this->query(),
         ];
     }
 }

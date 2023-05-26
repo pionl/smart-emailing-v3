@@ -63,6 +63,14 @@ abstract class AbstractRequest implements \JsonSerializable
     }
 
     /**
+     * Builds a GET query
+     */
+    public function query(): array
+    {
+        return [];
+    }
+
+    /**
      * Returns the request method
      */
     protected function method(): string
@@ -81,11 +89,27 @@ abstract class AbstractRequest implements \JsonSerializable
     protected function options(): array
     {
         if ($this->method() === 'GET') {
-            return [];
+            return [
+                'query' => $this->query(),
+            ];
         }
         return [
             'json' => $this->jsonSerialize(),
         ];
+    }
+
+    /**
+     * Sets the value into array if not valid
+     *
+     * @param mixed $value
+     */
+    protected function setQuery(array &$array, string $key, $value): void
+    {
+        if ($value === null) {
+            return;
+        }
+
+        $array[$key] = is_array($value) ? implode(',', $value) : $value;
     }
 
     /**

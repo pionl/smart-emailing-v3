@@ -28,6 +28,14 @@ abstract class AbstractHolder implements \JsonSerializable
         return $this->items[$index];
     }
 
+    /**
+     * @param int|string $index
+     */
+    public function has($index): bool
+    {
+        return isset($this->items[$index]);
+    }
+
     public function isEmpty(): bool
     {
         return $this->items === [];

@@ -26,6 +26,11 @@ class CustomFieldsSearchRequest extends AbstractSearchRequest
         return parent::expandBy($expand);
     }
 
+    public function expandCustomFieldOptions(): self
+    {
+        return $this->expandBy(['customfield_options']);
+    }
+
     /**
      * Comma separated list of properties to select. eg. "?select=id,name" If not provided, all fields are selected.
      *

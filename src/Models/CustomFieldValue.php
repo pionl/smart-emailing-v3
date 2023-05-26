@@ -29,7 +29,7 @@ class CustomFieldValue extends Model
      * Value size is limited to
      * 64KB. Required for simple custom-fields
      */
-    public function __construct($id, ?string $value = null)
+    public function __construct($id = null, ?string $value = null)
     {
         $this->setId($id);
 
@@ -92,5 +92,20 @@ class CustomFieldValue extends Model
     public function jsonSerialize(): array
     {
         return $this->removeEmptyValues($this->toArray());
+    }
+
+    /**
+     * @return static
+     */
+    public static function fromJSON(\stdClass $json): object
+    {
+        $item = parent::fromJSON($json);
+        if (isset($json->customfield_id)) {
+            $item->id = (int) $json->customfield_id;
+        }
+        if (isset($json->customfield_options_id)) {
+            $item->addOption($json->customfield_options_id);
+        }
+        return $item;
     }
 }

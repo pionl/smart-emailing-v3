@@ -60,7 +60,7 @@ class RequestTestCase extends ApiStubTestCase
         $customField = $response->data();
         $this->assertInstanceOf(CustomFieldDefinition::class, $customField);
         $this->assertEquals(10, $customField->id);
-        $this->assertNull($customField->options);
+        $this->assertEquals([], $customField->options()->toArray());
         $this->assertEquals('text', $customField->type);
         $this->assertEquals('Fruit', $customField->name);
     }

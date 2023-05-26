@@ -36,7 +36,7 @@ abstract class AbstractBasicSearchRequest extends AbstractRequest
      */
     public function select(array $select): self
     {
-        $this->select = $select;
+        $this->select = array_unique(array_merge($this->select ?? [], $select));
         return $this;
     }
 
@@ -97,19 +97,5 @@ abstract class AbstractBasicSearchRequest extends AbstractRequest
         return [
             'query' => $this->query(),
         ];
-    }
-
-    /**
-     * Sets the value into array if not valid
-     *
-     * @param mixed $value
-     */
-    protected function setQuery(array &$array, string $key, $value): void
-    {
-        if ($value === null) {
-            return;
-        }
-
-        $array[$key] = is_array($value) ? implode(',', $value) : $value;
     }
 }

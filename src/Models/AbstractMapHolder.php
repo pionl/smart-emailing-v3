@@ -18,6 +18,26 @@ abstract class AbstractMapHolder extends AbstractHolder
     protected array $idMap = [];
 
     /**
+     * @param int|string $id
+     * @return TEntry
+     */
+    public function getById($id): Model
+    {
+        if (isset($this->idMap[$id]) === false) {
+            throw new \InvalidArgumentException(sprintf('Id %s does not exist', $id));
+        }
+        return $this->idMap[$id];
+    }
+
+    /**
+     * @param int|string $id
+     */
+    public function hasId($id): bool
+    {
+        return isset($this->idMap[$id]);
+    }
+
+    /**
      * Adds an entry model into items list. Only unique items are added (represented by the id property)
      *
      * @param TEntry $entry

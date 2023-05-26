@@ -20,6 +20,11 @@ class ContactsSearchRequest extends AbstractSearchRequest
         return parent::expandBy($expand);
     }
 
+    public function expandCustomFields(): self
+    {
+        return $this->expandBy(['customfields']);
+    }
+
     public function select(array $select): self
     {
         InvalidFormatException::checkAllowedValues($select, Contact::SELECT_FIELDS);
