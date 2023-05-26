@@ -7,6 +7,7 @@ namespace SmartEmailing\v3\Models;
 use SmartEmailing\v3\Exceptions\InvalidFormatException;
 use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 use SmartEmailing\v3\Models\CustomFieldValue as ImportCustomField;
+use SmartEmailing\v3\Models\Holder\CustomFieldOptions;
 
 class CustomFieldDefinition extends Model
 {
@@ -38,7 +39,7 @@ class CustomFieldDefinition extends Model
 
     public ?string $type = null;
 
-    public ?array $options = [];
+    private CustomFieldOptions $options;
 
     public function __construct(?string $name = null, ?string $type = null)
     {
@@ -49,6 +50,7 @@ class CustomFieldDefinition extends Model
         if ($type !== null) {
             $this->setType($type);
         }
+        $this->options = new CustomFieldOptions();
     }
 
     /**
@@ -68,17 +70,6 @@ class CustomFieldDefinition extends Model
         return $this;
     }
 
-    /**
-     * Adds an option id
-     *
-     * @return $this
-     */
-    public function addOption(int $id)
-    {
-        $this->options[] = $id;
-        return $this;
-    }
-
     public function setName(?string $name): self
     {
         $this->name = $name;
@@ -91,6 +82,11 @@ class CustomFieldDefinition extends Model
         InvalidFormatException::checkInArray($type, static::types());
         $this->type = $type;
         return $this;
+    }
+
+    public function options(): CustomFieldOptions
+    {
+        return $this->options;
     }
 
     /**
@@ -111,9 +107,22 @@ class CustomFieldDefinition extends Model
     }
 
     /**
+     * Creates option object from the CustomField
+     */
+    public function createOption(?string $name = null): CustomFieldOption
+    {
+        PropertyRequiredException::throwIf(
+            'id',
+            is_numeric($this->id),
+            'You must register the custom field - missing id'
+        );
+        return new CustomFieldOption($this->id, $name);
+    }
+
+    /**
      * Returns the array representation
      *
-     * @return array{id: mixed, name: mixed, type: mixed, options: mixed}
+     * @return array{id: mixed, name: mixed, type: mixed}
      */
     public function toArray(): array
     {
@@ -121,12 +130,28 @@ class CustomFieldDefinition extends Model
             'id' => $this->id,
             'name' => $this->name,
             'type' => $this->type,
-            'options' => $this->options,
         ];
     }
 
     public function jsonSerialize(): array
     {
         return $this->removeEmptyValues($this->toArray());
+    }
+
+    /**
+     * @return static
+     */
+    public static function fromJSON(\stdClass $json): object
+    {
+        $item = parent::fromJSON($json);
+
+        if (isset($json->customfield_options)) {
+            foreach ($json->customfield_options as $value) {
+                $item->options()
+                    ->add(CustomFieldOption::fromJSON($value));
+            }
+        }
+
+        return $item;
     }
 }

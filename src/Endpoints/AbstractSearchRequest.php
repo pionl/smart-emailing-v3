@@ -40,7 +40,7 @@ abstract class AbstractSearchRequest extends AbstractBasicSearchRequest
      */
     public function expandBy(array $expand): self
     {
-        $this->expand = $expand;
+        $this->expand = array_unique(array_merge($this->expand ?? [], $expand));
         return $this;
     }
 

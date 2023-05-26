@@ -33,6 +33,49 @@ class RequestTest extends ApiStubTestCase
         $this->assertEquals(2, $customField->id);
     }
 
+    public function testGetExpanded(): void
+    {
+        $response = $this->createClientResponse('{
+            "status": "ok",
+            "meta": [],
+            "data": {
+                "id": 2,
+                "customfield_options": [
+                    {
+                        "customfield_id": 1,
+                        "id": 1,
+                        "order": 0,
+                        "name": "Tokyo"
+                    },
+                    {
+                        "customfield_id": 1,
+                        "id": 2,
+                        "order": 1,
+                        "name": "Sydney"
+                    },
+                    {
+                        "customfield_id": 1,
+                        "id": 3,
+                        "order": 2,
+                        "name": "Torino"
+                    }
+                ],
+                "name": "not correct",
+                "type": "checkbox"
+            }
+        }');
+        $customField = $this->request($response)
+            ->expandCustomFieldOptions()
+            ->send()
+            ->data();
+
+        $this->assertTrue(is_object($customField), 'The item is in the source');
+        $this->assertInstanceOf(CustomFieldDefinition::class, $customField);
+        $this->assertEquals(2, $customField->id);
+        $this->assertEquals('Tokyo', $customField->options()->get(0)->name);
+        $this->assertEquals('Torino', $customField->options()->getById(3)->name);
+    }
+
     public function testNotExists(): void
     {
         $response = $this->createClientResponse('{

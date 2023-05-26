@@ -25,8 +25,6 @@ class CustomFieldDefinitionTest extends BaseTestCase
         $this->assertNull($this->field->name);
         $this->assertNull($this->field->type);
         $this->assertNull($this->field->id);
-        $this->assertTrue(is_array($this->field->options), 'Options must be an array');
-        $this->assertEmpty($this->field->options);
     }
 
     public function testConstruct(): void
@@ -35,8 +33,6 @@ class CustomFieldDefinitionTest extends BaseTestCase
 
         $this->assertEquals('Test', $field->name);
         $this->assertEquals(CustomFieldDefinition::CHECKBOX, $field->type);
-        $this->assertTrue(is_array($field->options), 'Options must be an array');
-        $this->assertEmpty($field->options);
     }
 
     public function testConstructInvalidType(): void
@@ -78,16 +74,6 @@ class CustomFieldDefinitionTest extends BaseTestCase
         $array = $this->field->jsonSerialize();
         $this->assertArrayHasKey('name', $array);
         $this->assertCount(1, $array);
-    }
-
-    public function testJsonSerializeFilterArray(): void
-    {
-        $this->field->setName('test')
-            ->addOption(1);
-        $array = $this->field->jsonSerialize();
-        $this->assertArrayHasKey('name', $array);
-        $this->assertArrayHasKey('options', $array);
-        $this->assertCount(2, $array);
     }
 
     public function testCreateValueFail(): void

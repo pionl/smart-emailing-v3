@@ -11,7 +11,8 @@
 - If you still want to use these deprecated endpoints change `SmartEmailing\v3\Request\Eshops\Model\Order` to `SmartEmailing\v3\Models\OrderWithFeedItems`
 - For `Search` requests use `setPage($page, $limit)` instead of `setPage($page)->limit($limit)`
 - For `Search` requests use getters `getPage()`, `getOffset()` and `getLimit()` instead of properties
-
+- Array `CustomFieldDefinition->options` is no longer available. USe `->options()` instead to get proper `Holder` object
+- For custom field options use `CustomFieldOption` object
 
 - `CustomRequest` now returns `CustomResponse` with parsed data using `->data()`
 

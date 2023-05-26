@@ -97,6 +97,17 @@ class RequestTest extends ApiStubTestCase
         $this->assertEquals(8, $response->meta()->total_count);
     }
 
+    public function testExpandedResponseEndpoint(): void
+    {
+        $this->expectClientRequest(null, null, null, $this->createExpandedDefaultResponse());
+
+        $response = $this->request->expandCustomFieldOptions()
+            ->send();
+
+        $this->assertEquals('Tokyo', $response->data()[0]->options()->get(0)->name);
+        $this->assertEquals('Torino', $response->data()[0]->options()->getById(3)->name);
+    }
+
     //endregion
 
     //region Test query
@@ -207,6 +218,71 @@ class RequestTest extends ApiStubTestCase
                 {
                     "id": 2,
                     "customfield_options_url": "http://app.stormspire.loc/api/v3/customfield-options?customfield_id=2",
+                    "name": "my checkbox",
+                    "type": "checkbox"
+                }
+            ]
+        }');
+    }
+
+    private function createExpandedDefaultResponse(): ResponseInterface
+    {
+        return $this->createClientResponse('{
+            "status": "ok",
+            "meta": {
+                "total_count": 8,
+                "displayed_count": 2,
+                "offset": 0,
+                "limit": 2
+            },
+            "data": [
+                {
+                    "id": 1,
+                    "customfield_options": [
+                        {
+                            "customfield_id": 1,
+                            "id": 1,
+                            "order": 0,
+                            "name": "Tokyo"
+                        },
+                        {
+                            "customfield_id": 1,
+                            "id": 2,
+                            "order": 1,
+                            "name": "Sydney"
+                        },
+                        {
+                            "customfield_id": 1,
+                            "id": 3,
+                            "order": 2,
+                            "name": "Torino"
+                        }
+                    ],
+                    "name": "my select",
+                    "type": "select"
+                },
+                {
+                    "id": 2,
+                    "customfield_options": [
+                        {
+                            "customfield_id": 2,
+                            "id": 1,
+                            "order": 0,
+                            "name": "Tokyo"
+                        },
+                        {
+                            "customfield_id": 2,
+                            "id": 2,
+                            "order": 1,
+                            "name": "Sydney"
+                        },
+                        {
+                            "customfield_id": 2,
+                            "id": 3,
+                            "order": 2,
+                            "name": "Torino"
+                        }
+                    ],
                     "name": "my checkbox",
                     "type": "checkbox"
                 }

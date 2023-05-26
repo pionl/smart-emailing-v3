@@ -340,7 +340,16 @@ class Contact extends Model
 
         if (isset($json->customfields)) {
             foreach ($json->customfields as $value) {
-                $item->customFields->add(CustomFieldValue::fromJSON($value));
+                $customField = CustomFieldValue::fromJSON($value);
+                if ($customField->id === null) {
+                    continue;
+                }
+                if ($item->customFields->hasId($customField->id)) {
+                    $original = $item->customFields->getById($customField->id);
+                    $original->setOptions(array_merge($original->options, $customField->options));
+                } else {
+                    $item->customFields->add($customField);
+                }
             }
         }
 

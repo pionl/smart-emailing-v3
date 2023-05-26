@@ -67,4 +67,16 @@ class ContactListStatus extends Model
     {
         return $this->removeEmptyValues($this->toArray());
     }
+
+    /**
+     * @return static
+     */
+    public static function fromJSON(\stdClass $json): object
+    {
+        $item = parent::fromJSON($json);
+        if (isset($json->contactlist_id)) {
+            $item->id = (int) $json->contactlist_id;
+        }
+        return $item;
+    }
 }
