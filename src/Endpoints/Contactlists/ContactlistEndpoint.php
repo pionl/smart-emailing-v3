@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SmartEmailing\v3\Endpoints\Contactlists;
 
 use SmartEmailing\v3\Endpoints\AbstractEndpoint;
+use SmartEmailing\v3\Endpoints\Contactlists\Create\ContactlistCreateRequest;
 use SmartEmailing\v3\Endpoints\Contactlists\Get\ContactlistGetRequest;
 use SmartEmailing\v3\Endpoints\Contactlists\Search\ContactlistSearchRequest;
 use SmartEmailing\v3\Endpoints\Contactlists\Truncate\ContactlistTruncateRequest;
@@ -13,6 +14,18 @@ use SmartEmailing\v3\Models\Contactlist;
 
 class ContactlistEndpoint extends AbstractEndpoint
 {
+    public function createRequest(Contactlist $customField = null): ContactlistCreateRequest
+    {
+        return new ContactlistCreateRequest($this->api, $customField);
+    }
+
+    public function create(Contactlist $customField): Contactlist
+    {
+        return $this->createRequest($customField)
+            ->send()
+            ->data();
+    }
+
     public function searchRequest(): ContactlistSearchRequest
     {
         return new ContactlistSearchRequest($this->api);
