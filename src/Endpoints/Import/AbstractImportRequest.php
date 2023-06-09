@@ -13,8 +13,6 @@ use SmartEmailing\v3\Models\Model;
  */
 abstract class AbstractImportRequest extends AbstractRequest
 {
-    public array $contacts;
-
     /**
      * The maximum contacts per single request
      *
@@ -60,7 +58,7 @@ abstract class AbstractImportRequest extends AbstractRequest
     protected function sendInChunkMode(): ?StatusResponse
     {
         // Store the original contact list
-        $originalFullContactList = $this->data;
+        $originalFull = $this->data;
         $lastResponse = null;
 
         // Chunk the array of contacts send it in multiple requests
@@ -72,7 +70,7 @@ abstract class AbstractImportRequest extends AbstractRequest
         }
 
         // Restore to original array
-        $this->contacts = $originalFullContactList;
+        $this->data = $originalFull;
 
         return $lastResponse;
     }
