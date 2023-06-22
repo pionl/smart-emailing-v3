@@ -12,12 +12,12 @@ class SilencePeriod extends Model
     /**
      * Period unit
      */
-    private string $unit = 'days';
+    protected string $unit = 'days';
 
     /**
      * Period value, must be integer
      */
-    private int $value = 1;
+    protected int $value = 1;
 
     public function __construct(string $unit, int $value)
     {

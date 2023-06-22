@@ -8,9 +8,9 @@ use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 
 class Replace extends Model
 {
-    private ?string $key = null;
+    protected ?string $key = null;
 
-    private ?string $content = null;
+    protected ?string $content = null;
 
     public function getKey(): ?string
     {

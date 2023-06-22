@@ -10,13 +10,13 @@ namespace SmartEmailing\v3\Models;
  */
 class Attribute extends Model
 {
-    public ?string $name = null;
+    protected ?string $name = null;
 
     /**
      * String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields. Value size is limited to
      * 64KB. Required for simple custom-fields
      */
-    public ?string $value = null;
+    protected ?string $value = null;
 
     public function __construct(?string $name, ?string $value)
     {
@@ -24,10 +24,20 @@ class Attribute extends Model
         $this->value = $value;
     }
 
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
     public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
+    }
+
+    public function getValue(): ?string
+    {
+        return $this->value;
     }
 
     public function setValue(string $value): self

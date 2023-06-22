@@ -59,16 +59,16 @@ class RequestTestCase extends ApiStubTestCase
         );
         $customField = $response->data();
         $this->assertInstanceOf(CustomFieldDefinition::class, $customField);
-        $this->assertEquals(10, $customField->id);
+        $this->assertEquals(10, $customField->getId());
         $this->assertEquals([], $customField->options()->toArray());
-        $this->assertEquals('text', $customField->type);
-        $this->assertEquals('Fruit', $customField->name);
+        $this->assertEquals('text', $customField->getType());
+        $this->assertEquals('Fruit', $customField->getName());
     }
 
     public function testConstructCustomField(): void
     {
         $request = new CustomFieldsCreateRequest($this->apiStub, new CustomFieldDefinition('test'));
         $this->assertNotNull($request->customField());
-        $this->assertEquals('test', $request->customField()->name, 'Custom field is not same as passed');
+        $this->assertEquals('test', $request->customField()->getName(), 'Custom field is not same as passed');
     }
 }

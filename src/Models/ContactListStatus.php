@@ -16,12 +16,12 @@ class ContactListStatus extends Model
     public const REMOVED = 'removed';
     public const UNSUBSCRIBED = 'unsubscribed';
 
-    public ?int $id = null;
+    protected ?int $id = null;
 
     /**
      * Contact's status in Contactlist. Allowed values: "confirmed", "unsubscribed", "removed"
      */
-    public string $status = self::CONFIRMED;
+    protected string $status = self::CONFIRMED;
 
     public function __construct(int $id = null, ?string $status = self::CONFIRMED)
     {
@@ -34,10 +34,20 @@ class ContactListStatus extends Model
         }
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function setId(int $id): self
     {
         $this->id = (int) $id;
         return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 
     /**

@@ -30,7 +30,7 @@ class RequestTest extends ApiStubTestCase
 
         $this->assertTrue(is_object($customField), 'The item is in the source');
         $this->assertInstanceOf(CustomFieldDefinition::class, $customField);
-        $this->assertEquals(2, $customField->id);
+        $this->assertEquals(2, $customField->getId());
     }
 
     public function testGetExpanded(): void
@@ -71,9 +71,9 @@ class RequestTest extends ApiStubTestCase
 
         $this->assertTrue(is_object($customField), 'The item is in the source');
         $this->assertInstanceOf(CustomFieldDefinition::class, $customField);
-        $this->assertEquals(2, $customField->id);
-        $this->assertEquals('Tokyo', $customField->options()->get(0)->name);
-        $this->assertEquals('Torino', $customField->options()->getById(3)->name);
+        $this->assertEquals(2, $customField->getId());
+        $this->assertEquals('Tokyo', $customField->options()->get(0)->getName());
+        $this->assertEquals('Torino', $customField->options()->getById(3)->getName());
     }
 
     public function testNotExists(): void

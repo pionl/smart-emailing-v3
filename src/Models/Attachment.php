@@ -8,11 +8,11 @@ use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 
 class Attachment extends Model
 {
-    private ?string $fileName = null;
+    protected ?string $fileName = null;
 
-    private ?string $contentType = null;
+    protected ?string $contentType = null;
 
-    private ?string $dataBase64 = null;
+    protected ?string $dataBase64 = null;
 
     public function getFileName(): ?string
     {

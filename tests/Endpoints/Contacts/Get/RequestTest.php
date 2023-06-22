@@ -90,8 +90,8 @@ class RequestTest extends ApiStubTestCase
 
         $this->assertTrue(is_object($contact), 'The item is in the source');
         $this->assertInstanceOf(Contact::class, $contact);
-        $this->assertEquals(2, $contact->id);
-        $this->assertEquals('testmail_123@g4it.cz', $contact->emailAddress);
+        $this->assertEquals(2, $contact->getId());
+        $this->assertEquals('testmail_123@g4it.cz', $contact->getEmailAddress());
     }
 
     public function testGetExpandCustomFields(): void
@@ -202,9 +202,9 @@ class RequestTest extends ApiStubTestCase
 
         $this->assertTrue(is_object($contact), 'The item is in the source');
         $this->assertInstanceOf(Contact::class, $contact);
-        $this->assertEquals(2, $contact->id);
-        $this->assertEquals('testmail_123@g4it.cz', $contact->emailAddress);
-        $this->assertEquals([12, 15, 18], $contact->customFields()->getById(4)->options);
+        $this->assertEquals(2, $contact->getId());
+        $this->assertEquals('testmail_123@g4it.cz', $contact->getEmailAddress());
+        $this->assertEquals([12, 15, 18], $contact->customFields()->getById(4)->getOptions());
     }
 
     public function testNotExists(): void

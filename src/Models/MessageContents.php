@@ -8,11 +8,11 @@ use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 
 class MessageContents extends Model
 {
-    private ?string $subject = null;
+    protected ?string $subject = null;
 
-    private ?string $htmlBody = null;
+    protected ?string $htmlBody = null;
 
-    private ?string $textBody = null;
+    protected ?string $textBody = null;
 
     public function getSubject(): ?string
     {

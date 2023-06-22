@@ -8,9 +8,9 @@ use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 
 class Recipient extends Model
 {
-    private ?string $emailAddress = null;
+    protected ?string $emailAddress = null;
 
-    private string $cellphone = '';
+    protected string $cellphone = '';
 
     public function getEmailAddress(): ?string
     {

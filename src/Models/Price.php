@@ -13,12 +13,12 @@ class Price extends Model
     /**
      * @var float required
      */
-    public float $withoutVat;
+    protected float $withoutVat;
 
     /**
      * @var float required
      */
-    public float $withVat;
+    protected float $withVat;
 
     /**
      * item price currency code (ISO-4217 three-letter ("Alpha-3")) i.e.: CZK, EUR
@@ -27,11 +27,16 @@ class Price extends Model
      */
     protected string $currency;
 
-    public function __construct(float $withoutVat, float $withVat, string $currency)
+    public function __construct(float $withoutVat, float $withVat, string $currency = 'CZK')
     {
         $this->withoutVat = $withoutVat;
         $this->withVat = $withVat;
         $this->currency = $currency;
+    }
+
+    public function getWithoutVat(): float
+    {
+        return $this->withoutVat;
     }
 
     public function setWithoutVat(float $withoutVat): self
@@ -40,10 +45,20 @@ class Price extends Model
         return $this;
     }
 
+    public function getWithVat(): float
+    {
+        return $this->withVat;
+    }
+
     public function setWithVat(float $withVat): self
     {
         $this->withVat = $withVat;
         return $this;
+    }
+
+    public function getCurrency(): string
+    {
+        return $this->currency;
     }
 
     /**

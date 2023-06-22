@@ -16,7 +16,7 @@ class CustomFieldsSearchResponse extends AbstractCollectionResponse
     public function getByName(string $name): ?CustomFieldDefinition
     {
         foreach ($this->data() as $item) {
-            if ($item->name !== null && trim($item->name) === $name) {
+            if ($item->getName() !== null && trim($item->getName()) === $name) {
                 return $item;
             }
         }

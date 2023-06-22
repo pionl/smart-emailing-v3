@@ -8,11 +8,11 @@ use SmartEmailing\v3\Exceptions\PropertyRequiredException;
 
 class SenderCredentials extends Model
 {
-    private ?string $from = null;
+    protected ?string $from = null;
 
-    private ?string $replyTo = null;
+    protected ?string $replyTo = null;
 
-    private ?string $senderName = null;
+    protected ?string $senderName = null;
 
     public function getFrom(): ?string
     {

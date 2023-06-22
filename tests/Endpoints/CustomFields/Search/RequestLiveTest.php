@@ -49,9 +49,9 @@ class RequestLiveTestCase extends LiveTestCase
         /** @var CustomFieldDefinition $customField */
         foreach ($data as $customField) {
             $this->assertInstanceOf(CustomFieldDefinition::class, $customField);
-            $this->assertNotNull($customField->name);
-            $this->assertNotNull($customField->type);
-            $this->assertNotNull($customField->id);
+            $this->assertNotNull($customField->getName());
+            $this->assertNotNull($customField->getType());
+            $this->assertNotNull($customField->getId());
         }
     }
 }

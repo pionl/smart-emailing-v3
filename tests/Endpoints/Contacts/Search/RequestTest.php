@@ -84,17 +84,17 @@ class RequestTest extends ApiStubTestCase
         /** @var Contact $contact */
         foreach ($response->data() as $contact) {
             $this->assertInstanceOf(Contact::class, $contact);
-            $this->assertNotNull($contact->name);
-            $this->assertNotNull($contact->gender);
-            $this->assertNotNull($contact->id);
+            $this->assertNotNull($contact->getName());
+            $this->assertNotNull($contact->getGender());
+            $this->assertNotNull($contact->getId());
         }
 
         /** @var Contact $contact */
         $contact = $response->data()[0];
-        $this->assertEquals(Contact::MALE, $contact->gender);
-        $this->assertEquals(1, $contact->id);
-        $this->assertEquals('John', $contact->name);
-        $this->assertEquals(770, $contact->contactList()->toArray()[0]->id);
+        $this->assertEquals(Contact::MALE, $contact->getGender());
+        $this->assertEquals(1, $contact->getId());
+        $this->assertEquals('John', $contact->getName());
+        $this->assertEquals(770, $contact->contactList()->toArray()[0]->getId());
 
         $this->assertEquals(8, $response->meta()->total_count);
     }
@@ -108,7 +108,7 @@ class RequestTest extends ApiStubTestCase
 
         /** @var Contact $contact */
         $contact = $response->data()[0];
-        $this->assertEquals([12, 15, 18], $contact->customFields()->getById(4)->options);
+        $this->assertEquals([12, 15, 18], $contact->customFields()->getById(4)->getOptions());
     }
 
     public function testQuerySort(): void

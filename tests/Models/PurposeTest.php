@@ -19,27 +19,27 @@ class PurposeTest extends BaseTestCase
 
     public function testConstruct(): void
     {
-        $this->assertEquals(12, $this->field->id);
+        $this->assertEquals(12, $this->field->getId());
     }
 
     public function testConstructNumeric(): void
     {
-        $this->assertEquals(13, (new Purpose('13'))->id);
+        $this->assertEquals(13, (new Purpose('13'))->getId());
     }
 
     public function testSetIdNumeric(): void
     {
-        $this->assertEquals(13, $this->field->setId('13')->id);
+        $this->assertEquals(13, $this->field->setId('13')->getId());
     }
 
     public function testSetValidFrom(): void
     {
-        $this->assertEquals('1991-06-17 00:00:00', $this->field->setValidFrom('1991-06-17 00:00:00')->valid_from);
+        $this->assertEquals('1991-06-17 00:00:00', $this->field->setValidFrom('1991-06-17 00:00:00')->getValidFrom());
     }
 
     public function testSetValidTo(): void
     {
-        $this->assertEquals('1991-06-17 00:00:00', $this->field->setValidTo('1991-06-17 00:00:00')->valid_to);
+        $this->assertEquals('1991-06-17 00:00:00', $this->field->setValidTo('1991-06-17 00:00:00')->getValidTo());
     }
 
     public function testDateTimeFormat(): void

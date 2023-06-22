@@ -16,15 +16,15 @@ class CustomFieldOption extends Model
      */
     public const SORT_FIELDS = self::SELECT_FIELDS;
 
-    public ?int $id = null;
+    protected ?int $id = null;
 
-    public ?int $customFieldId = null;
+    protected ?int $customFieldId = null;
 
-    public ?string $name = null;
+    protected ?string $name = null;
 
-    public ?int $order = null;
+    protected ?int $order = null;
 
-    public ?array $options = [];
+    protected ?array $options = [];
 
     public function __construct(?int $customFieldId = null, ?string $name = null, ?int $order = 1)
     {
@@ -41,6 +41,11 @@ class CustomFieldOption extends Model
         }
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     /**
      * @param int|numeric-string|null $id
      */
@@ -50,10 +55,20 @@ class CustomFieldOption extends Model
         return $this;
     }
 
+    public function getCustomFieldId(): ?int
+    {
+        return $this->customFieldId;
+    }
+
     public function setCustomFieldId(?int $customFieldId): self
     {
         $this->customFieldId = $customFieldId;
         return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 
     public function setName(?string $name): self
@@ -62,10 +77,20 @@ class CustomFieldOption extends Model
         return $this;
     }
 
+    public function getOrder(): ?int
+    {
+        return $this->order;
+    }
+
     public function setOrder(?int $order): self
     {
         $this->order = $order;
         return $this;
+    }
+
+    public function getOptions(): ?array
+    {
+        return $this->options;
     }
 
     /**

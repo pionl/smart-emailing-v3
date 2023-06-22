@@ -15,35 +15,35 @@ class OrderItem extends Model
     /**
      * @var string|null required
      */
-    public ?string $id = null;
+    protected ?string $id = null;
 
     /**
      * @var string|null required
      */
-    public ?string $name = null;
+    protected ?string $name = null;
 
-    public ?string $description = null;
-
-    /**
-     * @var Price required
-     */
-    public Price $price;
+    protected ?string $description = null;
 
     /**
      * @var int required
      */
-    public int $quantity = 0;
+    protected int $quantity = 0;
 
-    public ?string $unit = null;
+    protected ?string $unit = null;
 
     /**
      * @var string required
      */
-    public string $url = '';
+    protected string $url = '';
 
-    public ?string $image_url = null;
+    protected ?string $image_url = null;
 
-    protected Attributes $attributes;
+    /**
+     * @var Price required
+     */
+    private Price $price;
+
+    private Attributes $attributes;
 
     /**
      * @param int|string $id
@@ -55,7 +55,13 @@ class OrderItem extends Model
         $this->setQuantity($quantity);
         $this->setPrice($price);
         $this->setUrl($url);
+        $this->price = new Price(0, 0);
         $this->attributes = new Attributes();
+    }
+
+    public function getId(): ?string
+    {
+        return $this->id;
     }
 
     /**
@@ -67,10 +73,20 @@ class OrderItem extends Model
         return $this;
     }
 
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
     public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 
     public function setDescription(string $description): self
@@ -79,10 +95,20 @@ class OrderItem extends Model
         return $this;
     }
 
+    public function getPrice(): Price
+    {
+        return $this->price;
+    }
+
     public function setPrice(Price $price): self
     {
         $this->price = $price;
         return $this;
+    }
+
+    public function getQuantity(): int
+    {
+        return $this->quantity;
     }
 
     public function setQuantity(int $quantity, string $unit = null): self
@@ -92,10 +118,25 @@ class OrderItem extends Model
         return $this;
     }
 
+    public function getUnit(): ?string
+    {
+        return $this->unit;
+    }
+
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
     public function setUrl(string $url): self
     {
         $this->url = $url;
         return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->image_url;
     }
 
     public function setImageUrl(?string $image_url): self

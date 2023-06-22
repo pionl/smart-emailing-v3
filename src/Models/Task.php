@@ -6,19 +6,19 @@ namespace SmartEmailing\v3\Models;
 
 class Task extends Model
 {
-    private ?Recipient $recipient = null;
+    protected ?Recipient $recipient = null;
 
     /**
      * @var Replace[]
      */
-    private array $replace = [];
-
-    private ?TemplateVariable $templateVariables = null;
+    protected array $replace = [];
 
     /**
      * @var Attachment[]
      */
-    private array $attachments = [];
+    protected array $attachments = [];
+
+    private ?TemplateVariable $templateVariables = null;
 
     public function getRecipient(): ?Recipient
     {

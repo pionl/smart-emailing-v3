@@ -10,18 +10,18 @@ namespace SmartEmailing\v3\Models;
  */
 class CustomFieldValue extends Model
 {
-    public ?int $id = null;
+    protected ?int $id = null;
 
     /**
      * Array of Customfields options IDs matching with selected Custom-field. Required for composite custom-fields
      */
-    public array $options = [];
+    protected array $options = [];
 
     /**
      * String value for simple custom-fields, and YYYY-MM-DD HH:MM:SS for date custom-fields. Value size is limited to
      * 64KB. Required for simple custom-fields
      */
-    public ?string $value = null;
+    protected ?string $value = null;
 
     /**
      * @param int|numeric-string|null    $id
@@ -39,12 +39,33 @@ class CustomFieldValue extends Model
     }
 
     /**
+     * Adds a CustomField id for composite custom-fields
+     *
+     * @return $this
+     */
+    public function addOption(int $customFiledId)
+    {
+        $this->options[] = (int) $customFiledId;
+        return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
      * @param int|numeric-string|null $id
      */
     public function setId($id): self
     {
         $this->id = $id !== null ? (int) $id : null;
         return $this;
+    }
+
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 
     /**
@@ -56,15 +77,9 @@ class CustomFieldValue extends Model
         return $this;
     }
 
-    /**
-     * Adds a CustomField id for composite custom-fields
-     *
-     * @return $this
-     */
-    public function addOption(int $customFiledId)
+    public function getValue(): ?string
     {
-        $this->options[] = (int) $customFiledId;
-        return $this;
+        return $this->value;
     }
 
     /**
