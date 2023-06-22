@@ -40,9 +40,9 @@ class EshopOrdersTest extends ApiStubTestCase
 
         $order = $orders->order();
         $this->assertNotNull($order);
-        $this->assertSame('eshop_name2', $order->eshopName);
-        $this->assertSame('eshop_code2', $order->eshopCode);
-        $this->assertSame('jan.novak2@smartemailing.cz', $order->emailAddress);
+        $this->assertSame('eshop_name2', $order->getEshopName());
+        $this->assertSame('eshop_code2', $order->getEshopCode());
+        $this->assertSame('jan.novak2@smartemailing.cz', $order->getEmailAddress());
     }
 
     public function testNewOrder(): void

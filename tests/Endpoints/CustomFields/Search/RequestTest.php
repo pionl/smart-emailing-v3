@@ -85,14 +85,14 @@ class RequestTest extends ApiStubTestCase
         /** @var CustomFieldDefinition $customField */
         foreach ($response->data() as $customField) {
             $this->assertInstanceOf(CustomFieldDefinition::class, $customField);
-            $this->assertNotNull($customField->name);
-            $this->assertNotNull($customField->type);
-            $this->assertNotNull($customField->id);
+            $this->assertNotNull($customField->getName());
+            $this->assertNotNull($customField->getType());
+            $this->assertNotNull($customField->getId());
         }
 
-        $this->assertEquals('select', $response->data()[0]->type);
-        $this->assertEquals(1, $response->data()[0]->id);
-        $this->assertEquals('my select', $response->data()[0]->name);
+        $this->assertEquals('select', $response->data()[0]->getType());
+        $this->assertEquals(1, $response->data()[0]->getId());
+        $this->assertEquals('my select', $response->data()[0]->getName());
 
         $this->assertEquals(8, $response->meta()->total_count);
     }
@@ -104,8 +104,8 @@ class RequestTest extends ApiStubTestCase
         $response = $this->request->expandCustomFieldOptions()
             ->send();
 
-        $this->assertEquals('Tokyo', $response->data()[0]->options()->get(0)->name);
-        $this->assertEquals('Torino', $response->data()[0]->options()->getById(3)->name);
+        $this->assertEquals('Tokyo', $response->data()[0]->options()->get(0)->getName());
+        $this->assertEquals('Torino', $response->data()[0]->options()->getById(3)->getName());
     }
 
     //endregion

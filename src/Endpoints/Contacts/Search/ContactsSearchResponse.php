@@ -16,7 +16,7 @@ class ContactsSearchResponse extends AbstractCollectionResponse
     public function getByEmailAddress(string $email): ?Contact
     {
         foreach ($this->data() as $item) {
-            if ($item->emailAddress !== null && strcasecmp($item->emailAddress, $email) === 0) {
+            if ($item->getEmailAddress() !== null && strcasecmp($item->getEmailAddress(), $email) === 0) {
                 return $item;
             }
         }

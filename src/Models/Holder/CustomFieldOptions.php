@@ -37,7 +37,7 @@ class CustomFieldOptions extends AbstractMapHolder
     public function getByName(string $name): ?CustomFieldOption
     {
         foreach ($this->toArray() as $item) {
-            if ($item->name === $name) {
+            if ($item->getName() === $name) {
                 return $item;
             }
         }
@@ -47,7 +47,7 @@ class CustomFieldOptions extends AbstractMapHolder
     public function hasName(string $name): bool
     {
         foreach ($this->toArray() as $item) {
-            if ($item->name === $name) {
+            if ($item->getName() === $name) {
                 return true;
             }
         }
@@ -56,6 +56,6 @@ class CustomFieldOptions extends AbstractMapHolder
 
     protected function entryKey(Model $entry): ?int
     {
-        return $entry->id;
+        return $entry->getId();
     }
 }

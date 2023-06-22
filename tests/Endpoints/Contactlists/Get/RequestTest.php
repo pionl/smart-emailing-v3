@@ -43,8 +43,8 @@ class RequestTest extends ApiStubTestCase
 
         $this->assertTrue(is_object($contactlist), 'The item is in the source');
         $this->assertInstanceOf(Contactlist::class, $contactlist);
-        $this->assertEquals(2, $contactlist->id);
-        $this->assertEquals('martin@smartemailing.cz', $contactlist->replyTo);
+        $this->assertEquals(2, $contactlist->getId());
+        $this->assertEquals('martin@smartemailing.cz', $contactlist->getReplyTo());
     }
 
     public function testNotExists(): void

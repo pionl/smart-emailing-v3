@@ -26,17 +26,17 @@ class Order extends Model
      *
      * @var string|null required
      */
-    public ?string $emailAddress = null;
+    protected ?string $emailAddress = null;
 
     /**
      * @var  string|null required
      */
-    public ?string $eshopName = null;
+    protected ?string $eshopName = null;
 
     /**
      * @var string|null required
      */
-    public ?string $eshopCode = null;
+    protected ?string $eshopCode = null;
 
     /**
      * Format YYYY-MM-DD HH:MM:SS
@@ -54,11 +54,11 @@ class Order extends Model
      */
     protected string $status = self::STATUS_PLACED;
 
-    protected Attributes $attributes;
+    private Attributes $attributes;
 
-    protected OrderItems $orderItems;
+    private OrderItems $orderItems;
 
-    protected FeedItems $feedItems;
+    private FeedItems $feedItems;
 
     public function __construct(?string $eshopName, ?string $eshopCode, ?string $emailAddress)
     {
@@ -70,10 +70,20 @@ class Order extends Model
         $this->feedItems = new FeedItems();
     }
 
+    public function getEmailAddress(): ?string
+    {
+        return $this->emailAddress;
+    }
+
     public function setEmailAddress(?string $emailAddress): self
     {
         $this->emailAddress = $emailAddress;
         return $this;
+    }
+
+    public function getEshopName(): ?string
+    {
+        return $this->eshopName;
     }
 
     public function setEshopName(?string $eshopName): self
@@ -82,10 +92,20 @@ class Order extends Model
         return $this;
     }
 
+    public function getEshopCode(): ?string
+    {
+        return $this->eshopCode;
+    }
+
     public function setEshopCode(?string $eshopCode): self
     {
         $this->eshopCode = $eshopCode;
         return $this;
+    }
+
+    public function getCreatedAt(): ?string
+    {
+        return $this->createdAt;
     }
 
     /**
@@ -97,6 +117,11 @@ class Order extends Model
         return $this;
     }
 
+    public function getPaidAt(): ?string
+    {
+        return $this->paidAt;
+    }
+
     /**
      * @param bool $convertToValidFormat converts the value to valid format
      */
@@ -104,6 +129,11 @@ class Order extends Model
     {
         $this->paidAt = $this->convertDate($paidAt, $convertToValidFormat);
         return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 
     public function setStatus(string $status): self

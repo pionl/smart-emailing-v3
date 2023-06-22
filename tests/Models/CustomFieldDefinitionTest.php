@@ -22,17 +22,17 @@ class CustomFieldDefinitionTest extends BaseTestCase
 
     public function testEmptyConstruct(): void
     {
-        $this->assertNull($this->field->name);
-        $this->assertNull($this->field->type);
-        $this->assertNull($this->field->id);
+        $this->assertNull($this->field->getName());
+        $this->assertNull($this->field->getType());
+        $this->assertNull($this->field->getId());
     }
 
     public function testConstruct(): void
     {
         $field = new CustomFieldDefinition('Test', CustomFieldDefinition::CHECKBOX);
 
-        $this->assertEquals('Test', $field->name);
-        $this->assertEquals(CustomFieldDefinition::CHECKBOX, $field->type);
+        $this->assertEquals('Test', $field->getName());
+        $this->assertEquals(CustomFieldDefinition::CHECKBOX, $field->getType());
     }
 
     public function testConstructInvalidType(): void
@@ -54,7 +54,7 @@ class CustomFieldDefinitionTest extends BaseTestCase
         // Test if set
         $this->assertEquals(
             CustomFieldDefinition::CHECKBOX,
-            $this->field->setType(CustomFieldDefinition::CHECKBOX)->type
+            $this->field->setType(CustomFieldDefinition::CHECKBOX)->getType()
         );
         $this->field->setType(CustomFieldDefinition::TEXT_AREA);
         $this->field->setType(CustomFieldDefinition::DATE);
@@ -95,8 +95,8 @@ class CustomFieldDefinitionTest extends BaseTestCase
             ->createValue('Test');
 
         $this->assertInstanceOf(CustomFieldValue::class, $importField);
-        $this->assertEquals(10, $importField->id);
-        $this->assertEquals('Test', $importField->value);
+        $this->assertEquals(10, $importField->getId());
+        $this->assertEquals('Test', $importField->getValue());
     }
 
     public function testCreateValueEmpty(): void
@@ -105,7 +105,7 @@ class CustomFieldDefinitionTest extends BaseTestCase
             ->createValue();
 
         $this->assertInstanceOf(CustomFieldValue::class, $importField);
-        $this->assertEquals(11, $importField->id);
-        $this->assertNull($importField->value);
+        $this->assertEquals(11, $importField->getId());
+        $this->assertNull($importField->getValue());
     }
 }

@@ -12,19 +12,19 @@ use SmartEmailing\v3\Exceptions\InvalidFormatException;
  */
 class Purpose extends Model
 {
-    public ?int $id = null;
+    protected ?int $id = null;
 
     /**
      * Date and time since processing purpose is valid in YYYY-MM-DD HH:MM:SS format. If empty, current date and time
      * will be used.
      */
-    public ?string $valid_from = null;
+    protected ?string $valid_from = null;
 
     /**
      * Date and time of processing purpose validity end in YYYY-MM-DD HH:MM:SS format. If empty, it will be calculated
      * as valid_from + default duration of particular purpose.
      */
-    public ?string $valid_to = null;
+    protected ?string $valid_to = null;
 
     /**
      * @param int|numeric-string  $id
@@ -42,6 +42,11 @@ class Purpose extends Model
         }
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     /**
      * @param int|numeric-string $id
      */
@@ -49,6 +54,11 @@ class Purpose extends Model
     {
         $this->id = (int) $id;
         return $this;
+    }
+
+    public function getValidFrom(): ?string
+    {
+        return $this->valid_from;
     }
 
     /**
@@ -65,6 +75,11 @@ class Purpose extends Model
 
         $this->valid_from = $valid_from;
         return $this;
+    }
+
+    public function getValidTo(): ?string
+    {
+        return $this->valid_to;
     }
 
     /**

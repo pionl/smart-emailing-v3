@@ -38,18 +38,18 @@ class Attributes extends AbstractMapHolder
     protected function insertEntry(Model $entry): bool
     {
         // Allow only unique values
-        if (isset($this->idMap[$entry->name])) {
+        if (isset($this->idMap[$entry->getName()])) {
             return false;
         }
 
         $this->items[] = $entry;
-        $this->idMap[$entry->name] = $entry;
+        $this->idMap[$entry->getName()] = $entry;
 
         return true;
     }
 
     protected function entryKey(Model $entry): ?string
     {
-        return $entry->name;
+        return $entry->getName();
     }
 }

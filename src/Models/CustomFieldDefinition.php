@@ -33,11 +33,11 @@ class CustomFieldDefinition extends Model
      */
     public const EXPAND_FIELDS = ['customfield_options'];
 
-    public ?int $id = null;
+    protected ?int $id = null;
 
-    public ?string $name = null;
+    protected ?string $name = null;
 
-    public ?string $type = null;
+    protected ?string $type = null;
 
     private CustomFieldOptions $options;
 
@@ -61,6 +61,11 @@ class CustomFieldDefinition extends Model
         return [self::TEXT, self::TEXT_AREA, self::DATE, self::CHECKBOX, self::RADIO, self::SELECT];
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     /**
      * @param int|numeric-string|null $id
      */
@@ -70,10 +75,20 @@ class CustomFieldDefinition extends Model
         return $this;
     }
 
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
     public function setName(?string $name): self
     {
         $this->name = $name;
         return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
     }
 
     public function setType(string $type): self

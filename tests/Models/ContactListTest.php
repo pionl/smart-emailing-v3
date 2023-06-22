@@ -19,13 +19,16 @@ class ContactListTest extends BaseTestCase
 
     public function testConstruct(): void
     {
-        $this->assertEquals(1, $this->list->id);
+        $this->assertEquals(1, $this->list->getId());
     }
 
     public function testSetStatus(): void
     {
-        $this->assertEquals(ContactListStatus::CONFIRMED, $this->list->status);
-        $this->assertEquals(ContactListStatus::REMOVED, $this->list->setStatus(ContactListStatus::REMOVED)->status);
+        $this->assertEquals(ContactListStatus::CONFIRMED, $this->list->getStatus());
+        $this->assertEquals(
+            ContactListStatus::REMOVED,
+            $this->list->setStatus(ContactListStatus::REMOVED)->getStatus()
+        );
     }
 
     public function testSetInvalidStatus(): void

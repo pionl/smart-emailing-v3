@@ -39,6 +39,6 @@ class ContactLists extends AbstractMapHolder
 
     protected function entryKey(Model $entry): ?int
     {
-        return $entry->id;
+        return $entry->getId();
     }
 }

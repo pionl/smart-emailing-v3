@@ -37,6 +37,6 @@ class OrderItems extends AbstractMapHolder
 
     protected function entryKey(Model $entry): ?string
     {
-        return $entry->id;
+        return $entry->getId();
     }
 }

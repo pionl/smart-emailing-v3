@@ -51,8 +51,8 @@ class RequestLiveTestCase extends LiveTestCase
 
         foreach ($data as $contact) {
             $this->assertInstanceOf(Contact::class, $contact);
-            $this->assertNotNull($contact->id);
-            $this->assertNotNull($contact->emailAddress);
+            $this->assertNotNull($contact->getId());
+            $this->assertNotNull($contact->getEmailAddress());
         }
     }
 }

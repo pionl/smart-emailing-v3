@@ -43,93 +43,93 @@ class Contact extends Model
     public const MALE = 'M';
     public const FEMALE = 'F';
 
-    public ?int $id = null;
+    protected ?int $id = null;
 
     /**
      * E-mail address of imported contact. This is the only required field.
      *
      * @var string|null required
      */
-    public ?string $emailAddress = null;
+    protected ?string $emailAddress = null;
 
     /**
      * First name
      */
-    public ?string $name = null;
+    protected ?string $name = null;
 
-    public ?string $surname = null;
+    protected ?string $surname = null;
 
     /**
      * Titles before name
      */
-    public ?string $titlesBefore = null;
+    protected ?string $titlesBefore = null;
 
     /**
      * Titles after name
      */
-    public ?string $titlesAfter = null;
+    protected ?string $titlesAfter = null;
 
-    public ?string $salutation = null;
+    protected ?string $salutation = null;
 
-    public ?string $company = null;
+    protected ?string $company = null;
 
-    public ?string $street = null;
+    protected ?string $street = null;
 
-    public ?string $town = null;
+    protected ?string $town = null;
 
-    public ?string $postalCode = null;
+    protected ?string $postalCode = null;
 
-    public ?string $country = null;
+    protected ?string $country = null;
 
-    public ?string $cellphone = null;
+    protected ?string $cellphone = null;
 
-    public ?string $phone = null;
+    protected ?string $phone = null;
 
-    public ?string $language = null;
+    protected ?string $language = null;
 
     /**
      * Custom notes
      */
-    public ?string $notes = null;
+    protected ?string $notes = null;
 
     /**
      * Allowed values: "M,F,NULL"
      */
-    public ?string $gender = null;
+    protected ?string $gender = null;
 
     /**
      * 0 if Contact is OK, 1 if Contact does not want to receive any of your e-mails anymore. This flag will stop
      * further campaigns. Be careful, setting this value to 1 will also un-subscribe contact from all lists. It is
      * recommended not to send this parameter at all if you do not know what you are doing.
      */
-    public ?int $blacklisted = null;
+    protected ?int $blacklisted = null;
 
     /**
      * Date of Contact's nameday in YYYY-MM-DD 00:00:00 format
      */
-    public ?string $nameDay = null;
+    protected ?string $nameDay = null;
 
     /**
      * Date of Contact's birthday in YYYY-MM-DD 00:00:00 format
      */
-    public ?string $birthday = null;
+    protected ?string $birthday = null;
 
     /**
      * Contact lists presence of imported contacts. Any contact list presence unlisted in imported data will be
      * untouched. Unsubscribed contacts will stay unsubscribed if settings.preserve_unsubscribed=1
      */
-    protected ContactLists $contactLists;
+    private ContactLists $contactLists;
 
     /**
      * Custom fields belonging to contact Custom fields unlisted in imported data will be untouched.
      */
-    protected CustomFieldValues $customFields;
+    private CustomFieldValues $customFields;
 
     /**
      * Processing purposes assigned to contact. Every purpose may be assigned multiple times for different time
      * intervals. Exact duplicities will be silently skipped.
      */
-    protected Purposes $purposes;
+    private Purposes $purposes;
 
     public function __construct(?string $emailAddress = null)
     {
@@ -139,10 +139,25 @@ class Contact extends Model
         $this->purposes = new Purposes();
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getEmailAddress(): ?string
+    {
+        return $this->emailAddress;
+    }
+
     public function setEmailAddress(?string $emailAddress): self
     {
         $this->emailAddress = $emailAddress;
         return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 
     public function setName(?string $name): self
@@ -151,10 +166,20 @@ class Contact extends Model
         return $this;
     }
 
+    public function getSurname(): ?string
+    {
+        return $this->surname;
+    }
+
     public function setSurname(?string $surname): self
     {
         $this->surname = $surname;
         return $this;
+    }
+
+    public function getTitlesBefore(): ?string
+    {
+        return $this->titlesBefore;
     }
 
     public function setTitlesBefore(?string $titlesBefore): self
@@ -163,10 +188,20 @@ class Contact extends Model
         return $this;
     }
 
+    public function getTitlesAfter(): ?string
+    {
+        return $this->titlesAfter;
+    }
+
     public function setTitlesAfter(?string $titlesAfter): self
     {
         $this->titlesAfter = $titlesAfter;
         return $this;
+    }
+
+    public function getSalutation(): ?string
+    {
+        return $this->salutation;
     }
 
     public function setSalutation(?string $salutation): self
@@ -175,10 +210,20 @@ class Contact extends Model
         return $this;
     }
 
+    public function getCompany(): ?string
+    {
+        return $this->company;
+    }
+
     public function setCompany(?string $company): self
     {
         $this->company = $company;
         return $this;
+    }
+
+    public function getStreet(): ?string
+    {
+        return $this->street;
     }
 
     public function setStreet(?string $street): self
@@ -187,10 +232,20 @@ class Contact extends Model
         return $this;
     }
 
+    public function getTown(): ?string
+    {
+        return $this->town;
+    }
+
     public function setTown(?string $town): self
     {
         $this->town = $town;
         return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
     }
 
     public function setPostalCode(?string $postalCode): self
@@ -199,10 +254,20 @@ class Contact extends Model
         return $this;
     }
 
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
     public function setCountry(?string $country): self
     {
         $this->country = $country;
         return $this;
+    }
+
+    public function getCellphone(): ?string
+    {
+        return $this->cellphone;
     }
 
     public function setCellphone(?string $cellphone): self
@@ -211,10 +276,20 @@ class Contact extends Model
         return $this;
     }
 
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
         return $this;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
     }
 
     public function setLanguage(?string $language): self
@@ -223,10 +298,20 @@ class Contact extends Model
         return $this;
     }
 
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
     public function setNotes(?string $notes): self
     {
         $this->notes = $notes;
         return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
     }
 
     /**
@@ -238,6 +323,11 @@ class Contact extends Model
 
         $this->gender = $gender;
         return $this;
+    }
+
+    public function isBlacklisted(): ?bool
+    {
+        return (bool) $this->blacklisted;
     }
 
     /**
@@ -253,6 +343,11 @@ class Contact extends Model
         return $this;
     }
 
+    public function getNameDay(): ?string
+    {
+        return $this->nameDay;
+    }
+
     /**
      * Date of Contact's birthday in YYYY-MM-DD 00:00:00 or different format
      *
@@ -264,6 +359,11 @@ class Contact extends Model
         return $this;
     }
 
+    public function getBirthday(): ?string
+    {
+        return $this->birthday;
+    }
+
     /**
      * Date of Contact's birthday in YYYY-MM-DD 00:00:00 format  or different format
      *
@@ -273,6 +373,11 @@ class Contact extends Model
     {
         $this->birthday = $this->convertDate($birthday, $convertToValidFormat);
         return $this;
+    }
+
+    public function getPurposes(): Purposes
+    {
+        return $this->purposes;
     }
 
     public function contactList(): ContactLists
@@ -341,12 +446,12 @@ class Contact extends Model
         if (isset($json->customfields)) {
             foreach ($json->customfields as $value) {
                 $customField = CustomFieldValue::fromJSON($value);
-                if ($customField->id === null) {
+                if ($customField->getId() === null) {
                     continue;
                 }
-                if ($item->customFields->hasId($customField->id)) {
-                    $original = $item->customFields->getById($customField->id);
-                    $original->setOptions(array_merge($original->options, $customField->options));
+                if ($item->customFields->hasId($customField->getId())) {
+                    $original = $item->customFields->getById($customField->getId());
+                    $original->setOptions(array_merge($original->getOptions(), $customField->getOptions()));
                 } else {
                     $item->customFields->add($customField);
                 }

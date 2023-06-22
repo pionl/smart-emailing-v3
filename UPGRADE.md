@@ -1,6 +1,7 @@
 # Upgrade 0.4 to 1.0
 
 - Change all used model classes namespace to 'SmartEmailing\v3\Models'
+- All model classes uses getters and setters instead of public properties
 (for example `SmartEmailing\v3\Request\Import\Contact` is now `SmartEmailing\v3\Models\Contact`)
 - Change references to namespace `SmartEmailing\v3\Request` to `SmartEmailing\v3\Endpoints`
 - Rename `SmartEmailing\v3\Request\CustomFields\CustomField` to `SmartEmailing\v3\Models\CustomFieldDefinition`

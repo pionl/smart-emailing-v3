@@ -47,13 +47,13 @@ class ContactTest extends BaseTestCase
     public function testSetGender(): void
     {
         $this->contact->setGender('M');
-        $this->assertEquals('M', $this->contact->gender);
+        $this->assertEquals('M', $this->contact->getGender());
     }
 
     public function testSetGenderNull(): void
     {
         $this->contact->setGender(null);
-        $this->assertNull($this->contact->gender);
+        $this->assertNull($this->contact->getGender());
     }
 
     /**
@@ -76,40 +76,43 @@ class ContactTest extends BaseTestCase
     public function testSetBlacklisted(): void
     {
         $this->assertEquals(
-            1,
+            true,
             $this->contact->setBlacklisted(true)
-->blacklisted,
+                ->isBlacklisted(),
             'Bool value should be converted to int'
         );
         $this->assertEquals(
-            0,
+            false,
             $this->contact->setBlacklisted(false)
-->blacklisted,
+                ->isBlacklisted(),
             'Bool value should be converted to int'
         );
-        $this->assertEquals(1, $this->contact->setBlacklisted(1)->blacklisted);
+        $this->assertEquals(true, $this->contact->setBlacklisted(1)->isBlacklisted());
     }
 
     public function testSetNameDay(): void
     {
         $this->assertEquals(
             '2010-12-13 00:00:00',
-            $this->contact->setNameDay('2010-12-13')
-->nameDay,
+            $this->contact
+                ->setNameDay('2010-12-13')
+                ->getNameDay(),
             'The date should be converted'
         );
         $this->assertEquals(
             '2010-12-13',
-            $this->contact->setNameDay('2010-12-13', false)
-->nameDay,
+            $this->contact
+                ->setNameDay('2010-12-13', false)
+                ->getNameDay(),
             'We should be able to disable converting'
         );
-        $this->assertEquals('2010-12-13', $this->contact->setNameDay('2010-12-13', false) ->nameDay);
+        $this->assertEquals('2010-12-13', $this->contact->setNameDay('2010-12-13', false) ->getNameDay());
 
         $this->assertEquals(
             date('Y-m-d H:i:s', strtotime('+1 month')),
-            $this->contact->setNameDay('+1 month')
-->nameDay
+            $this->contact
+                ->setNameDay('+1 month')
+                ->getNameDay()
         );
         $this->assertCount(2, $this->contact->jsonSerialize(), 'There should be 2 values - email and date');
     }
@@ -124,7 +127,7 @@ class ContactTest extends BaseTestCase
         $this->contact->customFields()
             ->add(new CustomFieldValue(1));
         $this->assertCount(1, $this->contact->customFields()->toArray(), 'There should be 1 field');
-        $this->assertEquals(1, $this->contact->customFields()->get(0)->id);
+        $this->assertEquals(1, $this->contact->customFields()->get(0)->getId());
     }
 
     public function testAddFieldUnique(): void
@@ -136,7 +139,7 @@ class ContactTest extends BaseTestCase
         $this->contact->customFields()
             ->add(new CustomFieldValue(2));
         $this->assertCount(2, $this->contact->customFields()->toArray(), 'There should be 2 fields - unique only');
-        $this->assertEquals(1, $this->contact->customFields()->get(0)->id);
+        $this->assertEquals(1, $this->contact->customFields()->get(0)->getId());
     }
 
     public function testCreateField(): void
@@ -148,9 +151,9 @@ class ContactTest extends BaseTestCase
         /** @var CustomFieldValue $field */
         $field = $this->contact->customFields()
             ->get(0);
-        $this->assertEquals(1, $field->id);
-        $this->assertEquals('test2', $field->value);
-        $this->assertEquals([1], $field->options);
+        $this->assertEquals(1, $field->getId());
+        $this->assertEquals('test2', $field->getValue());
+        $this->assertEquals([1], $field->getOptions());
     }
 
     public function testAddList(): void
@@ -158,7 +161,7 @@ class ContactTest extends BaseTestCase
         $this->contact->contactList()
             ->add(new ContactListStatus(1));
         $this->assertCount(1, $this->contact->contactList()->toArray(), 'There should be 1 field');
-        $this->assertEquals(1, $this->contact->contactList()->get(0)->id);
+        $this->assertEquals(1, $this->contact->contactList()->get(0)->getId());
     }
 
     public function testCreateList(): void
@@ -170,8 +173,8 @@ class ContactTest extends BaseTestCase
         /** @var ContactListStatus $list */
         $list = $this->contact->contactList()
             ->get(0);
-        $this->assertEquals(1, $list->id);
-        $this->assertEquals(ContactListStatus::REMOVED, $list->status);
+        $this->assertEquals(1, $list->getId());
+        $this->assertEquals(ContactListStatus::REMOVED, $list->getStatus());
     }
 
     public function testCreateListUnique(): void
@@ -189,8 +192,8 @@ class ContactTest extends BaseTestCase
         /** @var ContactListStatus $list */
         $list = $this->contact->contactList()
             ->get(0);
-        $this->assertEquals(1, $list->id);
-        $this->assertEquals(ContactListStatus::REMOVED, $list->status);
+        $this->assertEquals(1, $list->getId());
+        $this->assertEquals(ContactListStatus::REMOVED, $list->getStatus());
     }
 
     public function testAddPurpose(): void
@@ -208,13 +211,13 @@ class ContactTest extends BaseTestCase
         /** @var Purpose $list */
         $list = $this->contact->purposes()
             ->get(0);
-        $this->assertEquals(1, $list->id);
-        $this->assertEquals(null, $list->valid_to);
+        $this->assertEquals(1, $list->getId());
+        $this->assertEquals(null, $list->getValidTo());
 
         $list = $this->contact->purposes()
             ->get(1);
-        $this->assertEquals(2, $list->id);
-        $this->assertEquals('1998-02-22 05:45:00', $list->valid_to);
+        $this->assertEquals(2, $list->getId());
+        $this->assertEquals('1998-02-22 05:45:00', $list->getValidTo());
     }
 
     public function testJson(): void

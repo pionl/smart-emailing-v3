@@ -20,27 +20,27 @@ class CustomFieldTest extends BaseTestCase
 
     public function testConstruct(): void
     {
-        $this->assertEquals(12, $this->field->id);
+        $this->assertEquals(12, $this->field->getId());
     }
 
     public function testConstructNumeric(): void
     {
-        $this->assertEquals(13, (new CustomFieldValue('13'))->id);
+        $this->assertEquals(13, (new CustomFieldValue('13'))->getId());
     }
 
     public function testSetIdNumeric(): void
     {
-        $this->assertEquals(13, $this->field->setId('13')->id);
+        $this->assertEquals(13, $this->field->setId('13')->getId());
     }
 
     public function testSetValue(): void
     {
-        $this->assertEquals('test', $this->field->setValue('test')->value);
+        $this->assertEquals('test', $this->field->setValue('test')->getValue());
     }
 
     public function testSetOptions(): void
     {
-        $this->assertEquals([1, 2], $this->field->setOptions([1, 2])->options);
+        $this->assertEquals([1, 2], $this->field->setOptions([1, 2])->getOptions());
     }
 
     public function testNonArray(): void
@@ -57,6 +57,6 @@ class CustomFieldTest extends BaseTestCase
     {
         $this->field->addOption(1);
         $this->field->addOption(2);
-        $this->assertEquals([1, 2], $this->field->options);
+        $this->assertEquals([1, 2], $this->field->getOptions());
     }
 }

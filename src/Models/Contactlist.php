@@ -21,66 +21,66 @@ class Contactlist extends Model
         'segment_id',
     ];
 
-    public ?int $id = null;
+    protected ?int $id = null;
 
     /**
      * @var string|null Contactlist name.
      */
-    public ?string $name = null;
+    protected ?string $name = null;
 
-    public ?string $category = null;
+    protected ?string $category = null;
 
     /**
      * @var string|null Contactlist public name that will be displayed in unsubscribe pages.
      */
-    public ?string $publicName = null;
+    protected ?string $publicName = null;
 
     /**
      * @var string|null Name of contactlist owner.
      */
-    public ?string $senderName = null;
+    protected ?string $senderName = null;
 
-    public ?string $senderEmail = null;
+    protected ?string $senderEmail = null;
 
     /**
      * @var string|null Email address for list reply-to.
      */
-    public ?string $replyTo = null;
+    protected ?string $replyTo = null;
 
     /**
      * @var float|null Percentage of link-clicking contacts in list or null if there are is no data.
      */
-    public ?float $clickRate = null;
+    protected ?float $clickRate = null;
 
     /**
      * @var float|null Percentage of email-opening contacts in list or null if there are is no data.
      */
-    public ?float $openRate = null;
+    protected ?float $openRate = null;
 
     /**
      * @var int|null Total count of contacts in list.
      */
-    public ?int $alertOut = null;
+    protected ?int $alertOut = null;
 
     /**
      * @var int|null ID of supervising Segment. null if there is none.
      */
-    public ?int $segmentId = null;
+    protected ?int $segmentId = null;
 
     /**
      * @var string|null Sender signature. This can be used as customfield in your e-mails.
      */
-    public ?string $signature = null;
+    protected ?string $signature = null;
 
     /**
      * @var string|null Custom contactlist notes.
      */
-    public ?string $notes = null;
+    protected ?string $notes = null;
 
     /**
      * @var string|null Date and time of contactlist creation in YYYY-MM-DD HH:MM:SS format.
      */
-    public ?string $created = null;
+    protected ?string $created = null;
 
     /**
      * @param int|numeric-string|null $id
@@ -88,6 +88,11 @@ class Contactlist extends Model
     public function __construct($id = null)
     {
         $this->setId($id);
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     /**
@@ -99,10 +104,25 @@ class Contactlist extends Model
         return $this;
     }
 
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
     public function setName(?string $name): self
     {
         $this->name = $name;
         return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function getPublicName(): ?string
+    {
+        return $this->publicName;
     }
 
     public function setPublicName(?string $publicName): self
@@ -111,10 +131,20 @@ class Contactlist extends Model
         return $this;
     }
 
+    public function getSenderName(): ?string
+    {
+        return $this->senderName;
+    }
+
     public function setSenderName(?string $senderName): self
     {
         $this->senderName = $senderName;
         return $this;
+    }
+
+    public function getSenderEmail(): ?string
+    {
+        return $this->senderEmail;
     }
 
     public function setSenderEmail(?string $senderEmail): self
@@ -123,10 +153,50 @@ class Contactlist extends Model
         return $this;
     }
 
+    public function getReplyTo(): ?string
+    {
+        return $this->replyTo;
+    }
+
     public function setReplyTo(?string $replyTo): self
     {
         $this->replyTo = $replyTo;
         return $this;
+    }
+
+    public function getClickRate(): ?float
+    {
+        return $this->clickRate;
+    }
+
+    public function getOpenRate(): ?float
+    {
+        return $this->openRate;
+    }
+
+    public function getAlertOut(): ?int
+    {
+        return $this->alertOut;
+    }
+
+    public function getSegmentId(): ?int
+    {
+        return $this->segmentId;
+    }
+
+    public function getSignature(): ?string
+    {
+        return $this->signature;
+    }
+
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    public function getCreated(): ?string
+    {
+        return $this->created;
     }
 
     /**

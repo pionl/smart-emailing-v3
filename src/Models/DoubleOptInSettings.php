@@ -12,7 +12,7 @@ class DoubleOptInSettings extends Model
     /**
      * Double-opt-in e-mail settings
      */
-    private ?Campaign $campaign = null;
+    protected ?Campaign $campaign = null;
 
     /**
      * By adding silence period you will not send double opt-in e-mail to any e-mailmaddress that recieved any opt-in
@@ -21,13 +21,13 @@ class DoubleOptInSettings extends Model
      * Note: to prevent double opt-in spam, silence_period is now added to double_opt_in_settings by default (if not
      * already provided) and set to 1 day.
      */
-    private ?SilencePeriod $silencePeriod = null;
+    protected ?SilencePeriod $silencePeriod = null;
 
     /**
      * Double-opt in send-to mode. Fill-in all to send double opt-in e-email to every contact in batch, new-in-database
      * to send to send double opt-in e-email only to contacts that do not exist in the database yet.
      */
-    private string $sendToMode = 'all';
+    protected string $sendToMode = 'all';
 
     public function __construct(Campaign $campaign, SilencePeriod $silencePeriod = null, string $sendToMode = 'all')
     {

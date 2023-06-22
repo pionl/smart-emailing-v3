@@ -16,7 +16,13 @@ use SmartEmailing\v3\Models\Holder\OrderItems;
  */
 class OrderWithFeedItems extends Order
 {
-    protected FeedItems $feedItems;
+    private FeedItems $feedItems;
+
+    public function __construct(?string $eshopName, ?string $eshopCode, ?string $emailAddress)
+    {
+        parent::__construct($eshopName, $eshopCode, $emailAddress);
+        $this->feedItems = new FeedItems();
+    }
 
     public function feedItems(): FeedItems
     {

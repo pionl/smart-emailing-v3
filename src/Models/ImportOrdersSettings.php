@@ -13,7 +13,12 @@ class ImportOrdersSettings extends Model
      * Settings for skipping invalid orders, If the order cannot be processed. false - no orders will be imported, if
      * someone invalid true - invalid orders will be skipped, valid orders will be imported
      */
-    public bool $skipInvalidOrders = false;
+    protected bool $skipInvalidOrders = false;
+
+    public function isSkipInvalidOrders(): bool
+    {
+        return $this->skipInvalidOrders;
+    }
 
     public function setSkipInvalidOrders(bool $skipInvalidOrders): self
     {

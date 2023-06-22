@@ -13,23 +13,28 @@ class FeedItem extends Model
     /**
      * @var string required
      */
-    public string $id;
+    protected string $id;
 
     /**
      * @var string required
      */
-    public string $feedName;
+    protected string $feedName;
 
     /**
      * @var int required
      */
-    public int $quantity = 0;
+    protected int $quantity = 1;
 
-    public function __construct(string $id, string $feedName, int $quantity)
+    public function __construct(string $id, string $feedName, int $quantity = 1)
     {
         $this->id = $id;
         $this->feedName = $feedName;
         $this->quantity = $quantity;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function setId(string $id): self
@@ -38,10 +43,20 @@ class FeedItem extends Model
         return $this;
     }
 
+    public function getFeedName(): string
+    {
+        return $this->feedName;
+    }
+
     public function setFeedName(string $feedName): self
     {
         $this->feedName = $feedName;
         return $this;
+    }
+
+    public function getQuantity(): int
+    {
+        return $this->quantity;
     }
 
     public function setQuantity(int $quantity): self

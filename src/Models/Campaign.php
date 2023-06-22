@@ -12,25 +12,25 @@ class Campaign extends Model
     /**
      * ID of E-mail containing {{confirmlink}}.
      */
-    private int $emailId;
-
-    private ?SenderCredentials $senderCredentials = null;
+    protected int $emailId;
 
     /**
      * URL of thank-you page where contact will be redirected after clicking at confirmation link. If not provided,
      * contact will be redirected to default page
      */
-    private ?string $confirmationThankYouPageUrl = null;
+    protected ?string $confirmationThankYouPageUrl = null;
 
     /**
      * Date and time in YYYY-MM-DD HH:MM:SS format, when double opt-in e-mail will be expired.
      */
-    private ?string $validTo = null;
+    protected ?string $validTo = null;
 
     /**
      * @var Replace[]
      */
-    private array $replace = [];
+    protected array $replace = [];
+
+    private SenderCredentials $senderCredentials;
 
     /**
      * @param Replace[]         $replace
@@ -50,6 +50,37 @@ class Campaign extends Model
     }
 
     /**
+     * Dynamic content used to preprocess template before rendering it. This can be used to modify template structure
+     * and may contain HTML, dynamic fields and template scripts.
+     */
+    public function addReplace(Replace $replace): self
+    {
+        $this->replace[] = $replace;
+        return $this;
+    }
+
+    public function getEmailId(): int
+    {
+        return $this->emailId;
+    }
+
+    public function setEmailId(int $emailId): self
+    {
+        $this->emailId = $emailId;
+        return $this;
+    }
+
+    public function senderCredentials(): SenderCredentials
+    {
+        return $this->senderCredentials;
+    }
+
+    public function getConfirmationThankYouPageUrl(): ?string
+    {
+        return $this->confirmationThankYouPageUrl;
+    }
+
+    /**
      * URL of thank-you page where contact will be redirected after clicking at confirmation link. If not provided,
      * contact will be redirected to default page
      */
@@ -57,6 +88,11 @@ class Campaign extends Model
     {
         $this->confirmationThankYouPageUrl = $confirmationThankYouPageUrl;
         return $this;
+    }
+
+    public function getValidTo(): ?string
+    {
+        return $this->validTo;
     }
 
     /**
@@ -74,16 +110,6 @@ class Campaign extends Model
     public function getReplace(): array
     {
         return $this->replace;
-    }
-
-    /**
-     * Dynamic content used to preprocess template before rendering it. This can be used to modify template structure
-     * and may contain HTML, dynamic fields and template scripts.
-     */
-    public function addReplace(Replace $replace): self
-    {
-        $this->replace[] = $replace;
-        return $this;
     }
 
     /**

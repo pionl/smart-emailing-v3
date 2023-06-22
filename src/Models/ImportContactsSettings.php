@@ -13,45 +13,50 @@ class ImportContactsSettings extends Model
      * Existing contact's defaultfields and customfields (including nameday, gender and salution) will be updated ONLY
      * if this is set to true. If false is provided, only contactlist statuses will be updated. Nothing else.
      */
-    public bool $update = true;
+    protected bool $update = true;
 
     /**
      * If name is provided in Contact data section, automatically generate nameday defaultfield and overwrite existing
      * value if any.
      */
-    public bool $addNameDays = true;
+    protected bool $addNameDays = true;
 
     /**
      * If name is provided in Contact data section, automatically generate gender defaultfield and overwrite existing
      * value if any.
      */
-    public bool $addGenders = true;
+    protected bool $addGenders = true;
 
     /**
      * If name is provided in Contact data section, automatically generate salution defaultfield and overwrite existing
      * value if any.
      */
-    public bool $addSalutations = true;
+    protected bool $addSalutations = true;
 
     /**
      * If this flag is set to true, all contacts that are unsubscribed in some lists will stay unsubscribed regardless
      * of imported statuses. This is very useful when Import should respect unsubscriptions from previous campaigns and
      * we strongly recommend to keep this turned on.
      */
-    public bool $preserveUnSubscribed = true;
+    protected bool $preserveUnSubscribed = true;
 
     /**
      * If this flag is set to true, all contacts with invalid e-mail addresses will be silently skipped and your Import
      * will finish without them. Otherwise it will be terminated with 422 Error.
      */
-    public bool $skipInvalidEmails = false;
+    protected bool $skipInvalidEmails = false;
 
     /**
      * If this section is present, opt-in e-mail will be sent to all contacts in request, excluding blacklisted (sending
      * opt-in e-amil to blacklisted contacts can be forced by setting preserve_unsubscribed=false). Imported data will
      * be written when they click through confirmation link.
      */
-    public ?DoubleOptInSettings $doubleOptInSettings = null;
+    private ?DoubleOptInSettings $doubleOptInSettings = null;
+
+    public function isUpdate(): bool
+    {
+        return $this->update;
+    }
 
     /**
      * Existing contact's defaultfields and customfields (including nameday, gender and salution) will be updated ONLY
@@ -61,6 +66,11 @@ class ImportContactsSettings extends Model
     {
         $this->update = $update;
         return $this;
+    }
+
+    public function isAddNameDays(): bool
+    {
+        return $this->addNameDays;
     }
 
     /**
@@ -73,6 +83,11 @@ class ImportContactsSettings extends Model
         return $this;
     }
 
+    public function isAddGenders(): bool
+    {
+        return $this->addGenders;
+    }
+
     /**
      * If name is provided in Contact data section, automatically generate gender defaultfield and overwrite existing
      * value if any.
@@ -83,6 +98,11 @@ class ImportContactsSettings extends Model
         return $this;
     }
 
+    public function isAddSalutations(): bool
+    {
+        return $this->addSalutations;
+    }
+
     /**
      * If name is provided in Contact data section, automatically generate nameday defaultfield and overwrite existing
      * value if any.
@@ -91,6 +111,11 @@ class ImportContactsSettings extends Model
     {
         $this->addSalutations = $addSalutations;
         return $this;
+    }
+
+    public function isPreserveUnSubscribed(): bool
+    {
+        return $this->preserveUnSubscribed;
     }
 
     /**
@@ -104,6 +129,11 @@ class ImportContactsSettings extends Model
         return $this;
     }
 
+    public function isSkipInvalidEmails(): bool
+    {
+        return $this->skipInvalidEmails;
+    }
+
     /**
      * Existing contact's defaultfields and customfields (including nameday, gender and salution) will be updated ONLY
      * if this is set to true. If false is provided, only contactlist statuses will be updated. Nothing else.
@@ -112,6 +142,11 @@ class ImportContactsSettings extends Model
     {
         $this->skipInvalidEmails = $skipInvalidEmails;
         return $this;
+    }
+
+    public function getDoubleOptInSettings(): ?DoubleOptInSettings
+    {
+        return $this->doubleOptInSettings;
     }
 
     /**

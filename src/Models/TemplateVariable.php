@@ -6,7 +6,7 @@ namespace SmartEmailing\v3\Models;
 
 class TemplateVariable extends Model
 {
-    private array $customData = [];
+    protected array $customData = [];
 
     public function getCustomData(): array
     {

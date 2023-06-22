@@ -53,12 +53,12 @@ class RequestTest extends ApiStubTestCase
         /** @var Contactlist $contactlist */
         foreach ($response->data() as $contactlist) {
             $this->assertInstanceOf(Contactlist::class, $contactlist);
-            $this->assertNotNull($contactlist->name);
-            $this->assertNotNull($contactlist->id);
+            $this->assertNotNull($contactlist->getName());
+            $this->assertNotNull($contactlist->getId());
         }
 
-        $this->assertEquals(1, $response->data()[0]->id);
-        $this->assertEquals('martin@smartemailing.cz', $response->data()[0]->name);
+        $this->assertEquals(1, $response->data()[0]->getId());
+        $this->assertEquals('martin@smartemailing.cz', $response->data()[0]->getName());
 
         $this->assertEquals(8, $response->meta()->total_count);
     }

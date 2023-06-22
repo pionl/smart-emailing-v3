@@ -102,6 +102,6 @@ class CustomFieldsTest extends ApiStubTestCase
 
         $this->assertTrue(is_object($customField), 'The item is in the source');
         $this->assertInstanceOf(CustomFieldDefinition::class, $customField);
-        $this->assertEquals(1, $customField->id);
+        $this->assertEquals(1, $customField->getId());
     }
 }
