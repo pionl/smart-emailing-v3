@@ -22,7 +22,6 @@ jobs:
   code:
     name: "Code check"
     uses: wrk-flow/reusable-workflows/.github/workflows/php-check.yml@7562253bdc3769847417e3476b501e7126f5d2c0
-    secrets: inherit
 
   tests:
     name: "Run tests"
@@ -30,7 +29,8 @@ jobs:
       matrix:
         phpVersion: [ "7.4", "8.0", "8.1", "8.2" ]
     uses: wrk-flow/reusable-workflows/.github/workflows/php-tests.yml@7562253bdc3769847417e3476b501e7126f5d2c0
-    secrets: inherit
+    secrets:
+      GIST_SECRET: ${{ secrets.GIST_SECRET }}
     with:
       gistID: ${{ vars.GIST_ID }}
       gistOnPhpVersion: "8.2"
