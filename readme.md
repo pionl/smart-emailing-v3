@@ -1,10 +1,14 @@
 # Smart Emailing API v3
 API wrapper for [Smart emailing](http://smartemailing.cz) API. Currenlty in development.
 
+![img](https://img.shields.io/badge/PHPStan-8-blue)
+![php](https://img.shields.io/badge/PHP-7.4%20to%208.2-B0B3D6)
+![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/pionl/acb2fd9298c1faa461c2a60b54b673ed/raw/coverage.json)
+[![CI](https://github.com/pionl/smart-emailing-v3/actions/workflows/check.yml/badge.svg)](https://github.com/pionl/smart-emailing-v3/actions/workflows/check.yml)
 [![Total Downloads](https://poser.pugx.org/pion/smart-emailing-v3/downloads?format=flat)](https://packagist.org/packages/pion/smart-emailing-v3)
 [![Latest Stable Version](https://poser.pugx.org/pion/smart-emailing-v3/v/stable?format=flat)](https://packagist.org/packages/pion/smart-emailing-v3)
 [![Latest Unstable Version](https://poser.pugx.org/pion/smart-emailing-v3/v/unstable?format=flat)](https://packagist.org/packages/pion/smart-emailing-v3)
-[![Build Status](https://travis-ci.org/pionl/smart-emailing-v3.svg?branch=master)](https://travis-ci.org/pionl/smart-emailing-v3)
+
 
 * [Installation](#installation)
 * [Usage](#usage)
@@ -19,7 +23,7 @@ API wrapper for [Smart emailing](http://smartemailing.cz) API. Currenlty in deve
 
 **Requirements**
 
-This package requires PHP 7.3 and higher.
+This package requires PHP 7.4 and higher.
 
 **Install via composer**
 
