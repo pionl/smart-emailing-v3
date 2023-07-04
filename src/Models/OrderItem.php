@@ -55,7 +55,6 @@ class OrderItem extends Model
         $this->setQuantity($quantity);
         $this->setPrice($price);
         $this->setUrl($url);
-        $this->price = new Price(0, 0);
         $this->attributes = new Attributes();
     }
 
