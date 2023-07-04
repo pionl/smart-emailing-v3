@@ -1,5 +1,5 @@
 # Smart Emailing API v3
-API wrapper for [Smart emailing](http://smartemailing.cz) API. Currenlty in development.
+API wrapper for [Smart emailing](http://smartemailing.cz) API. 
 
 ![img](https://img.shields.io/badge/PHPStan-8-blue)
 ![php](https://img.shields.io/badge/PHP-7.4%20to%208.2-B0B3D6)
