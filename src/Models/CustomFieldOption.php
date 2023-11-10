@@ -108,6 +108,7 @@ class CustomFieldOption extends Model
         ];
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): array
     {
         return $this->removeEmptyValues($this->toArray());

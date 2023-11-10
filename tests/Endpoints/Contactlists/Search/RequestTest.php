@@ -29,6 +29,7 @@ class RequestTest extends ApiStubTestCase
 
             // The query parameters to send
             $query = $value['query'];
+            $this->assertTrue(is_array($query), 'Query must be an array');
             $this->assertArrayHasKey('limit', $query);
             $this->assertArrayHasKey('offset', $query);
             $this->assertEquals(0, $query['offset'], 'The first page should have 0 offset');

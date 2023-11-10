@@ -57,6 +57,7 @@ abstract class AbstractRequest implements \JsonSerializable
 
     abstract public function toArray(): array;
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): array
     {
         return $this->toArray();

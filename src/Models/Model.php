@@ -37,6 +37,7 @@ abstract class Model implements \JsonSerializable
      */
     abstract public function toArray(): array;
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): array
     {
         return $this->toArray();
